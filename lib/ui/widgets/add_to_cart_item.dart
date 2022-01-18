@@ -59,19 +59,18 @@ class AddToCardItem extends StatelessWidget {
                   () => onAddClick(globalKey),
                   icon: Icons.add,
                 ),
-                const Text('1'),
+                Text(products.qty!.toString()),
                 _trailingBtn(
                   () => onReduceClick(globalKey),
                   icon: Icons.remove,
                 ),
               ],
             ),
-          ),
+          )
         ],
       );
 
-  Widget _trailingBtn(VoidCallback callback,
-          {required IconData icon}) =>
+  Widget _trailingBtn(VoidCallback callback, {required IconData icon}) =>
       InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: callback,

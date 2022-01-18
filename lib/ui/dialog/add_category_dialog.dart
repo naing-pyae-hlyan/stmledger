@@ -33,6 +33,7 @@ class AddCategoryDialog {
               names: [nameCtrl.text],
               price: int.parse(priceCtrl.text),
               imgURl: context.read<RandomImageCtrl>().randomImage,
+              qty: 0,
             ),
           );
           context.pop();

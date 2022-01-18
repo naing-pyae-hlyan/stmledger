@@ -3,7 +3,7 @@ class Products {
   DateTime? date;
   List<String>? names;
   int? price;
-  int? quentity;
+  int? qty;
   int? charge;
   String? note;
   String? imgURl;
@@ -12,10 +12,10 @@ class Products {
     this.no,
     this.date,
     this.names,
-    this.price,
-    this.quentity,
-    this.charge,
+    this.price = 0,
+    this.qty = 0,
+    this.charge = 0,
     this.note,
-    this.imgURl,
+    this.imgURl = '',
   });
 }

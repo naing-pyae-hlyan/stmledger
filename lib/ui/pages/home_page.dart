@@ -13,7 +13,7 @@ void _onTapItem(BuildContext context, HomeTypeEnum type) {
       context.push(const CategoryHomePage());
       break;
     case HomeTypeEnum.sale:
-      context.push(const SaleHomePage());
+      context.push(const BaseSaleHomePage());
       break;
     case HomeTypeEnum.summary:
       context.push(const SummaryHomePage());

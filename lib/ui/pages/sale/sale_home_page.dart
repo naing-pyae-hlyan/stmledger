@@ -1,5 +1,21 @@
 import '../../../lib_exp.dart';
 
+class BaseSaleHomePage extends StatelessWidget {
+  const BaseSaleHomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => SaleCtrl()),
+      ],
+      child: SaleHomePage(
+        key: key,
+      ),
+    );
+  }
+}
+
 class SaleHomePage extends StatefulWidget {
   const SaleHomePage({Key? key}) : super(key: key);
 
@@ -10,19 +26,17 @@ class SaleHomePage extends StatefulWidget {
 class _SaleHomePageState extends State<SaleHomePage> {
   GlobalKey<CartIconKey> gkCart = GlobalKey<CartIconKey>();
   List<GlobalKey> imageGlobalKeyList = [];
+  late SaleCtrl _saleCtrl;
 
   late Function(GlobalKey) runAddToCardAnimation;
-  int _cartQuantityItems = 0;
 
-  void onAddClick(GlobalKey gkImageContainer) async {
+  void onAddClick(GlobalKey gkImageContainer, {required int count}) async {
     await runAddToCardAnimation(gkImageContainer);
-    await gkCart.currentState!
-        .runCartAnimation((++_cartQuantityItems).toString());
+    await gkCart.currentState!.runCartAnimation((count).toString());
   }
 
-  void onReduceClick(GlobalKey gkImageContainer) async {
-    await gkCart.currentState!
-        .runCartAnimation((--_cartQuantityItems).toString());
+  void onReduceClick(GlobalKey gkImageContainer, {required int count}) async {
+    await gkCart.currentState!.runCartAnimation((count).toString());
   }
 
   @override
@@ -32,6 +46,8 @@ class _SaleHomePageState extends State<SaleHomePage> {
       context.read<CategoryCtrl>().products.length,
       (index) => GlobalKey(),
     );
+    _saleCtrl = context.read<SaleCtrl>();
+    _saleCtrl.initCart(context.read<CategoryCtrl>().products);
   }
 
   @override
@@ -66,19 +82,25 @@ class _SaleHomePageState extends State<SaleHomePage> {
     );
   }
 
-  Widget _bodyWidget() => Consumer<CategoryCtrl>(
+  Widget _bodyWidget() => Consumer<SaleCtrl>(
         builder: (_, ctrl, __) {
           return ListView.separated(
             shrinkWrap: true,
-            itemCount: ctrl.products.length + 1,
+            itemCount: ctrl.cartList.length + 1,
             itemBuilder: (_, index) {
-              if (index == ctrl.products.length) {
+              if (index == ctrl.cartList.length) {
                 return _totalWidget();
               }
               return AddToCardItem(
-                products: ctrl.products[index],
-                onAddClick: onAddClick,
-                onReduceClick: onReduceClick,
+                products: ctrl.cartList[index],
+                onAddClick: (key) {
+                  ctrl.addQty(index);
+                  onAddClick(key, count: ctrl.cartCounter);
+                },
+                onReduceClick: (key) {
+                  ctrl.removeQty(index);
+                  onReduceClick(key, count: ctrl.cartCounter);
+                },
                 globalKey: imageGlobalKeyList[index],
               );
             },
