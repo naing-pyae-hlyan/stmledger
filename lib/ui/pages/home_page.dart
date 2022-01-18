@@ -39,7 +39,13 @@ class _HomePageState extends State<HomePage> {
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                 ),
-                itemBuilder: (_, index) => _gridItem(data: homeTypes[index]),
+                itemBuilder: (_, index) => MyItem(
+                    label: homeTypes[index].name,
+                    imgUrl: homeTypes[index].url,
+                    onPress: () => _onTapItem(
+                          context,
+                          homeTypes[index].type!,
+                        )),
               ),
             ),
             CommonUtils.versionLabel(),
@@ -48,30 +54,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  Widget _gridItem({required HomeTypeModel data}) => Column(
-        children: [
-          InkWell(
-            borderRadius: BorderRadius.circular(12),
-            onTap: () => _onTapItem(context, data.type!),
-            child: Container(
-              padding: const EdgeInsets.all(32.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: AppColors.primaryColor,
-              ),
-              child: Image.asset(
-                data.url!,
-                fit: BoxFit.contain,
-              ),
-            ),
-          ),
-          Text(
-            data.name!,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      );
 }

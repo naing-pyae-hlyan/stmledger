@@ -8,6 +8,14 @@ class CategoryHomePage extends StatefulWidget {
 }
 
 class _CategoryHomePageState extends State<CategoryHomePage> {
+  void _onAddPress() {
+    AddCategoryDialog.show(
+      context,
+      title: 'အသစ်ထည့်',
+      onPresss: (Map<String,String> map) {},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,6 +23,35 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
         automaticallyImplyLeading: true,
         centerTitle: false,
         title: const Text('အမျိုးအစားများ'),
+      ),
+      body: _body(),
+    );
+  }
+
+  Widget _body() {
+    const length = 4;
+    return Container(
+      padding: const EdgeInsets.all(20),
+      child: GridView.builder(
+        shrinkWrap: true,
+        itemCount: length + 1,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+        ),
+        itemBuilder: (_, index) {
+          if (index == length) {
+            return MyItem(
+              label: 'Add',
+              isAdd: true,
+              onPress: _onAddPress,
+            );
+          }
+          return MyItem(
+            label: 'ကြက်ဥလိပ်',
+            isAdd: false,
+            onPress: () {},
+          );
+        },
       ),
     );
   }
