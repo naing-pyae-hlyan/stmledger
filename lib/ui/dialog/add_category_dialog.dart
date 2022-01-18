@@ -48,48 +48,22 @@ class AddCategoryDialog {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            _inputForm(
+            myInputForm(
               nameCtrl,
               hintText: 'Name',
               fn: nameFn,
+              margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
             ),
-            _inputForm(
+            myInputForm(
               priceCtrl,
               hintText: '\$ Price',
               keyboardType: TextInputType.number,
               fn: priceFn,
+              margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
             ),
           ],
         ),
       ),
     );
   }
-
-  static Widget _inputForm(
-    TextEditingController controller, {
-    required String hintText,
-    required FocusNode fn,
-    TextInputType keyboardType = TextInputType.text,
-  }) =>
-      Container(
-        margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-        child: TextFormField(
-          controller: controller,
-          focusNode: fn,
-          maxLines: 1,
-          keyboardType: keyboardType,
-          decoration: InputDecoration(
-            isDense: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: AppColors.primaryColor),
-            ),
-            hintText: hintText,
-            hintStyle: TextStyle(
-              fontSize: 12,
-              color: AppColors.primaryColor.withOpacity(0.8),
-            ),
-          ),
-        ),
-      );
 }
