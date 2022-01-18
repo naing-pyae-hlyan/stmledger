@@ -1,6 +1,6 @@
 import '../../lib_exp.dart';
 
-class ActionButton extends StatelessWidget {
+class MyButton extends StatelessWidget {
   final VoidCallback onTap;
   final Color? color;
   final Color? labelColor;
@@ -10,8 +10,9 @@ class ActionButton extends StatelessWidget {
   final String label;
   final FontWeight? labelWeight;
   final double fontSize;
+  final Widget? child;
 
-  const ActionButton({
+  const MyButton({
     Key? key,
     required this.onTap,
     this.color,
@@ -19,6 +20,7 @@ class ActionButton extends StatelessWidget {
     this.fontSize = 13.0,
     this.padding = const EdgeInsets.all(16),
     this.borderRadius,
+    this.child,
     required this.label,
     this.labelWeight,
     this.labelColor,
@@ -44,7 +46,7 @@ class ActionButton extends StatelessWidget {
         width: width,
         padding: padding,
         alignment: Alignment.center,
-        child: _label,
+        child: child ?? _label,
       );
 
   Widget get _label => Text(

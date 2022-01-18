@@ -4,7 +4,8 @@ class Products {
   String? name;
   int? price;
   int? quentity;
-  String? charge;
+  int? charge;
+  String? note;
 
   Products({
     this.no,
@@ -13,5 +14,6 @@ class Products {
     this.price,
     this.quentity,
     this.charge,
+    this.note,
   });
 }

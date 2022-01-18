@@ -174,13 +174,13 @@ class _BaseDialogState extends State<BaseDialog> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              ActionButton(
+              MyButton(
                 onTap: callback1,
                 label: label1,
                 width: 120,
               ),
               const SizedBox(width: 16),
-              ActionButton(
+              MyButton(
                 onTap: callback2,
                 label: label2,
                 width: 120,
@@ -195,7 +195,7 @@ class _BaseDialogState extends State<BaseDialog> {
           vertical: 30,
           horizontal: context.tenPercentOfWidth + 8,
         ),
-        child: ActionButton(
+        child: MyButton(
           onTap: callback,
           label: label,
         ),

@@ -11,13 +11,39 @@ class _SaleHomePageState extends State<SaleHomePage> {
   final List<String> _productNameList = ['Select'];
   String _selectedName = 'Select';
   late CategoryCtrl _categoryCtrl;
-  TextEditingController _quantityCtrl = TextEditingController();
-  TextEditingController _priceCtrl = TextEditingController();
-  TextEditingController _noteCtrl = TextEditingController();
+  final TextEditingController _quantityCtrl = TextEditingController();
+  final TextEditingController _priceCtrl = TextEditingController();
+  final TextEditingController _noteCtrl = TextEditingController();
 
-  FocusNode _quantityFn = FocusNode();
-  FocusNode _priceFn = FocusNode();
-  FocusNode _noteFn = FocusNode();
+  final FocusNode _quantityFn = FocusNode();
+  final FocusNode _priceFn = FocusNode();
+  final FocusNode _noteFn = FocusNode();
+
+  Future<void> _sell() async {
+    if (_selectedName == 'Select') {
+      return;
+    } else if (_quantityCtrl.text.isEmpty) {
+      _quantityFn.requestFocus();
+      return;
+    } else if (_priceCtrl.text.isEmpty) {
+      _priceFn.requestFocus();
+      return;
+    } else {
+      int q = int.parse(_quantityCtrl.text);
+      int p = int.parse(_priceCtrl.text);
+      context.push(VoucherPage(
+        products: Products(
+          no: 1,
+          date: DateTime.now(),
+          name: _selectedName,
+          quentity: q,
+          price: p,
+          charge: (q * p),
+          note: _noteCtrl.text,
+        ),
+      ));
+    }
+  }
 
   @override
   void dispose() {
@@ -67,45 +93,52 @@ class _SaleHomePageState extends State<SaleHomePage> {
 
   Widget _body() => Container(
         padding: const EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _mText('အမျိုးအစား'),
-              MyDropDown(
-                selectedName: _selectedName,
-                list: _productNameList,
-                onChanged: _dropDownValueChanged,
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _mText('အမျိုးအစား'),
+                    MyDropDown(
+                      selectedName: _selectedName,
+                      list: _productNameList,
+                      onChanged: _dropDownValueChanged,
+                    ),
+                    const SizedBox(height: 16),
+                    _mText('အရေအတွက်'),
+                    myInputForm(
+                      _quantityCtrl,
+                      fn: _quantityFn,
+                      hintText: 'Quantity',
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 16),
+                    _mText('ဈေးနှုန်း ($dia)'),
+                    myInputForm(
+                      _priceCtrl,
+                      fn: _priceFn,
+                      hintText: '\$ Price',
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 16),
+                    _mText('မှတ်ချက်'),
+                    myInputForm(
+                      _noteCtrl,
+                      fn: _noteFn,
+                      hintText: 'Note',
+                      maxLine: 4,
+                      keyboardType: TextInputType.text,
+                    ),
+                    const SizedBox(height: 48),
+                  ],
+                ),
               ),
-              const SizedBox(height: 16),
-              _mText('အရေအတွက်'),
-              myInputForm(
-                _quantityCtrl,
-                fn: _quantityFn,
-                hintText: 'Quantity',
-                keyboardType: TextInputType.number,
-              ),
-              const SizedBox(height: 16),
-              _mText('ဈေးနှုန်း ($dia)'),
-              myInputForm(
-                _priceCtrl,
-                fn: _priceFn,
-                hintText: '\$ Price',
-                keyboardType: TextInputType.number,
-              ),
-              const SizedBox(height: 16),
-              _mText('မှတ်ချက်'),
-              myInputForm(
-                _noteCtrl,
-                fn: _noteFn,
-                hintText: 'Note',
-                maxLine: 4,
-                keyboardType: TextInputType.text,
-              ),
-              const SizedBox(height: 48),
-              ActionButton(onTap: () {}, label: 'Ok'),
-            ],
-          ),
+            ),
+            MyButton(onTap: _sell, label: 'Ok'),
+            const SizedBox(height: 8),
+          ],
         ),
       );
 
