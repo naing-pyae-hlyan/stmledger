@@ -4,7 +4,7 @@ class AddCategoryDialog {
   static void show(
     BuildContext context, {
     Key? key,
-    required ValueChanged<Map<String, String>> onPresss,
+    required ValueChanged<Products> onPresss,
     String btnLabel = 'Save',
     required String title,
   }) {
@@ -22,10 +22,10 @@ class AddCategoryDialog {
           priceFn.requestFocus();
           return;
         } else {
-          onPresss({
-            'name': nameCtrl.text,
-            'price': priceCtrl.text,
-          });
+          onPresss(Products(
+            name: nameCtrl.text,
+            price: int.parse(priceCtrl.text),
+          ));
           context.pop();
         }
       },

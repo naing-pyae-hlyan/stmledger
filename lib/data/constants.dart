@@ -1,5 +1,7 @@
 import 'package:stmledger/lib_exp.dart';
 
+const dia = 'ks';
+
 final List<HomeTypeModel> homeTypes = [
   HomeTypeModel(
     name: 'အမျိုးအစားများ',

@@ -12,7 +12,7 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
     AddCategoryDialog.show(
       context,
       title: 'အသစ်ထည့်',
-      onPresss: (Map<String,String> map) {},
+      onPresss: (Products map) {},
     );
   }
 
@@ -49,6 +49,7 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
           return MyItem(
             label: 'ကြက်ဥလိပ်',
             isAdd: false,
+            price: 1000,
             onPress: () {},
           );
         },
