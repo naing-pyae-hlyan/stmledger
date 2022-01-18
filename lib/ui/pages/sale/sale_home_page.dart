@@ -66,32 +66,38 @@ class _SaleHomePageState extends State<SaleHomePage> {
       receiveCreateAddToCardAnimationMethod: (addToCardAnimationMethod) =>
           runAddToCardAnimation = addToCardAnimationMethod,
       child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: true,
-            centerTitle: false,
-            title: const Text('အရောင်း'),
-            actions: [
-              AddToCartIcon(
-                key: gkCart,
-                icon: const Icon(Icons.shopping_cart),
-                colorBadge: Colors.red,
-              ),
-            ],
-          ),
-          body: _bodyWidget()),
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+          centerTitle: false,
+          title: const Text('အရောင်း'),
+          actions: [
+            AddToCartIcon(
+              key: gkCart,
+              icon: const Icon(Icons.shopping_cart),
+              colorBadge: Colors.red,
+            ),
+          ],
+        ),
+        body: _body(),
+      ),
     );
   }
 
-  Widget _bodyWidget() => Consumer<SaleCtrl>(
+  Widget _body() => Column(
+        children: <Widget>[
+          _listItemsView(),
+          _footerRow(),
+          const SizedBox(height: 16),
+        ],
+      );
+
+  Widget _listItemsView() => Consumer<SaleCtrl>(
         builder: (_, ctrl, __) {
-          return ListView.separated(
-            shrinkWrap: true,
-            itemCount: ctrl.cartList.length + 1,
-            itemBuilder: (_, index) {
-              if (index == ctrl.cartList.length) {
-                return _totalWidget();
-              }
-              return AddToCardItem(
+          return Expanded(
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: ctrl.cartList.length,
+              itemBuilder: (_, index) => AddToCardItem(
                 products: ctrl.cartList[index],
                 onAddClick: (key) {
                   ctrl.addQty(index);
@@ -102,35 +108,55 @@ class _SaleHomePageState extends State<SaleHomePage> {
                   onReduceClick(key, count: ctrl.cartCounter);
                 },
                 globalKey: imageGlobalKeyList[index],
-              );
-            },
-            separatorBuilder: (_, index) => const Divider(thickness: 1),
+              ),
+              separatorBuilder: (_, index) => const Divider(thickness: 1),
+            ),
           );
         },
       );
 
-  Widget _totalWidget() => Card(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                'Total : ',
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: Colors.pink[300],
-                ),
+  Widget _footerRow() => Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            SizedBox(
+              width: context.width * 0.4,
+              child: _totalWidget(),
+            ),
+            SizedBox(
+              width: context.width * 0.5,
+              child: MyButton(
+                onTap: () => context.push(VoucherPage(
+                  products: _saleCtrl.cartList,
+                )),
+                label: 'Checkout',
               ),
-              Text(
-                '1000 $dia',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.pink[300],
-                ),
-              ),
-            ],
-          ),
+            )
+          ],
         ),
+      );
+
+  Widget _totalWidget() => Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Total : ',
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              color: Colors.pink[300],
+            ),
+          ),
+          Consumer<SaleCtrl>(builder: (_, ctrl, __) {
+            return Text(
+              ctrl.totalAmount.toString().currency + ' $dia',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.pink[300],
+              ),
+            );
+          }),
+        ],
       );
 }

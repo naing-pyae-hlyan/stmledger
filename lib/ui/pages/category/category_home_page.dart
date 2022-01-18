@@ -82,14 +82,14 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
             }
             return MyItem(
               imgUrl: categoryCtrl.products[index].imgURl,
-              label: categoryCtrl.products[index].names?[0],
+              label: categoryCtrl.products[index].name?[0],
               price: categoryCtrl.products[index].price,
               isAdd: false,
               onCloseBtnCallback: () => _onRemovePress(index),
               onPress: () => _onUpdatePress(
                 index: index,
                 imgURl: categoryCtrl.products[index].imgURl ?? '',
-                name: categoryCtrl.products[index].names?[0] ?? '',
+                name: categoryCtrl.products[index].name?[0] ?? '',
                 price: categoryCtrl.products[index].price ?? 0,
               ),
             );

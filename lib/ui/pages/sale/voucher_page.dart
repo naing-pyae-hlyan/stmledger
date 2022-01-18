@@ -3,7 +3,7 @@ import 'package:stmledger/ui/widgets/voucher_item.dart';
 import '../../../lib_exp.dart';
 
 class VoucherPage extends StatefulWidget {
-  final Products products;
+  final List<Products> products;
   const VoucherPage({
     required this.products,
     Key? key,
@@ -37,7 +37,7 @@ class _VoucherPageState extends State<VoucherPage> {
             Expanded(
               child: SingleChildScrollView(
                 child: VoucherItem(
-                  products: widget.products,
+                  products: widget.products[0],
                 ),
               ),
             ),

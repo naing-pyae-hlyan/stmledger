@@ -30,7 +30,7 @@ class AddCategoryDialog {
         } else {
           onPresss(
             Products(
-              names: [nameCtrl.text],
+              name: nameCtrl.text,
               price: int.parse(priceCtrl.text),
               imgURl: context.read<RandomImageCtrl>().randomImage,
               qty: 0,

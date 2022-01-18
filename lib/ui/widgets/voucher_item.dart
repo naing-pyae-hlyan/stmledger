@@ -23,7 +23,7 @@ class VoucherItem extends StatelessWidget {
               'ရက်စွဲ',
               products?.date != null ? products?.date!.ddMMMhhmmAAA : '',
             ),
-            _textRow('အမျိုးအစား', products?.names?.join(',\n') ?? ''),
+            _textRow('အမျိုးအစား', products?.name ?? ''),
             _textRow('အရေအတွက်', (products?.qty ?? '').toString()),
             _textRow(
               'စျေးနှုန်း ($dia)',

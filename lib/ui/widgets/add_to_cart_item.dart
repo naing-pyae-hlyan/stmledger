@@ -21,7 +21,7 @@ class AddToCardItem extends StatelessWidget {
         assetImage: products.imgURl,
       ),
       title: Text(
-        products.names?[0] ?? '',
+        products.name ?? '',
         style: const TextStyle(
           fontWeight: FontWeight.w700,
         ),
@@ -59,7 +59,10 @@ class AddToCardItem extends StatelessWidget {
                   () => onAddClick(globalKey),
                   icon: Icons.add,
                 ),
-                Text(products.qty!.toString()),
+                Text(
+                  products.qty!.toString(),
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
                 _trailingBtn(
                   () => onReduceClick(globalKey),
                   icon: Icons.remove,

@@ -1,7 +1,7 @@
 class Products {
   int? no;
   DateTime? date;
-  List<String>? names;
+  String? name;
   int? price;
   int? qty;
   int? charge;
@@ -11,7 +11,7 @@ class Products {
   Products({
     this.no,
     this.date,
-    this.names,
+    this.name,
     this.price = 0,
     this.qty = 0,
     this.charge = 0,

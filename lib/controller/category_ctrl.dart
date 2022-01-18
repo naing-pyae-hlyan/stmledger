@@ -5,37 +5,37 @@ import '../lib_exp.dart';
 class CategoryCtrl with ChangeNotifier {
   List<Products> products = [
     Products(
-      names: ['Cake'],
+      name: 'Cake',
       price: 1000,
       imgURl: 'assets/icons/bakery.png',
       qty: 0,
     ),
     Products(
-      names: ['Bread'],
+      name: 'Bread',
       price: 800,
       imgURl: 'assets/icons/bread1.png',
       qty: 0,
     ),
     Products(
-      names: ['Ice Cream'],
+      name: 'Ice Cream',
       price: 200,
       imgURl: 'assets/icons/bread2.png',
       qty: 0,
     ),
     Products(
-      names: ['ပလာတာ'],
+      name: 'ပလာတာ',
       price: 500,
       imgURl: 'assets/icons/bread3.png',
       qty: 0,
     ),
     Products(
-      names: ['ထပ်တရာ'],
+      name: 'ထပ်တရာ',
       price: 500,
       imgURl: 'assets/icons/bread4.png',
       qty: 0,
     ),
     Products(
-      names: ['သကြားပလာတာ'],
+      name: 'သကြားပလာတာ',
       price: 500,
       imgURl: 'assets/icons/bread4.png',
       qty: 0,

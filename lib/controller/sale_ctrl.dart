@@ -29,4 +29,14 @@ class SaleCtrl with ChangeNotifier {
     }
     return count;
   }
+
+  int get totalAmount {
+    int amt = 0;
+    for (var p in cartList) {
+      if (p.price != null && p.qty != null && p.price! > 0 && p.qty! > 0) {
+        amt += (p.price! * p.qty!);
+      }
+    }
+    return amt;
+  }
 }
