@@ -34,26 +34,63 @@ class _SaleHomePageState extends State<SaleHomePage> {
       receiveCreateAddToCardAnimationMethod: (addToCardAnimationMethod) =>
           runAddToCardAnimation = addToCardAnimationMethod,
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: true,
-          centerTitle: false,
-          title: const Text('အရောင်း'),
-          actions: [
-            AddToCartIcon(
-              key: gkCart,
-              icon: const Icon(Icons.shopping_cart),
-              colorBadge: Colors.red,
-            ),
-          ],
-        ),
-        body: Center(
-          child: Container(
-            alignment: Alignment.center,
-            height: 73,
-            child: AddToCardItem(onClick: listClick, index: 1),
+          appBar: AppBar(
+            automaticallyImplyLeading: true,
+            centerTitle: false,
+            title: const Text('အရောင်း'),
+            actions: [
+              AddToCartIcon(
+                key: gkCart,
+                icon: const Icon(Icons.shopping_cart),
+                colorBadge: Colors.red,
+              ),
+            ],
           ),
-        ),
-      ),
+          body: _bodyWidget()),
     );
   }
+
+  Widget _bodyWidget() => Consumer<CategoryCtrl>(
+        builder: (_, ctrl, __) {
+          return ListView.separated(
+            shrinkWrap: true,
+            itemCount: ctrl.products.length + 1,
+            itemBuilder: (_, index) {
+              if (index == ctrl.products.length) {
+                return _totalWidget();
+              }
+              return AddToCardItem(
+                products: ctrl.products[index],
+                onClick: listClick,
+              );
+            },
+            separatorBuilder: (_, index) => const Divider(thickness: 1),
+          );
+        },
+      );
+
+  Widget _totalWidget() => Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                'Total : ',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: Colors.pink[300],
+                ),
+              ),
+              Text(
+                '1000 $dia',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.pink[300],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
 }
