@@ -8,4 +8,9 @@ class ItemPressStateCtrl with ChangeNotifier {
     state = !state;
     notifyListeners();
   }
+
+  void setState(bool b) {
+    state = b;
+    notifyListeners();
+  }
 }

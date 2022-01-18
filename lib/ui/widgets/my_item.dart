@@ -51,7 +51,9 @@ class _MyItemState extends State<MyItem> {
                       : const SizedBox.shrink(),
                 ],
               ),
-              stateCtrl.state ? _closeButton() : const SizedBox.shrink(),
+              stateCtrl.state
+                  ? _closeButton(stateCtrl)
+                  : const SizedBox.shrink(),
             ],
           ),
           const SizedBox(height: 4),
@@ -70,7 +72,10 @@ class _MyItemState extends State<MyItem> {
 
   Widget _card(ItemPressStateCtrl stateCtrl) => InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: widget.onPress,
+        onTap: () {
+          widget.onPress();
+          stateCtrl.setState(false);
+        },
         onLongPress: () {
           if (widget.onCloseBtnCallback != null) {
             stateCtrl.stateChange();
@@ -109,7 +114,7 @@ class _MyItemState extends State<MyItem> {
         ),
       );
 
-  Widget _closeButton() {
+  Widget _closeButton(ItemPressStateCtrl stateCtrl) {
     if (widget.onCloseBtnCallback == null) return const SizedBox.shrink();
     return Positioned(
       right: 0,
@@ -119,7 +124,10 @@ class _MyItemState extends State<MyItem> {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: widget.onCloseBtnCallback,
+            onTap: () {
+              widget.onCloseBtnCallback!();
+              stateCtrl.setState(false);
+            },
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
