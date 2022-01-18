@@ -14,7 +14,7 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
     AddCategoryDialog.show(
       context,
       title: 'အသစ်ထည့်',
-      onPresss: (Products product) {
+      onPresss: (Product product) {
         _categoryCtrl.addProducts(product);
       },
     );
@@ -33,7 +33,7 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
       productName: name,
       productPrice: price.toString(),
       imgUrl: imgURl,
-      onPresss: (Products product) {
+      onPresss: (Product product) {
         _categoryCtrl.updateProducts(index, product);
       },
     );

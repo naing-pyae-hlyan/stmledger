@@ -1,4 +1,4 @@
-class Products {
+class Product {
   int? no;
   DateTime? date;
   String? name;
@@ -8,7 +8,7 @@ class Products {
   String? note;
   String? imgURl;
 
-  Products({
+  Product({
     this.no,
     this.date,
     this.name,

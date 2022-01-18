@@ -71,10 +71,17 @@ class _SaleHomePageState extends State<SaleHomePage> {
           centerTitle: false,
           title: const Text('အရောင်း'),
           actions: [
-            AddToCartIcon(
-              key: gkCart,
-              icon: const Icon(Icons.shopping_cart),
-              colorBadge: Colors.red,
+            InkWell(
+              onTap: () => context.push(VoucherPage(
+                products: _saleCtrl.getConfirmedCartList,
+                totalAmount: _saleCtrl.totalAmount,
+              )),
+              borderRadius: BorderRadius.circular(16),
+              child: AddToCartIcon(
+                key: gkCart,
+                icon: const Icon(Icons.shopping_cart),
+                colorBadge: Colors.red,
+              ),
             ),
           ],
         ),
@@ -128,7 +135,8 @@ class _SaleHomePageState extends State<SaleHomePage> {
               width: context.width * 0.5,
               child: MyButton(
                 onTap: () => context.push(VoucherPage(
-                  products: _saleCtrl.cartList,
+                  products: _saleCtrl.getConfirmedCartList,
+                  totalAmount: _saleCtrl.totalAmount,
                 )),
                 label: 'Checkout',
               ),

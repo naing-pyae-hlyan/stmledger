@@ -1,7 +1,7 @@
 import '../../lib_exp.dart';
 
 class AddToCardItem extends StatelessWidget {
-  final Products products;
+  final Product products;
   final GlobalKey globalKey;
   final void Function(GlobalKey) onAddClick;
   final void Function(GlobalKey) onReduceClick;

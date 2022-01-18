@@ -73,8 +73,9 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
           if (index == length) {
             return _totalItem();
           }
-          return VoucherItem(
-            products: Products(),
+          return const VoucherItem(
+            products: [],
+            totalAmount: 0,
           );
         },
       ),

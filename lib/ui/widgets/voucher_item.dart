@@ -1,9 +1,11 @@
 import '../../lib_exp.dart';
 
 class VoucherItem extends StatelessWidget {
-  final Products? products;
+  final List<Product>? products;
+  final int? totalAmount;
   const VoucherItem({
     required this.products,
+    required this.totalAmount,
     Key? key,
   }) : super(key: key);
 
@@ -18,26 +20,28 @@ class VoucherItem extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
-            _textRow('နံပါတ်', (products?.no ?? '').toString()),
+            _textRow('နံပါတ်', ('').toString()),
             _textRow(
               'ရက်စွဲ',
-              products?.date != null ? products?.date!.ddMMMhhmmAAA : '',
+              DateTime.now().ddMMMhhmmAAA,
             ),
-            _textRow('အမျိုးအစား', products?.name ?? ''),
-            _textRow('အရေအတွက်', (products?.qty ?? '').toString()),
-            _textRow(
-              'စျေးနှုန်း ($dia)',
-              (products?.price ?? '').toString().currency,
+            _textRow('အမျိုးအစားများ', 'Qty / Price'),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: products?.length,
+              itemBuilder: (_, index) => _textRow(
+                products![index].name!,
+                products![index].qty.toString() +
+                    ' x ' +
+                    products![index].price.toString().currency,
+              ),
             ),
             const Divider(thickness: 1),
             _textRow(
               'ကျသင့်ငွေ ($dia)',
-              (products?.charge ?? '').toString().currency,
+              (totalAmount ?? '').toString().currency + dia,
             ),
-            const Divider(thickness: 1),
-            (products?.note != null && products!.note!.isNotEmpty)
-                ? _textRow('မှတ်ချက်', products?.note)
-                : const SizedBox.shrink(),
           ],
         ),
       ),

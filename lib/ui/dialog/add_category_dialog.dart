@@ -4,7 +4,7 @@ class AddCategoryDialog {
   static void show(
     BuildContext context, {
     Key? key,
-    required ValueChanged<Products> onPresss,
+    required ValueChanged<Product> onPresss,
     String btnLabel = 'Save',
     required String title,
     String productName = '',
@@ -29,7 +29,7 @@ class AddCategoryDialog {
           return;
         } else {
           onPresss(
-            Products(
+            Product(
               name: nameCtrl.text,
               price: int.parse(priceCtrl.text),
               imgURl: context.read<RandomImageCtrl>().randomImage,

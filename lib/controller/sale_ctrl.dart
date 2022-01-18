@@ -1,8 +1,12 @@
 import '../lib_exp.dart';
 
 class SaleCtrl with ChangeNotifier {
-  List<Products> cartList = [];
-  void initCart(List<Products> l) {
+  List<Product> cartList = [];
+  void initCart(List<Product> l) {
+    cartList.clear();
+    for (var p in l) {
+      p.qty = 0;
+    }
     cartList = l;
   }
 
@@ -28,6 +32,16 @@ class SaleCtrl with ChangeNotifier {
       }
     }
     return count;
+  }
+
+  List<Product> get getConfirmedCartList {
+    List<Product> l = [];
+    for (var p in cartList) {
+      if (p.qty != null && p.price != null && p.qty! > 0 && p.price! > 0) {
+        l.add(p);
+      }
+    }
+    return l;
   }
 
   int get totalAmount {
