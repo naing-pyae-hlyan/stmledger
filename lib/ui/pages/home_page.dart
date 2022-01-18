@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
               _iconRow(
                 img1: 'assets/bakery.png',
                 name1: 'အမျိုးအစားများ',
-                onPress1: () {},
+                onPress1: () => context.push(const CategoryHomePage()),
                 img2: 'assets/text-file.png',
                 name2: 'စာရင်းချုပ်',
                 onPress2: () {},

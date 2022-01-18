@@ -1,3 +1,5 @@
+export 'controller/ctrl_exp.dart';
+export 'model/model_exp.dart';
 export 'ui/ui_exp.dart';
 export 'themes/theme_exp.dart';
 export 'utils/util_exp.dart';
