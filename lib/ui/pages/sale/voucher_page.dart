@@ -1,3 +1,5 @@
+import 'package:stmledger/ui/widgets/voucher_item.dart';
+
 import '../../../lib_exp.dart';
 
 class VoucherPage extends StatefulWidget {
@@ -29,56 +31,24 @@ class _VoucherPageState extends State<VoucherPage> {
   }
 
   Widget _body() => Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(8),
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    _textRow('နံပါတ်', widget.products.no.toString()),
-                    _textRow('ရက်စွဲ', widget.products.date!.ddMMMhhmmAAA),
-                    _textRow('အမျိုးအစား', widget.products.name),
-                    _textRow('အရေအတွက်', widget.products.quentity.toString()),
-                    _textRow(
-                      'စျေးနှုန်း ($dia)',
-                      widget.products.price.toString().currency,
-                    ),
-                    const Divider(thickness: 1),
-                    _textRow(
-                      'ကျသင့်ငွေ ($dia)',
-                      widget.products.charge.toString().currency,
-                    ),
-                    const Divider(thickness: 1),
-                    widget.products.note!.isNotEmpty
-                        ? _textRow('မှတ်ချက်', widget.products.note)
-                        : const SizedBox.shrink(),
-                    const SizedBox(height: 64),
-                  ],
+                child: VoucherItem(
+                  products: widget.products,
                 ),
               ),
             ),
-            MyButton(
-              onTap: _print,
-              label: 'Print',
-            ),
-            const SizedBox(height: 8),
-          ],
-        ),
-      );
-
-  Widget _textRow(String t1, String? t2) => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text('$t1 : '),
-            Text(
-              t2!,
-              style: const TextStyle(
-                fontWeight: FontWeight.w700,
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: MyButton(
+                onTap: _print,
+                label: 'Print',
               ),
             ),
+            const SizedBox(height: 8),
           ],
         ),
       );

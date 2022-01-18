@@ -1,3 +1,5 @@
+import 'package:stmledger/ui/widgets/voucher_item.dart';
+
 import '../../../lib_exp.dart';
 
 class SummaryHomePage extends StatefulWidget {
@@ -11,8 +13,6 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
   final List<String> _productNameList = ['All'];
   String _selectedName = 'All';
   late CategoryCtrl _categoryCtrl;
-
-  Future<void> _pickDateTime({required bool isStartDate}) async {}
 
   @override
   void initState() {
@@ -37,10 +37,12 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
   }
 
   Widget _body() => Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(8),
         child: Column(
           children: <Widget>[
             _haderRow(),
+            const SizedBox(height: 8),
+            _itemListView(),
           ],
         ),
       );
@@ -59,5 +61,71 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
             ),
           ),
         ],
+      );
+
+  Widget _itemListView() {
+    const int length = 10;
+    return Flexible(
+      child: ListView.builder(
+        itemCount: length + 1,
+        shrinkWrap: true,
+        itemBuilder: (_, index) {
+          if (index == length) {
+            return _totalItem();
+          }
+          return VoucherItem(
+            products: Products(),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _totalItem() => Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        color: AppColors.primaryColor,
+        elevation: 0.5,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Text(
+                  DateTime.now().ddMMyyyy +
+                      ' မှ ' +
+                      DateTime.now().ddMMyyyy +
+                      ' ထိ',
+                  style: TextStyle(color: Colors.grey[200]),
+                ),
+              ),
+              _textRow('အရေအတွက်', '1000'),
+              _textRow('ရောင်းရငွေ ($dia)', '10000'.currency),
+            ],
+          ),
+        ),
+      );
+
+  Widget _textRow(String t1, String? t2) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              '$t1 : ',
+              style: TextStyle(color: Colors.grey[200]),
+            ),
+            Text(
+              t2!,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: Colors.grey[200],
+              ),
+            ),
+          ],
+        ),
       );
 }
