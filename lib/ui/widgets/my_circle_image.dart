@@ -34,9 +34,11 @@ class _MyCircleImageWithGeneratedImageState
 class MyCircleImage extends StatefulWidget {
   final String? assetImage;
   final Color? bgColor;
+  final GlobalKey? globalKey;
   const MyCircleImage({
     required this.assetImage,
     this.bgColor,
+    this.globalKey,
     Key? key,
   }) : super(key: key);
 
@@ -48,8 +50,10 @@ class _MyCircleImageState extends State<MyCircleImage> {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
+      key: widget.key,
       borderRadius: BorderRadius.circular(32),
       child: Container(
+        key: widget.globalKey,
         color: widget.bgColor ?? AppColors.primaryColor,
         child: Image.asset(
           widget.assetImage ?? '',

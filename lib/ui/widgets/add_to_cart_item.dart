@@ -1,20 +1,23 @@
 import '../../lib_exp.dart';
 
 class AddToCardItem extends StatelessWidget {
-  final GlobalKey imageGlobalKey = GlobalKey();
   final Products products;
-  final void Function(GlobalKey) onClick;
-  AddToCardItem({
+  final GlobalKey globalKey;
+  final void Function(GlobalKey) onAddClick;
+  final void Function(GlobalKey) onReduceClick;
+  const AddToCardItem({
     required this.products,
-    required this.onClick,
+    required this.onAddClick,
+    required this.onReduceClick,
+    required this.globalKey,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => onClick(imageGlobalKey),
       leading: MyCircleImage(
+        globalKey: globalKey,
         assetImage: products.imgURl,
       ),
       title: Text(
@@ -53,12 +56,12 @@ class AddToCardItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 _trailingBtn(
-                  () {},
+                  () => onAddClick(globalKey),
                   icon: Icons.add,
                 ),
                 const Text('1'),
                 _trailingBtn(
-                  () {},
+                  () => onReduceClick(globalKey),
                   icon: Icons.remove,
                 ),
               ],
@@ -67,13 +70,14 @@ class AddToCardItem extends StatelessWidget {
         ],
       );
 
-  Widget _trailingBtn(VoidCallback callback, {required IconData icon}) =>
+  Widget _trailingBtn(VoidCallback callback,
+          {required IconData icon}) =>
       InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: callback,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
-          child: Material(
+          child: Container(
             color: AppColors.primaryColor,
             child: Icon(
               icon,

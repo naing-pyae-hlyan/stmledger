@@ -9,13 +9,29 @@ class SaleHomePage extends StatefulWidget {
 
 class _SaleHomePageState extends State<SaleHomePage> {
   GlobalKey<CartIconKey> gkCart = GlobalKey<CartIconKey>();
+  List<GlobalKey> imageGlobalKeyList = [];
+
   late Function(GlobalKey) runAddToCardAnimation;
   int _cartQuantityItems = 0;
 
-  void listClick(GlobalKey gkImageContainer) async {
+  void onAddClick(GlobalKey gkImageContainer) async {
     await runAddToCardAnimation(gkImageContainer);
     await gkCart.currentState!
         .runCartAnimation((++_cartQuantityItems).toString());
+  }
+
+  void onReduceClick(GlobalKey gkImageContainer) async {
+    await gkCart.currentState!
+        .runCartAnimation((--_cartQuantityItems).toString());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    imageGlobalKeyList = List<GlobalKey>.generate(
+      context.read<CategoryCtrl>().products.length,
+      (index) => GlobalKey(),
+    );
   }
 
   @override
@@ -61,7 +77,9 @@ class _SaleHomePageState extends State<SaleHomePage> {
               }
               return AddToCardItem(
                 products: ctrl.products[index],
-                onClick: listClick,
+                onAddClick: onAddClick,
+                onReduceClick: onReduceClick,
+                globalKey: imageGlobalKeyList[index],
               );
             },
             separatorBuilder: (_, index) => const Divider(thickness: 1),
