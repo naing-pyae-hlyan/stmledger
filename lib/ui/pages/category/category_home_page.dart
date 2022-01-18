@@ -13,23 +13,9 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        title: const Text('အမျိုးအစားများ'),
         centerTitle: false,
+        title: const Text('အမျိုးအစားများ'),
       ),
-      body: _addCategoryBtn(),
     );
   }
-
-  Widget _addCategoryBtn() => InkWell(
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: AppColors.primaryColor,
-          ),
-          width: 120,
-          height: 150,
-        ),
-        borderRadius: BorderRadius.circular(12),
-        onTap: () {},
-      );
 }

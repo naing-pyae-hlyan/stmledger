@@ -4,6 +4,7 @@ export 'ui/ui_exp.dart';
 export 'themes/theme_exp.dart';
 export 'utils/util_exp.dart';
 export 'extension/ext_exp.dart';
+export 'data/data_exp.dart';
 
 // dart
 export 'dart:async';

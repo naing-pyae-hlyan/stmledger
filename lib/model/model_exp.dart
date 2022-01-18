@@ -1,0 +1,1 @@
+export 'home_type_model.dart';
