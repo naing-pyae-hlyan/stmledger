@@ -8,12 +8,43 @@ class CategoryHomePage extends StatefulWidget {
 }
 
 class _CategoryHomePageState extends State<CategoryHomePage> {
+  late CategoryCtrl _categoryCtrl;
+
   void _onAddPress() {
     AddCategoryDialog.show(
       context,
       title: 'အသစ်ထည့်',
-      onPresss: (Products map) {},
+      onPresss: (Products product) {
+        _categoryCtrl.addProducts(product);
+      },
     );
+  }
+
+  void _onUpdatePress({
+    required int index,
+    required String name,
+    required int price,
+  }) {
+    AddCategoryDialog.show(
+      context,
+      title: 'ပြင်မည်',
+      btnLabel: 'Update',
+      productName: name,
+      productPrice: price.toString(),
+      onPresss: (Products product) {
+        _categoryCtrl.updateProducts(index, product);
+      },
+    );
+  }
+
+  void _onRemovePress(int index) {
+    _categoryCtrl.removeProducts(index);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _categoryCtrl = context.read<CategoryCtrl>();
   }
 
   @override
@@ -29,31 +60,38 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
   }
 
   Widget _body() {
-    const length = 4;
     return Container(
       padding: const EdgeInsets.all(20),
-      child: GridView.builder(
-        shrinkWrap: true,
-        itemCount: length + 1,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-        ),
-        itemBuilder: (_, index) {
-          if (index == length) {
+      child: Consumer<CategoryCtrl>(builder: (_, categoryCtrl, __) {
+        final length = categoryCtrl.products.length;
+        return GridView.builder(
+          shrinkWrap: true,
+          itemCount: length + 1,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+          ),
+          itemBuilder: (_, index) {
+            if (index == length) {
+              return MyItem(
+                label: 'Add',
+                isAdd: true,
+                onPress: _onAddPress,
+              );
+            }
             return MyItem(
-              label: 'Add',
-              isAdd: true,
-              onPress: _onAddPress,
+              label: categoryCtrl.products[index].name,
+              price: categoryCtrl.products[index].price,
+              isAdd: false,
+              onCloseBtnCallback: () => _onRemovePress(index),
+              onPress: () => _onUpdatePress(
+                index: index,
+                name: categoryCtrl.products[index].name ?? '',
+                price: categoryCtrl.products[index].price ?? 0,
+              ),
             );
-          }
-          return MyItem(
-            label: 'ကြက်ဥလိပ်',
-            isAdd: false,
-            price: 1000,
-            onPress: () {},
-          );
-        },
-      ),
+          },
+        );
+      }),
     );
   }
 }

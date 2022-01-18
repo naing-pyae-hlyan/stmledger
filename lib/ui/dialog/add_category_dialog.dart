@@ -7,11 +7,16 @@ class AddCategoryDialog {
     required ValueChanged<Products> onPresss,
     String btnLabel = 'Save',
     required String title,
+    String productName = '',
+    String productPrice = '',
   }) {
     final TextEditingController nameCtrl = TextEditingController();
     final TextEditingController priceCtrl = TextEditingController();
     final FocusNode nameFn = FocusNode();
     final FocusNode priceFn = FocusNode();
+    nameFn.requestFocus();
+    nameCtrl.text = productName;
+    priceCtrl.text = productPrice;
     BaseDialog.show(
       context,
       onTapActionButton: () {

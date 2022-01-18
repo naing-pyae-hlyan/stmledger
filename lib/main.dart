@@ -1,7 +1,15 @@
 import 'lib_exp.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CategoryCtrl()),
+        ChangeNotifierProvider(create: (_) => ItemPressStateCtrl(state: false)),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
