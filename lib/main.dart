@@ -5,6 +5,10 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CategoryCtrl()),
+        ChangeNotifierProvider(
+            create: (_) => RandomImageCtrl(
+                randomImage:
+                    categoryCakes[Random().nextInt(categoryCakes.length)])),
         ChangeNotifierProvider(create: (_) => ItemPressStateCtrl(state: false)),
       ],
       child: const MyApp(),

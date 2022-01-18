@@ -19,3 +19,11 @@ final List<HomeTypeModel> homeTypes = [
     type: HomeTypeEnum.summary,
   ),
 ];
+
+final List<String> categoryCakes = [
+  'assets/icons/bakery.png',
+  'assets/icons/bread1.png',
+  'assets/icons/bread2.png',
+  'assets/icons/bread3.png',
+  'assets/icons/bread4.png',
+];

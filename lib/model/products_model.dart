@@ -6,6 +6,7 @@ class Products {
   int? quentity;
   int? charge;
   String? note;
+  String? imgURl;
 
   Products({
     this.no,
@@ -15,5 +16,6 @@ class Products {
     this.quentity,
     this.charge,
     this.note,
+    this.imgURl,
   });
 }

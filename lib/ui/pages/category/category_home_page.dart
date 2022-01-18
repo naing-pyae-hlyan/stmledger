@@ -22,6 +22,7 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
 
   void _onUpdatePress({
     required int index,
+    required String imgURl,
     required String name,
     required int price,
   }) {
@@ -31,6 +32,7 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
       btnLabel: 'Update',
       productName: name,
       productPrice: price.toString(),
+      imgUrl: imgURl,
       onPresss: (Products product) {
         _categoryCtrl.updateProducts(index, product);
       },
@@ -79,12 +81,14 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
               );
             }
             return MyItem(
+              imgUrl: categoryCtrl.products[index].imgURl,
               label: categoryCtrl.products[index].names?[0],
               price: categoryCtrl.products[index].price,
               isAdd: false,
               onCloseBtnCallback: () => _onRemovePress(index),
               onPress: () => _onUpdatePress(
                 index: index,
+                imgURl: categoryCtrl.products[index].imgURl ?? '',
                 name: categoryCtrl.products[index].names?[0] ?? '',
                 price: categoryCtrl.products[index].price ?? 0,
               ),

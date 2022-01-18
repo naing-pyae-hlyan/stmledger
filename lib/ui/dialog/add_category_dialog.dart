@@ -9,6 +9,7 @@ class AddCategoryDialog {
     required String title,
     String productName = '',
     String productPrice = '',
+    String? imgUrl,
   }) {
     final TextEditingController nameCtrl = TextEditingController();
     final TextEditingController priceCtrl = TextEditingController();
@@ -27,10 +28,13 @@ class AddCategoryDialog {
           priceFn.requestFocus();
           return;
         } else {
-          onPresss(Products(
-            names: [nameCtrl.text],
-            price: int.parse(priceCtrl.text),
-          ));
+          onPresss(
+            Products(
+              names: [nameCtrl.text],
+              price: int.parse(priceCtrl.text),
+              imgURl: context.read<RandomImageCtrl>().randomImage,
+            ),
+          );
           context.pop();
         }
       },
@@ -48,6 +52,7 @@ class AddCategoryDialog {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            MyCircleImageWithGeneratedImage(imgUrl: imgUrl),
             myInputForm(
               nameCtrl,
               hintText: 'Name',
