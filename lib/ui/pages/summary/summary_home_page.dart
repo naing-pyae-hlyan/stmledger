@@ -19,7 +19,7 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
     super.initState();
     _categoryCtrl = context.read<CategoryCtrl>();
     for (var p in _categoryCtrl.products) {
-      _productNameList.add(p.name ?? '');
+      _productNameList.add(p.names?[0] ?? '');
     }
     _selectedName = _productNameList[0];
   }

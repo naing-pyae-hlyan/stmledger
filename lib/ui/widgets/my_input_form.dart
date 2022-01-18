@@ -6,6 +6,7 @@ Widget myInputForm(
   FocusNode? fn,
   EdgeInsetsGeometry? margin,
   TextInputType keyboardType = TextInputType.text,
+  bool readOnly = false,
   int maxLine = 1,
 }) =>
     Container(
@@ -15,8 +16,10 @@ Widget myInputForm(
         focusNode: fn,
         maxLines: maxLine,
         keyboardType: keyboardType,
+        readOnly: readOnly,
         decoration: InputDecoration(
           isDense: true,
+          
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: AppColors.primaryColor),

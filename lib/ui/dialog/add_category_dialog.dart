@@ -28,7 +28,7 @@ class AddCategoryDialog {
           return;
         } else {
           onPresss(Products(
-            name: nameCtrl.text,
+            names: [nameCtrl.text],
             price: int.parse(priceCtrl.text),
           ));
           context.pop();

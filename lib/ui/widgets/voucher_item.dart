@@ -23,7 +23,7 @@ class VoucherItem extends StatelessWidget {
               'ရက်စွဲ',
               products?.date != null ? products?.date!.ddMMMhhmmAAA : '',
             ),
-            _textRow('အမျိုးအစား', products?.name ?? ''),
+            _textRow('အမျိုးအစား', products?.names?.join(',\n') ?? ''),
             _textRow('အရေအတွက်', (products?.quentity ?? '').toString()),
             _textRow(
               'စျေးနှုန်း ($dia)',
@@ -48,12 +48,19 @@ class VoucherItem extends StatelessWidget {
         padding: const EdgeInsets.all(4.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text('$t1 : '),
-            Text(
-              t2 ?? '',
-              style: const TextStyle(
-                fontWeight: FontWeight.w700,
+            Flexible(
+              child: Text(
+                t2 ?? '',
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                ),
+                overflow: TextOverflow.ellipsis,
+                softWrap: true,
+                maxLines: 5,
+                textAlign: TextAlign.end,
               ),
             ),
           ],

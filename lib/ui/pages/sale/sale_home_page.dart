@@ -8,8 +8,8 @@ class SaleHomePage extends StatefulWidget {
 }
 
 class _SaleHomePageState extends State<SaleHomePage> {
-  final List<String> _productNameList = ['Select'];
-  String _selectedName = 'Select';
+  final List<String> _productNameList = [];
+  final List<String> _selectedName = [];
   late CategoryCtrl _categoryCtrl;
   final TextEditingController _quantityCtrl = TextEditingController();
   final TextEditingController _priceCtrl = TextEditingController();
@@ -18,15 +18,15 @@ class _SaleHomePageState extends State<SaleHomePage> {
   final FocusNode _quantityFn = FocusNode();
   final FocusNode _priceFn = FocusNode();
   final FocusNode _noteFn = FocusNode();
+  FToast? fToast;
 
-  Future<void> _sell() async {
-    if (_selectedName == 'Select') {
+  Future<void> _voucher() async {
+    if (_selectedName.isEmpty) {
+      showToast(fToast, msg: 'အမျိုးအစားရွေးပါ။', alertType: AlertType.warning);
       return;
     } else if (_quantityCtrl.text.isEmpty) {
       _quantityFn.requestFocus();
-      return;
-    } else if (_priceCtrl.text.isEmpty) {
-      _priceFn.requestFocus();
+      showToast(fToast, msg: 'အရေအတွက်ထည့်ပါ။', alertType: AlertType.warning);
       return;
     } else {
       int q = int.parse(_quantityCtrl.text);
@@ -35,7 +35,7 @@ class _SaleHomePageState extends State<SaleHomePage> {
         products: Products(
           no: 1,
           date: DateTime.now(),
-          name: _selectedName,
+          names: _selectedName,
           quentity: q,
           price: p,
           charge: (q * p),
@@ -60,22 +60,29 @@ class _SaleHomePageState extends State<SaleHomePage> {
   void initState() {
     super.initState();
     _categoryCtrl = context.read<CategoryCtrl>();
+    fToast = FToast();
+    fToast?.init(context);
     for (var p in _categoryCtrl.products) {
-      _productNameList.add(p.name ?? '');
+      _productNameList.add(p.names?[0] ?? '');
     }
-    _selectedName = _productNameList[0];
     _quantityCtrl.text = '1';
   }
 
-  void _dropDownValueChanged(dynamic s) {
-    setState(() => _selectedName = s);
-    for (var p in _categoryCtrl.products) {
-      if (p.name == s) {
-        _priceCtrl.text = p.price.toString();
-        break;
-      } else {
-        _priceCtrl.clear();
+  void _dropDownValueChanged(dynamic value) {
+    if (value is List) {
+      _selectedName.clear();
+      int totalPrice = 0;
+      for (var s in value) {
+        for (var product in _categoryCtrl.products) {
+          if (s == product.names?[0]) {
+            _selectedName.add(s);
+            totalPrice += product.price ?? 0;
+          }
+        }
       }
+      (totalPrice > 0)
+          ? _priceCtrl.text = totalPrice.toString()
+          : _priceCtrl.clear();
     }
   }
 
@@ -101,10 +108,10 @@ class _SaleHomePageState extends State<SaleHomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     _mText('အမျိုးအစား'),
-                    MyDropDown(
-                      selectedName: _selectedName,
-                      list: _productNameList,
-                      onChanged: _dropDownValueChanged,
+                    MyMultiDropDown(
+                      title: 'Select',
+                      items: _productNameList,
+                      onSelected: _dropDownValueChanged,
                     ),
                     const SizedBox(height: 16),
                     _mText('အရေအတွက်'),
@@ -120,6 +127,7 @@ class _SaleHomePageState extends State<SaleHomePage> {
                       _priceCtrl,
                       fn: _priceFn,
                       hintText: '\$ Price',
+                      readOnly: true,
                       keyboardType: TextInputType.number,
                     ),
                     const SizedBox(height: 16),
@@ -136,7 +144,24 @@ class _SaleHomePageState extends State<SaleHomePage> {
                 ),
               ),
             ),
-            MyButton(onTap: _sell, label: 'Ok'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                MyButton(
+                  onTap: _voucher,
+                  label: 'ထည့်',
+                  width: context.width * 0.4,
+                  padding: const EdgeInsets.all(8),
+                  color: AppColors.primaryColor.withOpacity(0.7),
+                ),
+                MyButton(
+                  onTap: _voucher,
+                  label: 'ဘောင်ချာ',
+                  width: context.width * 0.4,
+                  padding: const EdgeInsets.all(8),
+                )
+              ],
+            ),
             const SizedBox(height: 8),
           ],
         ),

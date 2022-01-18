@@ -79,13 +79,13 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
               );
             }
             return MyItem(
-              label: categoryCtrl.products[index].name,
+              label: categoryCtrl.products[index].names?[0],
               price: categoryCtrl.products[index].price,
               isAdd: false,
               onCloseBtnCallback: () => _onRemovePress(index),
               onPress: () => _onUpdatePress(
                 index: index,
-                name: categoryCtrl.products[index].name ?? '',
+                name: categoryCtrl.products[index].names?[0] ?? '',
                 price: categoryCtrl.products[index].price ?? 0,
               ),
             );
