@@ -4,6 +4,7 @@ extension DateExt on DateTime {
   String get ddMMMyyyyE => DateFormat('dd MMM yyyy E').format(this);
   String get ddMMMyyyyEE => DateFormat('dd MMM yyyy (E)').format(this);
   String get ddMMMyyyy => DateFormat('dd MMM yyyy').format(this);
+  String get ddMMyyyy => DateFormat('dd/MM/yyyy').format(this);
   String get ddMMMyyyyHHmm => DateFormat('dd MMM yyyy hh:mm aaa').format(this);
   String get ddMMMhhmmAAA => DateFormat('dd MMM, hh:mm aaa').format(this);
 

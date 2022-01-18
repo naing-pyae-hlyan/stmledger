@@ -12,6 +12,10 @@ class VoucherPage extends StatefulWidget {
 }
 
 class _VoucherPageState extends State<VoucherPage> {
+  Future<void> _print() async {
+    context.pushAndRemoveUntil(const HomePage());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +59,7 @@ class _VoucherPageState extends State<VoucherPage> {
               ),
             ),
             MyButton(
-              onTap: () {},
+              onTap: _print,
               label: 'Print',
             ),
             const SizedBox(height: 8),

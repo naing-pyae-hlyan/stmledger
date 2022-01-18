@@ -62,6 +62,7 @@ class _MyItemState extends State<MyItem> {
             style: const TextStyle(
               fontWeight: FontWeight.w600,
             ),
+            softWrap: true,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
           ),
