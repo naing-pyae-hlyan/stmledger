@@ -4,7 +4,7 @@ import '../../lib_exp.dart';
 const String tag = 'DbHelper';
 
 class DbHelper {
-  final String _dbName = 'thutawave.db';
+  final String _dbName = 'stm.db';
   final int _dbVersion = 1;
 
   static Database? _db;
@@ -34,6 +34,7 @@ class DbHelper {
   }
 
   Future<void> _onCreate(Database db, int version) async {
+    await ProductsTable.onCreate(db);
     // Create other tables ----
   }
 

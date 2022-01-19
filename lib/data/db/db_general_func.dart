@@ -3,7 +3,7 @@ import '../../lib_exp.dart';
 class DbGeneralFunc {
   static Future<int> insert({
     required String tableName,
-    required Map<String, Object> values,
+    required Map<String, dynamic> values,
     ConflictAlgorithm? conflictAlgorithm,
   }) async {
     /// Insert User into the table.
@@ -56,7 +56,7 @@ class DbGeneralFunc {
     final Database? db = await DbHelper().db;
     if (db == null) return 0;
     debugLog(tableName, 'Deleted DB by ID --> $id');
-    return await db.delete(tableName, where: '$productId=?', whereArgs: [id]);
+    return await db.delete(tableName, where: '$productIdConst=?', whereArgs: [id]);
   }
 
   static Future<int> deleteAll({required String tableName}) async {

@@ -14,7 +14,22 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
     AddCategoryDialog.show(
       context,
       title: 'အသစ်ထည့်',
-      onPresss: (Product product) {
+      onPresss: (Product product) async {
+        LoadingDialog.show(context);
+        var resp = await DbCtrl.insertProduct(product);
+        if (resp == ErrorResponse) {
+          MyAlertDialog.show(
+            context,
+            type: AlertType.fail,
+            onTapActionButton: () {
+              LoadingDialog.hide(context);
+            },
+            title: 'Fail!',
+            description: resp.message,
+          );
+        } else {
+          LoadingDialog.hide(context);
+        }
         _categoryCtrl.addProducts(product);
       },
     );
@@ -57,9 +72,56 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
         centerTitle: false,
         title: const Text('အမျိုးအစားများ'),
       ),
-      body: _body(),
+      body: _futureBody(),
     );
   }
+
+  Widget _futureBody() => Container(
+        padding: const EdgeInsets.all(20),
+        child: FutureBuilder<dynamic>(
+          future: ProductsTable.getAll(),
+          builder: (_, snapshot) {
+            if (snapshot.data is ErrorResponse) {
+              return Center(
+                child: Text(snapshot.data.message),
+              );
+            }
+            if (snapshot.data is List<Product>) {
+              List<Product> products = snapshot.data;
+              return GridView.builder(
+                shrinkWrap: true,
+                itemCount: products.length + 1,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
+                itemBuilder: (_, index) {
+                  if (index == products.length) {
+                    return MyItem(
+                      label: 'Add',
+                      isAdd: true,
+                      onPress: _onAddPress,
+                    );
+                  }
+                  return MyItem(
+                    imgUrl: products[index].imgURl,
+                    label: products[index].name,
+                    price: products[index].price,
+                    isAdd: false,
+                    onCloseBtnCallback: () => _onRemovePress(index),
+                    onPress: () => _onUpdatePress(
+                      index: index,
+                      imgURl: products[index].imgURl ?? '',
+                      name: products[index].name ?? '',
+                      price: products[index].price ?? 0,
+                    ),
+                  );
+                },
+              );
+            }
+            return const LinearProgressIndicator();
+          },
+        ),
+      );
 
   Widget _body() {
     return Container(
