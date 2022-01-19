@@ -41,7 +41,6 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
         (resp is ErrorResponse)
             ? DialogUtils.errorDialog(context, resp)
             : _dbCtrl.refreshUI();
-        // _categoryCtrl.updateProducts(index, product);
       },
     );
   }
@@ -57,7 +56,6 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
   @override
   void initState() {
     super.initState();
-    // _categoryCtrl = context.read<CategoryCtrl>();
     _dbCtrl = context.read<DbCtrl>();
   }
 

@@ -1,7 +1,11 @@
 import '../../../lib_exp.dart';
 
 class BaseSaleHomePage extends StatelessWidget {
-  const BaseSaleHomePage({Key? key}) : super(key: key);
+  final List<Product> products;
+  const BaseSaleHomePage({
+    required this.products,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,13 +15,18 @@ class BaseSaleHomePage extends StatelessWidget {
       ],
       child: SaleHomePage(
         key: key,
+        products: products,
       ),
     );
   }
 }
 
 class SaleHomePage extends StatefulWidget {
-  const SaleHomePage({Key? key}) : super(key: key);
+  final List<Product> products;
+  const SaleHomePage({
+    required this.products,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _SaleHomePageState createState() => _SaleHomePageState();
@@ -43,11 +52,11 @@ class _SaleHomePageState extends State<SaleHomePage> {
   void initState() {
     super.initState();
     imageGlobalKeyList = List<GlobalKey>.generate(
-      context.read<CategoryCtrl>().products.length,
+      widget.products.length,
       (index) => GlobalKey(),
     );
     _saleCtrl = context.read<SaleCtrl>();
-    _saleCtrl.initCart(context.read<CategoryCtrl>().products);
+    _saleCtrl.initCart(widget.products);
   }
 
   @override
@@ -56,9 +65,9 @@ class _SaleHomePageState extends State<SaleHomePage> {
       gkCart: gkCart,
       rotation: false,
       dragToCardCurve: Curves.easeIn,
-      dragToCardDuration: const Duration(milliseconds: 1000),
+      dragToCardDuration: const Duration(milliseconds: 500),
       previewCurve: Curves.linearToEaseOut,
-      previewDuration: const Duration(milliseconds: 500),
+      previewDuration: const Duration(milliseconds: 100),
       previewHeight: 30,
       previewWidth: 30,
       opacity: 0.85,

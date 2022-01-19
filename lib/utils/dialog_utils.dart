@@ -1,7 +1,12 @@
 import '../lib_exp.dart';
 
 class DialogUtils {
-  static void errorDialog(BuildContext context, dynamic resp) {
+  static void errorDialog(
+    BuildContext context,
+    dynamic resp, {
+    String title = 'Fail!',
+    AlertType alertType = AlertType.fail,
+  }) {
     String msg = '';
     if (resp is ErrorResponse) {
       msg = resp.message ?? '';
@@ -10,9 +15,9 @@ class DialogUtils {
     }
     MyAlertDialog.show(
       context,
-      type: AlertType.fail,
+      type: alertType,
       onTapActionButton: () {},
-      title: 'Fail!',
+      title: title,
       description: msg,
     );
   }

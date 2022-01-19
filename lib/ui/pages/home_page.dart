@@ -7,21 +7,35 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-void _onTapItem(BuildContext context, HomeTypeEnum type) {
-  switch (type) {
-    case HomeTypeEnum.category:
-      context.push(const CategoryHomePage());
-      break;
-    case HomeTypeEnum.sale:
-      context.push(const BaseSaleHomePage());
-      break;
-    case HomeTypeEnum.summary:
-      context.push(const SummaryHomePage());
-      break;
-  }
-}
-
 class _HomePageState extends State<HomePage> {
+  Future<void> _getProductsListFromDb() async {
+    final List<Product> resp = await context.read<DbCtrl>().getAllProductList();
+    if (resp.isEmpty) {
+      DialogUtils.errorDialog(
+        context,
+        'ကုန်ပစ္စည်းများမရှိသေးပါ။\nအမျိုးအစားများထဲတွင် ပစ္စည်းအသစ်များ\nထည့်သွင်းနိုင်ပါသည်။',
+        alertType: AlertType.warning,
+        title: 'Warning!',
+      );
+    } else {
+      context.push(BaseSaleHomePage(products: resp));
+    }
+  }
+
+  void _onTapItem(HomeTypeEnum type) {
+    switch (type) {
+      case HomeTypeEnum.category:
+        context.push(const CategoryHomePage());
+        break;
+      case HomeTypeEnum.sale:
+        _getProductsListFromDb();
+        break;
+      case HomeTypeEnum.summary:
+        context.push(const SummaryHomePage());
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,10 +56,7 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (_, index) => MyItem(
                     label: homeTypes[index].name,
                     imgUrl: homeTypes[index].url,
-                    onPress: () => _onTapItem(
-                          context,
-                          homeTypes[index].type!,
-                        )),
+                    onPress: () => _onTapItem(homeTypes[index].type!)),
               ),
             ),
             CommonUtils.versionLabel(),

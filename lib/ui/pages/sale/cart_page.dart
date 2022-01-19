@@ -69,8 +69,7 @@ class _CartPageState extends State<CartPage> {
       );
 
   Widget _item(Product product) => ListTile(
-        isThreeLine: true,
-        dense: false,
+        contentPadding: const EdgeInsets.all(8),
         leading: MyCircleImage(
           assetImage: product.imgURl,
         ),
@@ -86,12 +85,13 @@ class _CartPageState extends State<CartPage> {
         subtitle: Text(
           (product.price?.toString() ?? '').currency + ' $dia',
           style: TextStyle(
-            fontSize: 12,
+            fontSize: 14,
             color: Colors.pink[300],
             fontWeight: FontWeight.w700,
           ),
         ),
         trailing: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             RichText(
@@ -112,6 +112,7 @@ class _CartPageState extends State<CartPage> {
                 ],
               ),
             ),
+            const SizedBox(height: 8),
             RichText(
               text: TextSpan(
                 text: 'Charge\t\t',
