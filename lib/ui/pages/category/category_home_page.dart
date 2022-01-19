@@ -36,7 +36,11 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
       productPrice: product.price.toString(),
       imgUrl: product.imgURl,
       id: product.id,
-      onPresss: (Product p) {
+      onPresss: (Product p) async {
+        var resp = await _dbCtrl.updateProduct(p);
+        (resp is ErrorResponse)
+            ? DialogUtils.errorDialog(context, resp)
+            : _dbCtrl.refreshUI();
         // _categoryCtrl.updateProducts(index, product);
       },
     );
@@ -73,7 +77,7 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
         padding: const EdgeInsets.all(20),
         child: Consumer<DbCtrl>(builder: (_, ctrl, __) {
           return FutureBuilder<dynamic>(
-            future: ctrl.getProductList(),
+            future: ctrl.getAllProductList(),
             builder: (_, snapshot) {
               if (snapshot.data is ErrorResponse) {
                 return Center(

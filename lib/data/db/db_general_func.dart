@@ -48,6 +48,22 @@ class DbGeneralFunc {
     return await db.rawQuery('SELECT * FROM $tableName');
   }
 
+  static Future<int> updateById({
+    required String tableName,
+    required int id,
+    required Map<String, dynamic> values,
+  }) async {
+    final Database? db = await DbHelper().db;
+    if (db == null) return 0;
+    debugLog(tableName, 'Updated DB by ID --> $id $values');
+    return await db.update(
+      tableName,
+      values,
+      where: '$uniqueIdConst=?',
+      whereArgs: [id],
+    );
+  }
+
   static Future<int> deleteById({
     required String tableName,
     required int id,

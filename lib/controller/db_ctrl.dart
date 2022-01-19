@@ -3,7 +3,7 @@ import '../lib_exp.dart';
 class DbCtrl with ChangeNotifier {
   void refreshUI() => notifyListeners();
 
-   Future<dynamic> getProductList() async {
+  Future<dynamic> getAllProductList() async {
     List<Product> resp = [];
     try {
       resp = await ProductsTable.getAll();
@@ -13,7 +13,7 @@ class DbCtrl with ChangeNotifier {
     return resp;
   }
 
-   Future<dynamic> insertProduct(Product product) async {
+  Future<dynamic> insertProduct(Product product) async {
     int? resp;
     try {
       resp = await ProductsTable.insert(product);
@@ -23,7 +23,17 @@ class DbCtrl with ChangeNotifier {
     return resp;
   }
 
-   Future<dynamic> deleteById(int id) async {
+  Future<dynamic> updateProduct(Product product) async {
+    int? resp;
+    try {
+      resp = await ProductsTable.update(product);
+    } catch (e) {
+      return ErrorResponse(code: null, message: e.toString());
+    }
+    return resp;
+  }
+
+  Future<dynamic> deleteById(int id) async {
     int? resp;
     try {
       resp = await ProductsTable.deleteById(id);

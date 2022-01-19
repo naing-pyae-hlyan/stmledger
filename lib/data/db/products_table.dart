@@ -14,6 +14,14 @@ class ProductsTable {
     );
   }
 
+  static Future<List<Product>> getAll() async {
+    final Database? db = await DbHelper().db;
+    if (db == null) return [];
+    final List<Map<String, dynamic>> maps = await db.query(tableName);
+
+    return List.generate(maps.length, (index) => Product.fromJson(maps[index]));
+  }
+
   static Future<int> insert(Product product) async => DbGeneralFunc.insert(
         tableName: tableName,
         values: {
@@ -23,13 +31,15 @@ class ProductsTable {
         },
       );
 
-  static Future<List<Product>> getAll() async {
-    final Database? db = await DbHelper().db;
-    if (db == null) return [];
-    final List<Map<String, dynamic>> maps = await db.query(tableName);
-
-    return List.generate(maps.length, (index) => Product.fromJson(maps[index]));
-  }
+  static Future<int> update(Product product) async => DbGeneralFunc.updateById(
+        tableName: tableName,
+        id: product.id!,
+        values: {
+          productNameConst: product.name,
+          productPriceConst: product.price,
+          imgUrlConst: product.imgURl,
+        },
+      );
 
   static Future<int> deleteById(int id) async =>
       DbGeneralFunc.deleteById(tableName: tableName, id: id);
