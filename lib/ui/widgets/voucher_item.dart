@@ -21,9 +21,9 @@ class VoucherItem extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _textRow(
-              'ရက်စွဲ',
-              DateTime.now().ddMMMhhmmAAA,
-            ),
+                'ရက်စွဲ',
+                MyDateUtils.convertTimestempToDate(products?[0].timestamp)
+                    .ddMMMhhmmAAA),
             _textRow('အမျိုးအစားများ', 'Qty / Price'),
             ListView.builder(
               shrinkWrap: true,

@@ -44,6 +44,16 @@ class DbCtrl with ChangeNotifier {
   }
 
   /// For Voucher
+  Future<dynamic> getAllVoucher() async {
+    List<VoucherModel> resp = [];
+    try {
+      resp = await VoucherTable.getAllVoucher();
+    } catch (e) {
+      return ErrorResponse(code: null, message: e.toString());
+    }
+    return resp;
+  }
+
   Future<dynamic> insertVoucher(
       {required List<Product> products, required int charge}) async {
     int? resp;

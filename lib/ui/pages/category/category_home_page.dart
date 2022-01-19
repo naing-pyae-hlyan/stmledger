@@ -83,7 +83,7 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
                 );
               }
               if (snapshot.data is List<Product>) {
-                List<Product> products = snapshot.data;
+                final List<Product> products = snapshot.data;
                 return GridView.builder(
                   shrinkWrap: true,
                   itemCount: products.length + 1,

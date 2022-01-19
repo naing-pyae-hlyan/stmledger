@@ -28,18 +28,19 @@ class VoucherTable {
       "$timestampConst < '$lastDate' ORDER BY "
       "$uniqueIdConst DESC LIMIT 1000",
     );
-    if (true) {
-      
-    }
+    if (true) {}
     return List.generate(maps.length, (index) => Product.fromJson(maps[index]));
   }
 
-  static Future<List<Product>> getAll() async {
+  static Future<List<VoucherModel>> getAllVoucher() async {
     final Database? db = await DbHelper().db;
     if (db == null) return [];
-    final List<Map<String, dynamic>> maps = await db.query(tableName);
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+      'SELECT * FROM $tableName ORDER BY $uniqueIdConst DESC',
+    );
 
-    return List.generate(maps.length, (index) => Product.fromJson(maps[index]));
+    return List.generate(
+        maps.length, (index) => VoucherModel.fromJson(maps[index]));
   }
 
   static Future<int> insert({
@@ -58,7 +59,7 @@ class VoucherTable {
         qtyConst: p.qty,
       });
     }
-    map[voucherConst] = json.toString();
+    map[voucherConst] = jsonEncode(json);
 
     return DbGeneralFunc.insert(
       tableName: tableName,

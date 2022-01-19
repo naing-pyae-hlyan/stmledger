@@ -16,12 +16,12 @@ class SummaryHomePage extends StatefulWidget {
 class _SummaryHomePageState extends State<SummaryHomePage> {
   final List<String> _productNameList = ['All'];
   String _selectedName = 'All';
-  late CategoryCtrl _categoryCtrl;
+  late DbCtrl _dbCtrl;
 
   @override
   void initState() {
     super.initState();
-    _categoryCtrl = context.read<CategoryCtrl>();
+    _dbCtrl = context.read<DbCtrl>();
     for (var p in widget.products) {
       _productNameList.add(p.name ?? '');
     }
@@ -40,17 +40,6 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
     );
   }
 
-  Widget _body() => Container(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: <Widget>[
-            _haderRow(),
-            const SizedBox(height: 8),
-            _itemListView(),
-          ],
-        ),
-      );
-
   Widget _haderRow() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -67,26 +56,59 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
         ],
       );
 
-  Widget _itemListView() {
-    const int length = 10;
-    return Flexible(
-      child: ListView.builder(
-        itemCount: length + 1,
-        shrinkWrap: true,
-        itemBuilder: (_, index) {
-          if (index == length) {
-            return _totalItem();
-          }
-          return const VoucherItem(
-            products: [],
-            totalAmount: 0,
+  Widget _body() {
+    return FutureBuilder<dynamic>(
+      future: _dbCtrl.getAllVoucher(),
+      builder: (_, snapshot) {
+        if (snapshot.data is ErrorResponse) {
+          return Center(
+            child: Text(snapshot.data.message),
           );
-        },
-      ),
+        }
+        if (snapshot.data is List<VoucherModel>) {
+          final List<VoucherModel> voucher = snapshot.data;
+
+          if (voucher.isEmpty) {
+            return _emptyCart();
+          } else {
+            int totalAmount = 0;
+            for (VoucherModel v in voucher) {
+              totalAmount += v.charge ?? 0;
+            }
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: <Widget>[
+                  _haderRow(),
+                  const SizedBox(height: 8),
+                  Flexible(
+                    child: ListView.builder(
+                      itemCount: voucher.length + 1,
+                      shrinkWrap: true,
+                      itemBuilder: (_, index) {
+                        if (index == voucher.length) {
+                          return _totalItem(totalAmount);
+                        }
+                        return VoucherItem(
+                          products:
+                              convertVoucherModelToProduct(voucher[index]),
+                          totalAmount: voucher[index].charge,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+        }
+
+        return const LinearProgressIndicator();
+      },
     );
   }
 
-  Widget _totalItem() => Card(
+  Widget _totalItem(int charge) => Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
@@ -107,8 +129,7 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
                   style: TextStyle(color: Colors.grey[200]),
                 ),
               ),
-              _textRow('အရေအတွက်', '1000'),
-              _textRow('ရောင်းရငွေ ($dia)', '10000'.currency),
+              _textRow('ရောင်းရငွေ ($dia)', charge.toString().currency + dia),
             ],
           ),
         ),
@@ -128,6 +149,29 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Colors.grey[200],
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget _emptyCart() => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset(
+              'assets/icons/empty.png',
+              width: context.width * 0.5,
+              height: context.width * 0.5,
+              fit: BoxFit.contain,
+            ),
+            const SizedBox(height: 32),
+            Text(
+              'Empty Voucher',
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 24,
+                color: AppColors.primaryColor,
               ),
             ),
           ],
