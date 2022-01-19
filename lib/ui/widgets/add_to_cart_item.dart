@@ -47,7 +47,8 @@ class AddToCardItem extends StatelessWidget {
             'Qty',
             style: TextStyle(
               fontSize: 10,
-              color: AppColors.primaryColor.withOpacity(0.8),
+              fontWeight: FontWeight.w700,
+              color: Colors.grey[400],
             ),
           ),
           SizedBox(

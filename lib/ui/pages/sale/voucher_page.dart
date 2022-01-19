@@ -76,7 +76,7 @@ class _VoucherPageState extends State<VoucherPage> {
                 label: 'Print',
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
           ],
         ),
       );

@@ -73,11 +73,10 @@ class _SaleHomePageState extends State<SaleHomePage> {
           actions: [
             InkWell(
               onTap: () => context.push(
-                const CartPage(),
-                // VoucherPage(
-                //   products: _saleCtrl.getConfirmedCartList,
-                //   totalAmount: _saleCtrl.totalAmount,
-                // ),
+                CartPage(
+                  products: _saleCtrl.getConfirmedCartList,
+                  totalAmount: _saleCtrl.totalAmount,
+                ),
               ),
               borderRadius: BorderRadius.circular(16),
               child: AddToCartIcon(
@@ -97,28 +96,31 @@ class _SaleHomePageState extends State<SaleHomePage> {
         children: <Widget>[
           _listItemsView(),
           _footerRow(),
-          const SizedBox(height: 16),
         ],
       );
 
   Widget _listItemsView() => Consumer<SaleCtrl>(
         builder: (_, ctrl, __) {
+          final List<Product> products = ctrl.cartList;
           return Expanded(
             child: ListView.separated(
               shrinkWrap: true,
-              itemCount: ctrl.cartList.length,
-              itemBuilder: (_, index) => AddToCardItem(
-                products: ctrl.cartList[index],
-                onAddClick: (key) {
-                  ctrl.addQty(index);
-                  onAddClick(key, count: ctrl.cartCounter);
-                },
-                onReduceClick: (key) {
-                  ctrl.removeQty(index);
-                  onReduceClick(key, count: ctrl.cartCounter);
-                },
-                globalKey: imageGlobalKeyList[index],
-              ),
+              itemCount: products.length + 1,
+              itemBuilder: (_, index) {
+                if (index == products.length) return const SizedBox.shrink();
+                return AddToCardItem(
+                  products: products[index],
+                  onAddClick: (key) {
+                    ctrl.addQty(index);
+                    onAddClick(key, count: ctrl.cartCounter);
+                  },
+                  onReduceClick: (key) {
+                    ctrl.removeQty(index);
+                    onReduceClick(key, count: ctrl.cartCounter);
+                  },
+                  globalKey: imageGlobalKeyList[index],
+                );
+              },
               separatorBuilder: (_, index) => const Divider(thickness: 1),
             ),
           );
@@ -134,7 +136,7 @@ class _SaleHomePageState extends State<SaleHomePage> {
         ),
         elevation: 0,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 32),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
