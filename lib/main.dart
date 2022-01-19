@@ -5,6 +5,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CategoryCtrl()),
+        ChangeNotifierProvider(create: (_) => DbCtrl()),
         ChangeNotifierProvider(
             create: (_) => RandomImageCtrl(
                 randomImage:

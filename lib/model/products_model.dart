@@ -1,8 +1,8 @@
 import 'package:stmledger/lib_exp.dart';
 
 class Product {
-  int? no;
-  DateTime? date;
+  int? id;
+  int? timestamp;
   String? name;
   int? price;
   int? qty;
@@ -11,8 +11,8 @@ class Product {
   String? imgURl;
 
   Product({
-    this.no,
-    this.date,
+    this.id,
+    this.timestamp,
     this.name,
     this.price = 0,
     this.qty = 0,
@@ -22,7 +22,8 @@ class Product {
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-        date: json[dateConst],
+        id: json[uniqueIdConst],
+        timestamp: json[timestampConst],
         name: json[productNameConst],
         price: json[productPriceConst],
         qty: json[qtyConst],
@@ -32,7 +33,7 @@ class Product {
       );
 
   Map<String, dynamic> toJson() => {
-        dateConst: date,
+        timestampConst: timestamp,
         productNameConst: name,
         productPriceConst: price,
         qtyConst: qty,

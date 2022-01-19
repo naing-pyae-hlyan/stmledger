@@ -1,6 +1,8 @@
 import '../lib_exp.dart';
 
 class CommonUtils {
+
+
   static Future<void> clearAllData({bool keepLoginCredentials = false}) async {
     /// TODO clear all
   }

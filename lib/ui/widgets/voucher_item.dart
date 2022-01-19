@@ -20,7 +20,6 @@ class VoucherItem extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
-            _textRow('နံပါတ်', ('').toString()),
             _textRow(
               'ရက်စွဲ',
               DateTime.now().ddMMMhhmmAAA,

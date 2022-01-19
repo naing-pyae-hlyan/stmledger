@@ -7,19 +7,21 @@ class ProductsTable {
     await db.execute(
       'CREATE TABLE $tableName('
       '$uniqueIdConst INTEGER PRIMARY KEY AUTOINCREMENT,'
-      '$dateConst TEXT,'
       '$productNameConst TEXT,'
       '$productPriceConst INT,'
-      '$imgUrlConst TEXT,'
-      '$qtyConst INT,'
-      '$chargeConst INT,'
-      '$noteConst TEXT'
+      '$imgUrlConst TEXT'
       ')',
     );
   }
 
-  static Future<int> insert(Product product) async =>
-      DbGeneralFunc.insert(tableName: tableName, values: product.toJson());
+  static Future<int> insert(Product product) async => DbGeneralFunc.insert(
+        tableName: tableName,
+        values: {
+          productNameConst: product.name,
+          productPriceConst: product.price,
+          imgUrlConst: product.imgURl,
+        },
+      );
 
   static Future<List<Product>> getAll() async {
     final Database? db = await DbHelper().db;

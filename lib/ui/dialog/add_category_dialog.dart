@@ -10,6 +10,7 @@ class AddCategoryDialog {
     String productName = '',
     String productPrice = '',
     String? imgUrl,
+    int? id,
   }) {
     final TextEditingController nameCtrl = TextEditingController();
     final TextEditingController priceCtrl = TextEditingController();
@@ -28,15 +29,15 @@ class AddCategoryDialog {
           priceFn.requestFocus();
           return;
         } else {
+          context.pop();
           onPresss(
             Product(
               name: nameCtrl.text,
               price: int.parse(priceCtrl.text),
               imgURl: context.read<RandomImageCtrl>().randomImage,
-              qty: 0,
+              id: id,
             ),
           );
-          context.pop();
         }
       },
       addCloseButton: true,

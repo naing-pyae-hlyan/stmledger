@@ -8,60 +8,53 @@ class CategoryHomePage extends StatefulWidget {
 }
 
 class _CategoryHomePageState extends State<CategoryHomePage> {
-  late CategoryCtrl _categoryCtrl;
+  late DbCtrl _dbCtrl;
 
   void _onAddPress() {
     AddCategoryDialog.show(
       context,
       title: 'အသစ်ထည့်',
       onPresss: (Product product) async {
-        LoadingDialog.show(context);
-        var resp = await DbCtrl.insertProduct(product);
-        if (resp == ErrorResponse) {
-          MyAlertDialog.show(
-            context,
-            type: AlertType.fail,
-            onTapActionButton: () {
-              LoadingDialog.hide(context);
-            },
-            title: 'Fail!',
-            description: resp.message,
-          );
-        } else {
-          LoadingDialog.hide(context);
-        }
-        _categoryCtrl.addProducts(product);
+        var resp = await _dbCtrl.insertProduct(product);
+
+        (resp is ErrorResponse)
+            ? DialogUtils.errorDialog(context, resp)
+            : _dbCtrl.refreshUI();
       },
     );
   }
 
   void _onUpdatePress({
     required int index,
-    required String imgURl,
-    required String name,
-    required int price,
+    required Product product,
   }) {
     AddCategoryDialog.show(
       context,
       title: 'ပြင်မည်',
       btnLabel: 'Update',
-      productName: name,
-      productPrice: price.toString(),
-      imgUrl: imgURl,
-      onPresss: (Product product) {
-        _categoryCtrl.updateProducts(index, product);
+      productName: product.name ?? '',
+      productPrice: product.price.toString(),
+      imgUrl: product.imgURl,
+      id: product.id,
+      onPresss: (Product p) {
+        // _categoryCtrl.updateProducts(index, product);
       },
     );
   }
 
-  void _onRemovePress(int index) {
-    _categoryCtrl.removeProducts(index);
+  void _onRemovePress(int? id) async {
+    if (id == null) return;
+    var resp = await _dbCtrl.deleteById(id);
+    (resp is ErrorResponse)
+        ? DialogUtils.errorDialog(context, resp)
+        : _dbCtrl.refreshUI();
   }
 
   @override
   void initState() {
     super.initState();
-    _categoryCtrl = context.read<CategoryCtrl>();
+    // _categoryCtrl = context.read<CategoryCtrl>();
+    _dbCtrl = context.read<DbCtrl>();
   }
 
   @override
@@ -78,86 +71,47 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
 
   Widget _futureBody() => Container(
         padding: const EdgeInsets.all(20),
-        child: FutureBuilder<dynamic>(
-          future: ProductsTable.getAll(),
-          builder: (_, snapshot) {
-            if (snapshot.data is ErrorResponse) {
-              return Center(
-                child: Text(snapshot.data.message),
-              );
-            }
-            if (snapshot.data is List<Product>) {
-              List<Product> products = snapshot.data;
-              return GridView.builder(
-                shrinkWrap: true,
-                itemCount: products.length + 1,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                ),
-                itemBuilder: (_, index) {
-                  if (index == products.length) {
+        child: Consumer<DbCtrl>(builder: (_, ctrl, __) {
+          return FutureBuilder<dynamic>(
+            future: ctrl.getProductList(),
+            builder: (_, snapshot) {
+              if (snapshot.data is ErrorResponse) {
+                return Center(
+                  child: Text(snapshot.data.message),
+                );
+              }
+              if (snapshot.data is List<Product>) {
+                List<Product> products = snapshot.data;
+                return GridView.builder(
+                  shrinkWrap: true,
+                  itemCount: products.length + 1,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                  ),
+                  itemBuilder: (_, index) {
+                    if (index == products.length) {
+                      return MyItem(
+                        label: 'Add',
+                        isAdd: true,
+                        onPress: _onAddPress,
+                      );
+                    }
                     return MyItem(
-                      label: 'Add',
-                      isAdd: true,
-                      onPress: _onAddPress,
+                      imgUrl: products[index].imgURl,
+                      label: products[index].name,
+                      price: products[index].price,
+                      isAdd: false,
+                      onCloseBtnCallback: () =>
+                          _onRemovePress(products[index].id),
+                      onPress: () => _onUpdatePress(
+                          index: index, product: products[index]),
                     );
-                  }
-                  return MyItem(
-                    imgUrl: products[index].imgURl,
-                    label: products[index].name,
-                    price: products[index].price,
-                    isAdd: false,
-                    onCloseBtnCallback: () => _onRemovePress(index),
-                    onPress: () => _onUpdatePress(
-                      index: index,
-                      imgURl: products[index].imgURl ?? '',
-                      name: products[index].name ?? '',
-                      price: products[index].price ?? 0,
-                    ),
-                  );
-                },
-              );
-            }
-            return const LinearProgressIndicator();
-          },
-        ),
+                  },
+                );
+              }
+              return const LinearProgressIndicator();
+            },
+          );
+        }),
       );
-
-  Widget _body() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      child: Consumer<CategoryCtrl>(builder: (_, categoryCtrl, __) {
-        final length = categoryCtrl.products.length;
-        return GridView.builder(
-          shrinkWrap: true,
-          itemCount: length + 1,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-          ),
-          itemBuilder: (_, index) {
-            if (index == length) {
-              return MyItem(
-                label: 'Add',
-                isAdd: true,
-                onPress: _onAddPress,
-              );
-            }
-            return MyItem(
-              imgUrl: categoryCtrl.products[index].imgURl,
-              label: categoryCtrl.products[index].name,
-              price: categoryCtrl.products[index].price,
-              isAdd: false,
-              onCloseBtnCallback: () => _onRemovePress(index),
-              onPress: () => _onUpdatePress(
-                index: index,
-                imgURl: categoryCtrl.products[index].imgURl ?? '',
-                name: categoryCtrl.products[index].name ?? '',
-                price: categoryCtrl.products[index].price ?? 0,
-              ),
-            );
-          },
-        );
-      }),
-    );
-  }
 }

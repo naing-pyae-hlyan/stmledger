@@ -56,7 +56,8 @@ class DbGeneralFunc {
     final Database? db = await DbHelper().db;
     if (db == null) return 0;
     debugLog(tableName, 'Deleted DB by ID --> $id');
-    return await db.delete(tableName, where: '$productIdConst=?', whereArgs: [id]);
+    return await db
+        .delete(tableName, where: '$uniqueIdConst=?', whereArgs: [id]);
   }
 
   static Future<int> deleteAll({required String tableName}) async {
