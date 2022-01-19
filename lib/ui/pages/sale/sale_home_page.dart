@@ -125,26 +125,35 @@ class _SaleHomePageState extends State<SaleHomePage> {
         },
       );
 
-  Widget _footerRow() => Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            SizedBox(
-              width: context.width * 0.4,
-              child: _totalWidget(),
-            ),
-            SizedBox(
-              width: context.width * 0.5,
-              child: MyButton(
-                onTap: () => context.push(VoucherPage(
-                  products: _saleCtrl.getConfirmedCartList,
-                  totalAmount: _saleCtrl.totalAmount,
-                )),
-                label: 'Checkout',
+  Widget _footerRow() => Card(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
+        ),
+        elevation: 0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 24),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              SizedBox(
+                width: context.width * 0.4,
+                child: _totalWidget(),
               ),
-            )
-          ],
+              SizedBox(
+                width: context.width * 0.5,
+                child: MyButton(
+                  onTap: () => context.push(VoucherPage(
+                    products: _saleCtrl.getConfirmedCartList,
+                    totalAmount: _saleCtrl.totalAmount,
+                  )),
+                  label: 'Checkout',
+                ),
+              )
+            ],
+          ),
         ),
       );
 
@@ -156,7 +165,7 @@ class _SaleHomePageState extends State<SaleHomePage> {
             'Total : ',
             style: TextStyle(
               fontWeight: FontWeight.w700,
-              color: Colors.pink[300],
+              color: Colors.pink[200],
             ),
           ),
           Consumer<SaleCtrl>(builder: (_, ctrl, __) {
@@ -164,6 +173,7 @@ class _SaleHomePageState extends State<SaleHomePage> {
               ctrl.totalAmount.toString().currency + ' $dia',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                fontSize: 20,
                 color: Colors.pink[300],
               ),
             );

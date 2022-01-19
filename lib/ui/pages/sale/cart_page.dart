@@ -16,11 +16,15 @@ class _CartPageState extends State<CartPage> {
         automaticallyImplyLeading: true,
         centerTitle: false,
       ),
-      body: _body(),
+      body: _emptyCart(),
     );
   }
 
-  Widget _body() => Center(
+  Widget _body() => Container(
+    
+  );
+
+  Widget _emptyCart() => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
