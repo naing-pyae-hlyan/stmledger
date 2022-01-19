@@ -3,7 +3,11 @@ import 'package:stmledger/ui/widgets/voucher_item.dart';
 import '../../../lib_exp.dart';
 
 class SummaryHomePage extends StatefulWidget {
-  const SummaryHomePage({Key? key}) : super(key: key);
+  final List<Product> products;
+  const SummaryHomePage({
+    required this.products,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _SummaryHomePageState createState() => _SummaryHomePageState();
@@ -18,7 +22,7 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
   void initState() {
     super.initState();
     _categoryCtrl = context.read<CategoryCtrl>();
-    for (var p in _categoryCtrl.products) {
+    for (var p in widget.products) {
       _productNameList.add(p.name ?? '');
     }
     _selectedName = _productNameList[0];

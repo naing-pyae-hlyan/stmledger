@@ -6,3 +6,4 @@ const timestampConst = 'timestamp';
 const chargeConst = 'charge';
 const noteConst = 'note';
 const imgUrlConst = 'img_url';
+const voucherConst = 'voucher';

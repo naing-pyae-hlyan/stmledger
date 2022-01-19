@@ -8,9 +8,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<void> _getProductsListFromDb() async {
+  Future<void> _getProductsListFromDb(HomeTypeEnum type) async {
     final List<Product> resp = await context.read<DbCtrl>().getAllProductList();
-    if (resp.isEmpty) {
+    if (type == HomeTypeEnum.summary) {
+      context.push(SummaryHomePage(products: resp));
+      return;
+    } else if (resp.isEmpty) {
       DialogUtils.errorDialog(
         context,
         'ကုန်ပစ္စည်းများမရှိသေးပါ။\nအမျိုးအစားများထဲတွင် ပစ္စည်းအသစ်များ\nထည့်သွင်းနိုင်ပါသည်။',
@@ -28,10 +31,10 @@ class _HomePageState extends State<HomePage> {
         context.push(const CategoryHomePage());
         break;
       case HomeTypeEnum.sale:
-        _getProductsListFromDb();
+        _getProductsListFromDb(HomeTypeEnum.sale);
         break;
       case HomeTypeEnum.summary:
-        context.push(const SummaryHomePage());
+        _getProductsListFromDb(HomeTypeEnum.summary);
         break;
     }
   }

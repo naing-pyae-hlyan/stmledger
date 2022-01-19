@@ -35,10 +35,13 @@ class DbHelper {
 
   Future<void> _onCreate(Database db, int version) async {
     await ProductsTable.onCreate(db);
+    await VoucherTable.onCreate(db);
     // Create other tables ----
   }
 
   static Future clearTables() async {
+    await ProductsTable.deleteAll();
+    await VoucherTable.deleteAll();
     // Clear other tables ----
   }
 }

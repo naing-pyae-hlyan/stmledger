@@ -38,13 +38,13 @@ class MyAlertDialog {
     BuildContext context, {
     Key? key,
     required AlertType type,
-    required VoidCallback onTapActionButton,
     String actionButtonLabel = 'OK',
     VoidCallback? onTapActionButton2,
     String? actionButtonLabel2,
     required String title,
     required String? description,
     bool? addCloseButton,
+    required VoidCallback onTapActionButton,
   }) {
     BaseDialog.show(
       context,
