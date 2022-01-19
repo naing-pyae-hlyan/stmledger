@@ -35,6 +35,7 @@ class SaleHomePage extends StatefulWidget {
 class _SaleHomePageState extends State<SaleHomePage> {
   GlobalKey<CartIconKey> gkCart = GlobalKey<CartIconKey>();
   List<GlobalKey> imageGlobalKeyList = [];
+  late FToast _fToast;
   late SaleCtrl _saleCtrl;
 
   late Function(GlobalKey) runAddToCardAnimation;
@@ -48,6 +49,25 @@ class _SaleHomePageState extends State<SaleHomePage> {
     await gkCart.currentState!.runCartAnimation((count).toString());
   }
 
+  void onCheckoutClick() {
+    if (_saleCtrl.getConfirmedCartList.isNotEmpty &&
+        _saleCtrl.totalAmount > 0) {
+      context.push(
+        VoucherPage(
+          products: _saleCtrl.getConfirmedCartList,
+          totalAmount: _saleCtrl.totalAmount,
+        ),
+      );
+    } else {
+      showToast(
+        _fToast,
+        msg: 'အနည်းဆုံး ပစ္စည်းတစ်ခုကို ခြင်းထဲသို့ထည့်ပါ။',
+        gravity: ToastGravity.BOTTOM,
+        alertType: AlertType.warning,
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -57,6 +77,8 @@ class _SaleHomePageState extends State<SaleHomePage> {
     );
     _saleCtrl = context.read<SaleCtrl>();
     _saleCtrl.initCart(widget.products);
+    _fToast = FToast();
+    _fToast.init(context);
   }
 
   @override
@@ -156,10 +178,7 @@ class _SaleHomePageState extends State<SaleHomePage> {
               SizedBox(
                 width: context.width * 0.5,
                 child: MyButton(
-                  onTap: () => context.push(VoucherPage(
-                    products: _saleCtrl.getConfirmedCartList,
-                    totalAmount: _saleCtrl.totalAmount,
-                  )),
+                  onTap: onCheckoutClick,
                   label: 'Checkout',
                 ),
               )
