@@ -72,10 +72,13 @@ class _SaleHomePageState extends State<SaleHomePage> {
           title: const Text('အရောင်း'),
           actions: [
             InkWell(
-              onTap: () => context.push(VoucherPage(
-                products: _saleCtrl.getConfirmedCartList,
-                totalAmount: _saleCtrl.totalAmount,
-              )),
+              onTap: () => context.push(
+                const CartPage(),
+                // VoucherPage(
+                //   products: _saleCtrl.getConfirmedCartList,
+                //   totalAmount: _saleCtrl.totalAmount,
+                // ),
+              ),
               borderRadius: BorderRadius.circular(16),
               child: AddToCartIcon(
                 key: gkCart,
