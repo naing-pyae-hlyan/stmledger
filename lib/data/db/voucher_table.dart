@@ -18,23 +18,23 @@ class VoucherTable {
   static Future<List<VoucherModel>> find({
     required int? fstDate,
     required int? lastDate,
-    required String type,
+    required int productId,
   }) async {
     final Database? db = await DbHelper().db;
     if (db == null) return [];
     List<Map<String, dynamic>> maps = [];
-    if (fstDate == null && lastDate == null && type != allCategoryConst) {
+    if (fstDate == null && lastDate == null && productId != allCategoryConst.key) {
       maps = await db.rawQuery(
         MySqlQueries.getByQuery(
           tableName,
           column: voucherConst,
-          query: type,
+          productId: productId,
           idName: uniqueIdConst,
         ),
       );
     } else if (fstDate != null &&
         lastDate != null &&
-        type == allCategoryConst) {
+        productId == allCategoryConst.key) {
       maps = await db.rawQuery(MySqlQueries.getByDate(
         tableName,
         column: timestampConst,
@@ -44,13 +44,13 @@ class VoucherTable {
       ));
     } else if (fstDate != null &&
         lastDate != null &&
-        type != allCategoryConst) {
+        productId != allCategoryConst.key) {
       maps = await db.rawQuery(MySqlQueries.getByDateWithQuery(
         tableName,
         column: timestampConst,
         fstTimestamp: fstDate,
         lastTimestamp: lastDate,
-        query: type,
+        productId: productId,
         idName: uniqueIdConst,
       ));
     } else {

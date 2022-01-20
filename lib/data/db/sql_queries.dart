@@ -5,10 +5,10 @@ class MySqlQueries {
   static String getByQuery(
     String tableName, {
     required String column,
-    required String query,
+    required int productId,
     required String idName,
   }) =>
-      "SELECT * FROM $tableName WHERE $column LIKE '$query' ORDER BY $idName DESC LIMIT 1000";
+      "SELECT * FROM $tableName WHERE $column LIKE '$productId' ORDER BY $idName DESC LIMIT 1000";
 
   static String getByDate(
     String tableName, {
@@ -25,8 +25,8 @@ class MySqlQueries {
     required String column,
     required int fstTimestamp,
     required int lastTimestamp,
-    required String query,
+    required int productId,
     required String idName,
   }) =>
-      "SELECT * FROM $tableName WHERE $column BETWEEN '%$fstTimestamp%' AND '%$lastTimestamp%' LIKE '%$query%' ORDER BY $idName DESC LIMIT 1000";
+      "SELECT * FROM $tableName WHERE $column BETWEEN '%$fstTimestamp%' AND '%$lastTimestamp%' LIKE '%$productId%' ORDER BY $idName DESC LIMIT 1000";
 }

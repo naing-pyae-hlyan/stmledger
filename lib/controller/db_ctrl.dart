@@ -76,7 +76,7 @@ class DbCtrl with ChangeNotifier {
     List<VoucherModel>? resp = [];
     try {
       resp = await VoucherTable.find(
-          fstDate: fstTimestamp, lastDate: lastTimestamp, type: productType);
+          fstDate: fstTimestamp, lastDate: lastTimestamp, productId: productId);
     } catch (e) {
       return ErrorResponse(code: null, message: e.toString());
     }
@@ -85,14 +85,14 @@ class DbCtrl with ChangeNotifier {
 
   int? fstTimestamp;
   int? lastTimestamp;
-  String productType = allCategoryConst.value!;
+  int productId = allCategoryConst.key!;
 
   void setQuery(
-      {String? type,
+      {int? productId,
       int? fstDate,
       int? lstDate,
       bool needCallDBandNotify = true}) async {
-    productType = type ?? allCategoryConst.value!;
+    productId = productId ?? allCategoryConst.key!;
     fstTimestamp = fstDate;
     lastTimestamp = lstDate;
     if (needCallDBandNotify) {
@@ -102,7 +102,7 @@ class DbCtrl with ChangeNotifier {
   }
 
   void resetQuery() {
-    productType = allCategoryConst.value!;
+    productId = allCategoryConst.key!;
     fstTimestamp = null;
     lastTimestamp = null;
   }

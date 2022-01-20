@@ -75,7 +75,7 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
             fstDate = date?.millisecondsSinceEpoch;
             _dbCtrl.setQuery(
               fstDate: fstDate,
-              type: _dbCtrl.productType,
+              productId: _dbCtrl.productId,
               needCallDBandNotify: false,
             );
           }),
@@ -84,7 +84,7 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
             _dbCtrl.setQuery(
               fstDate: fstDate,
               lstDate: lstDate,
-              type: _dbCtrl.productType,
+              productId: _dbCtrl.productId,
               needCallDBandNotify: true,
             );
           }),
@@ -96,7 +96,7 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
               onChanged: (MyDropDownModel v) => setState(() {
                 _selectedValue = v;
                 _dbCtrl.setQuery(
-                  type: v.value,
+                  productId: v.key,
                   fstDate: fstDate,
                   lstDate: lstDate,
                   needCallDBandNotify: true,
