@@ -14,7 +14,7 @@ class SummaryHomePage extends StatefulWidget {
 }
 
 class _SummaryHomePageState extends State<SummaryHomePage> {
-  final List<String> _productNameList = [allCategoryConst];
+  List<String> _productNameList = [];
   String _selectedName = allCategoryConst;
   late DbCtrl _dbCtrl;
 
@@ -22,10 +22,14 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
   void initState() {
     super.initState();
     _dbCtrl = context.read<DbCtrl>();
+    List<String> ids = [allCategoryConst];
+
     for (var p in widget.products) {
-      _productNameList.add(p.name ?? '');
+      ids.add(p.name ?? '');
     }
-    _productNameList.toSet().toList();
+    _productNameList = [
+      ...{...ids}
+    ];
     _selectedName = _productNameList[0];
   }
 
