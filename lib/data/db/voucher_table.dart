@@ -16,33 +16,46 @@ class VoucherTable {
   }
 
   static Future<List<VoucherModel>> find({
-    required int fstDate,
-    required int lastDate,
-    required String query,
+    required int? fstDate,
+    required int? lastDate,
+    required String type,
   }) async {
     final Database? db = await DbHelper().db;
     if (db == null) return [];
     List<Map<String, dynamic>> maps = [];
-    if (query == allCategoryConst) {
-      maps = await db.rawQuery(MySqlQueries.getAll(tableName, uniqueIdConst));
-    } else {
+    if (fstDate == null && lastDate == null && type != allCategoryConst) {
       maps = await db.rawQuery(
         MySqlQueries.getByQuery(
           tableName,
           column: voucherConst,
-          query: query,
+          query: type,
           idName: uniqueIdConst,
         ),
       );
+    } else if (fstDate != null &&
+        lastDate != null &&
+        type == allCategoryConst) {
+      maps = await db.rawQuery(MySqlQueries.getByDate(
+        tableName,
+        column: voucherConst,
+        fstTimestamp: fstDate,
+        lastTimestamp: lastDate,
+        idName: uniqueIdConst,
+      ));
+    } else if (fstDate != null &&
+        lastDate != null &&
+        type != allCategoryConst) {
+      maps = await db.rawQuery(MySqlQueries.getByDateWithQuery(
+        tableName,
+        column: voucherConst,
+        fstTimestamp: fstDate,
+        lastTimestamp: lastDate,
+        query: type,
+        idName: uniqueIdConst,
+      ));
+    } else {
+      maps = await db.rawQuery(MySqlQueries.getAll(tableName, uniqueIdConst));
     }
-
-    // final List<Map<String, dynamic>> maps = await db.rawQuery(
-    //   "SELECT * FROM $tableName WHERE "
-    //   "$voucherConst REGEXP '$query' AND "
-    //   "$timestampConst > '$fstDate' AND "
-    //   "$timestampConst < '$lastDate' ORDER BY "
-    //   "$uniqueIdConst DESC LIMIT 1000",
-    // );
 
     return List.generate(
         maps.length, (index) => VoucherModel.fromJson(maps[index]));
@@ -51,10 +64,8 @@ class VoucherTable {
   static Future<List<VoucherModel>> getAllVoucher() async {
     final Database? db = await DbHelper().db;
     if (db == null) return [];
-    final List<Map<String, dynamic>> maps = await db.rawQuery(
-        MySqlQueries.getAll(tableName, uniqueIdConst)
-        // 'SELECT * FROM $tableName ORDER BY $uniqueIdConst DESC LIMIT 1000',
-        );
+    final List<Map<String, dynamic>> maps =
+        await db.rawQuery(MySqlQueries.getAll(tableName, uniqueIdConst));
 
     return List.generate(
         maps.length, (index) => VoucherModel.fromJson(maps[index]));

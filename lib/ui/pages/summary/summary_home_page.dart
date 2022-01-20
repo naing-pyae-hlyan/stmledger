@@ -17,6 +17,8 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
   List<String> _productNameList = [];
   String _selectedName = allCategoryConst;
   late DbCtrl _dbCtrl;
+  int? fstDate;
+  int? lstDate;
 
   @override
   void initState() {
@@ -31,6 +33,8 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
       ...{...ids}
     ];
     _selectedName = _productNameList[0];
+    fstDate = null;
+    lstDate = null;
   }
 
   @override
@@ -67,8 +71,23 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
   Widget _haderRow() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          MyDatePicker(onSelectedDateTime: (DateTime? date) {}),
-          MyDatePicker(onSelectedDateTime: (DateTime? date) {}),
+          MyDatePicker(onSelectedDateTime: (DateTime? date) {
+            fstDate = date?.millisecondsSinceEpoch;
+            _dbCtrl.setQuery(
+              fstDate: fstDate,
+              type: _dbCtrl.productType,
+              needCallDBandNotify: false,
+            );
+          }),
+          MyDatePicker(onSelectedDateTime: (DateTime? date) {
+            lstDate = date?.millisecondsSinceEpoch;
+            _dbCtrl.setQuery(
+              fstDate: fstDate,
+              lstDate: lstDate,
+              type: _dbCtrl.productType,
+              needCallDBandNotify: true,
+            );
+          }),
           SizedBox(
             width: context.width * 0.4,
             child: MyDropDown(
@@ -76,7 +95,12 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
               list: _productNameList,
               onChanged: (v) => setState(() {
                 _selectedName = v;
-                _dbCtrl.setQuery(v);
+                _dbCtrl.setQuery(
+                  type: v,
+                  fstDate: fstDate,
+                  lstDate: lstDate,
+                  needCallDBandNotify: true,
+                );
               }),
             ),
           ),
