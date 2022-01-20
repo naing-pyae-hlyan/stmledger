@@ -85,14 +85,14 @@ class DbCtrl with ChangeNotifier {
 
   int? fstTimestamp;
   int? lastTimestamp;
-  String productType = allCategoryConst;
+  String productType = allCategoryConst.value!;
 
   void setQuery(
       {String? type,
       int? fstDate,
       int? lstDate,
       bool needCallDBandNotify = true}) async {
-    productType = type ?? allCategoryConst;
+    productType = type ?? allCategoryConst.value!;
     fstTimestamp = fstDate;
     lastTimestamp = lstDate;
     if (needCallDBandNotify) {
@@ -102,7 +102,7 @@ class DbCtrl with ChangeNotifier {
   }
 
   void resetQuery() {
-    productType = allCategoryConst;
+    productType = allCategoryConst.value!;
     fstTimestamp = null;
     lastTimestamp = null;
   }

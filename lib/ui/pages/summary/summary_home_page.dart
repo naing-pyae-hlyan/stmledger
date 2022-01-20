@@ -14,8 +14,8 @@ class SummaryHomePage extends StatefulWidget {
 }
 
 class _SummaryHomePageState extends State<SummaryHomePage> {
-  List<String> _productNameList = [];
-  String _selectedName = allCategoryConst;
+  List<MyDropDownModel> _productNameList = [];
+  MyDropDownModel _selectedValue = allCategoryConst;
   late DbCtrl _dbCtrl;
   int? fstDate;
   int? lstDate;
@@ -24,15 +24,15 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
   void initState() {
     super.initState();
     _dbCtrl = context.read<DbCtrl>();
-    List<String> ids = [allCategoryConst];
+    List<MyDropDownModel> ids = [allCategoryConst];
 
     for (var p in widget.products) {
-      ids.add(p.name ?? '');
+      ids.add(MyDropDownModel(value: p.name, key: p.id));
     }
     _productNameList = [
       ...{...ids}
     ];
-    _selectedName = _productNameList[0];
+    _selectedValue = _productNameList[0];
     fstDate = null;
     lstDate = null;
   }
@@ -91,12 +91,12 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
           SizedBox(
             width: context.width * 0.4,
             child: MyDropDown(
-              selectedName: _selectedName,
+              selectedName: _selectedValue,
               list: _productNameList,
-              onChanged: (v) => setState(() {
-                _selectedName = v;
+              onChanged: (MyDropDownModel v) => setState(() {
+                _selectedValue = v;
                 _dbCtrl.setQuery(
-                  type: v,
+                  type: v.value,
                   fstDate: fstDate,
                   lstDate: lstDate,
                   needCallDBandNotify: true,
