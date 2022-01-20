@@ -3,9 +3,11 @@ import '../../lib_exp.dart';
 class VoucherItem extends StatelessWidget {
   final List<Product>? products;
   final int? totalAmount;
+  final String? note;
   const VoucherItem({
     required this.products,
     required this.totalAmount,
+    this.note,
     Key? key,
   }) : super(key: key);
 
@@ -41,6 +43,7 @@ class VoucherItem extends StatelessWidget {
               'ကျသင့်ငွေ ($dia)',
               (totalAmount ?? '').toString().currency + dia,
             ),
+            note != null ? _textRow('မှတ်ချက်', note) : const SizedBox.shrink(),
           ],
         ),
       ),

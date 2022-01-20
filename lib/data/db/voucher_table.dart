@@ -9,6 +9,7 @@ class VoucherTable {
       '$uniqueIdConst INTEGER PRIMARY KEY AUTOINCREMENT,'
       '$timestampConst INT,'
       '$chargeConst INT,'
+      '$noteConst TEXT,'
       '$voucherConst TEXT'
       ')',
     );
@@ -28,7 +29,7 @@ class VoucherTable {
       "$timestampConst < '$lastDate' ORDER BY "
       "$uniqueIdConst DESC LIMIT 1000",
     );
-    if (true) {}
+
     return List.generate(maps.length, (index) => Product.fromJson(maps[index]));
   }
 
@@ -36,7 +37,7 @@ class VoucherTable {
     final Database? db = await DbHelper().db;
     if (db == null) return [];
     final List<Map<String, dynamic>> maps = await db.rawQuery(
-      'SELECT * FROM $tableName ORDER BY $uniqueIdConst DESC',
+      'SELECT * FROM $tableName ORDER BY $uniqueIdConst DESC LIMIT 1000',
     );
 
     return List.generate(
@@ -46,10 +47,12 @@ class VoucherTable {
   static Future<int> insert({
     required List<Product> products,
     required int charge,
+    required String note,
   }) async {
     Map<String, dynamic> map = {};
     map[timestampConst] = MyDateUtils.timestampNow;
     map[chargeConst] = charge;
+    map[noteConst] = note;
     List<Map<String, dynamic>> json = [];
 
     for (var p in products) {

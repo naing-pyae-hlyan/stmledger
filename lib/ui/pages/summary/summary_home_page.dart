@@ -93,6 +93,7 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
                           products:
                               convertVoucherModelToProduct(voucher[index]),
                           totalAmount: voucher[index].charge,
+                          note: voucher[index].note,
                         );
                       },
                     ),

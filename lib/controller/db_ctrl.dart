@@ -54,11 +54,18 @@ class DbCtrl with ChangeNotifier {
     return resp;
   }
 
-  Future<dynamic> insertVoucher(
-      {required List<Product> products, required int charge}) async {
+  Future<dynamic> insertVoucher({
+    required List<Product> products,
+    required int charge,
+    required String note,
+  }) async {
     int? resp;
     try {
-      resp = await VoucherTable.insert(products: products, charge: charge);
+      resp = await VoucherTable.insert(
+        products: products,
+        charge: charge,
+        note: note,
+      );
     } catch (e) {
       return ErrorResponse(code: null, message: e.toString());
     }

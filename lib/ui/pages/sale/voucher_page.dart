@@ -37,7 +37,10 @@ class _VoucherPageState extends State<VoucherPage> {
 
   Future<void> _voucher() async {
     final resp = await _dbCtrl.insertVoucher(
-        products: widget.products, charge: widget.totalAmount!);
+      products: widget.products,
+      charge: widget.totalAmount!,
+      note: _noteCtrl.text,
+    );
     (resp is ErrorResponse)
         ? DialogUtils.errorDialog(context, resp)
         : MyAlertDialog.show(
