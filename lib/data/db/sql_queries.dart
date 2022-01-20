@@ -8,7 +8,7 @@ class MySqlQueries {
     required String query,
     required String idName,
   }) =>
-      "SELECT * FROM $tableName WHERE $column LIKE '%$query%' ORDER BY $idName DESC LIMIT 1000";
+      "SELECT * FROM $tableName WHERE $column LIKE '$query' ORDER BY $idName DESC LIMIT 1000";
 
   static String getByDate(
     String tableName, {
@@ -17,6 +17,7 @@ class MySqlQueries {
     required int lastTimestamp,
     required String idName,
   }) =>
+      // ''' SELECT * FROM $tableName WHERE $column BETWEEN '$fstTimestamp' AND '$lastTimestamp' ''';
       "SELECT * FROM $tableName WHERE $column BETWEEN '$fstTimestamp' AND '$lastTimestamp' ORDER BY $idName DESC LIMIT 1000";
 
   static String getByDateWithQuery(
@@ -27,5 +28,5 @@ class MySqlQueries {
     required String query,
     required String idName,
   }) =>
-      "SELECT * FROM $tableName WHERE $column BETWEEN '$fstTimestamp' AND '$lastTimestamp' LIKE '%$query%' ORDER BY $idName DESC LIMIT 1000";
+      "SELECT * FROM $tableName WHERE $column BETWEEN '%$fstTimestamp%' AND '%$lastTimestamp%' LIKE '%$query%' ORDER BY $idName DESC LIMIT 1000";
 }

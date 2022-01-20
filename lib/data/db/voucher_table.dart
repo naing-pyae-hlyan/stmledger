@@ -37,7 +37,7 @@ class VoucherTable {
         type == allCategoryConst) {
       maps = await db.rawQuery(MySqlQueries.getByDate(
         tableName,
-        column: voucherConst,
+        column: timestampConst,
         fstTimestamp: fstDate,
         lastTimestamp: lastDate,
         idName: uniqueIdConst,
@@ -47,7 +47,7 @@ class VoucherTable {
         type != allCategoryConst) {
       maps = await db.rawQuery(MySqlQueries.getByDateWithQuery(
         tableName,
-        column: voucherConst,
+        column: timestampConst,
         fstTimestamp: fstDate,
         lastTimestamp: lastDate,
         query: type,
@@ -84,6 +84,7 @@ class VoucherTable {
 
     for (var p in products) {
       json.add({
+        productIdConst: p.id,
         productNameConst: p.name,
         productPriceConst: p.price,
         qtyConst: p.qty,
