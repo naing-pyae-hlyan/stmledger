@@ -7,3 +7,4 @@ const chargeConst = 'charge';
 const noteConst = 'note';
 const imgUrlConst = 'img_url';
 const voucherConst = 'voucher';
+const allCategoryConst = 'All';

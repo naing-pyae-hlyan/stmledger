@@ -14,8 +14,8 @@ class SummaryHomePage extends StatefulWidget {
 }
 
 class _SummaryHomePageState extends State<SummaryHomePage> {
-  final List<String> _productNameList = ['All'];
-  String _selectedName = 'All';
+  final List<String> _productNameList = [allCategoryConst];
+  String _selectedName = allCategoryConst;
   late DbCtrl _dbCtrl;
 
   @override
@@ -25,7 +25,15 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
     for (var p in widget.products) {
       _productNameList.add(p.name ?? '');
     }
+    _productNameList.toSet().toList();
     _selectedName = _productNameList[0];
+  }
+
+  @override
+  void dispose() {
+    _dbCtrl.resetQuery();
+
+    super.dispose();
   }
 
   @override
@@ -40,6 +48,18 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
     );
   }
 
+  Widget _body() => Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            _haderRow(),
+            const SizedBox(height: 8),
+            _fetchVoucherListView(),
+          ],
+        ),
+      );
+
   Widget _haderRow() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -50,61 +70,58 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
             child: MyDropDown(
               selectedName: _selectedName,
               list: _productNameList,
-              onChanged: (v) => setState(() => _selectedName = v),
+              onChanged: (v) => setState(() {
+                _selectedName = v;
+                _dbCtrl.setQuery(v);
+              }),
             ),
           ),
         ],
       );
 
-  Widget _body() {
-    return FutureBuilder<dynamic>(
-      future: _dbCtrl.getAllVoucher(),
-      builder: (_, snapshot) {
-        if (snapshot.data is ErrorResponse) {
-          return Center(
-            child: Text(snapshot.data.message),
-          );
-        }
-        if (snapshot.data is List<VoucherModel>) {
-          final List<VoucherModel> voucher = snapshot.data;
-
-          if (voucher.isEmpty) {
-            return _emptyCart();
-          } else {
-            int totalAmount = 0;
-            for (VoucherModel v in voucher) {
-              totalAmount += v.charge ?? 0;
+  Widget _fetchVoucherListView() {
+    return Consumer<DbCtrl>(
+      builder: (_, dbCtrl, __) {
+        return FutureBuilder<dynamic>(
+          future: _dbCtrl.find(),
+          builder: (_, snapshot) {
+            if (snapshot.data is ErrorResponse) {
+              return Center(
+                child: Text(snapshot.data.message),
+              );
             }
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-                  _haderRow(),
-                  const SizedBox(height: 8),
-                  Flexible(
-                    child: ListView.builder(
-                      itemCount: voucher.length + 1,
-                      shrinkWrap: true,
-                      itemBuilder: (_, index) {
-                        if (index == voucher.length) {
-                          return _totalItem(totalAmount);
-                        }
-                        return VoucherItem(
-                          products:
-                              convertVoucherModelToProduct(voucher[index]),
-                          totalAmount: voucher[index].charge,
-                          note: voucher[index].note,
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-        }
+            if (snapshot.data is List<VoucherModel>) {
+              final List<VoucherModel> voucher = snapshot.data;
 
-        return const LinearProgressIndicator();
+              if (voucher.isEmpty) {
+                return _emptyCart();
+              } else {
+                int totalAmount = 0;
+                for (VoucherModel v in voucher) {
+                  totalAmount += v.charge ?? 0;
+                }
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: voucher.length + 1,
+                    shrinkWrap: true,
+                    itemBuilder: (_, index) {
+                      if (index == voucher.length) {
+                        return _totalItem(totalAmount);
+                      }
+                      return VoucherItem(
+                        products: convertVoucherModelToProduct(voucher[index]),
+                        totalAmount: voucher[index].charge,
+                        note: voucher[index].note,
+                      );
+                    },
+                  ),
+                );
+              }
+            }
+
+            return const LinearProgressIndicator();
+          },
+        );
       },
     );
   }
@@ -156,7 +173,7 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
         ),
       );
 
-  Widget _emptyCart() => Center(
+  Widget _emptyCart() => Flexible(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -168,7 +185,7 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
             ),
             const SizedBox(height: 32),
             Text(
-              'Empty Voucher',
+              'No result',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 24,

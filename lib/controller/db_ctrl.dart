@@ -72,18 +72,28 @@ class DbCtrl with ChangeNotifier {
     return resp;
   }
 
-  Future<dynamic> find({
-    required int fstDate,
-    required int lastDate,
-    required String query,
-  }) async {
-    List<Product>? resp = [];
+  Future<dynamic> find() async {
+    List<VoucherModel>? resp = [];
     try {
       resp = await VoucherTable.find(
-          fstDate: fstDate, lastDate: lastDate, query: query);
+          fstDate: fstTimestamp, lastDate: lastTimestamp, query: query);
     } catch (e) {
       return ErrorResponse(code: null, message: e.toString());
     }
     return resp;
+  }
+
+  int fstTimestamp = MyDateUtils.timestampNow;
+  int lastTimestamp = MyDateUtils.timestampNow;
+  String query = allCategoryConst;
+
+  void setQuery(String q) async {
+    query = q;
+    await find();
+    notifyListeners();
+  }
+
+  void resetQuery() {
+    query = allCategoryConst;
   }
 }
