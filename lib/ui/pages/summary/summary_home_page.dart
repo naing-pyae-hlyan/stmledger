@@ -24,14 +24,11 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
   void initState() {
     super.initState();
     _dbCtrl = context.read<DbCtrl>();
-    List<MyDropDownModel> ids = [allCategoryConst];
-
+    final Map<String, MyDropDownModel> ids = {};
     for (var p in widget.products) {
-      ids.add(MyDropDownModel(value: p.name, key: p.id));
+      ids[p.name!] = MyDropDownModel(value: p.name, key: p.id);
     }
-    _productNameList = [
-      ...{...ids}
-    ];
+    _productNameList = ids.values.toList();
     _selectedValue = _productNameList[0];
     fstDate = null;
     lstDate = null;
