@@ -115,27 +115,27 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
               );
             }
             if (snapshot.data is List<VoucherModel>) {
-              final List<VoucherModel> voucher = snapshot.data;
+              final List<VoucherModel> vouchers = snapshot.data;
 
-              if (voucher.isEmpty) {
+              if (vouchers.isEmpty) {
                 return _emptyCart();
               } else {
                 int totalAmount = 0;
-                for (VoucherModel v in voucher) {
+                for (VoucherModel v in vouchers) {
                   totalAmount += v.charge ?? 0;
                 }
                 return Expanded(
                   child: ListView.builder(
-                    itemCount: voucher.length + 1,
+                    itemCount: vouchers.length + 1,
                     shrinkWrap: true,
                     itemBuilder: (_, index) {
-                      if (index == voucher.length) {
+                      if (index == vouchers.length) {
                         return _totalItem(totalAmount);
                       }
                       return VoucherItem(
-                        products: convertVoucherModelToProduct(voucher[index]),
-                        totalAmount: voucher[index].charge,
-                        note: voucher[index].note,
+                        voucher: vouchers[index],
+                        totalAmount: vouchers[index].charge,
+                        note: vouchers[index].note,
                       );
                     },
                   ),

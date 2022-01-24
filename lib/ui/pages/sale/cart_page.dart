@@ -1,10 +1,10 @@
 import '../../../lib_exp.dart';
 
 class CartPage extends StatefulWidget {
-  final List<Product> products;
+  final VoucherModel voucher;
   final int totalAmount;
   const CartPage({
-    required this.products,
+    required this.voucher,
     required this.totalAmount,
     Key? key,
   }) : super(key: key);
@@ -14,6 +14,32 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  List<Product> _productList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    for (Product p in widget.voucher.products!) {
+      if (p.qty! > 0) {
+        _productList.add(p);
+      }
+    }
+  }
+
+  void _checkOut() async {
+    context.push(
+      VoucherPage(
+        voucher: VoucherModel(
+          timestamp: widget.voucher.timestamp,
+          charge: widget.voucher.charge,
+          note: widget.voucher.note,
+          products: _productList,
+        ),
+        totalAmount: widget.totalAmount,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +48,9 @@ class _CartPageState extends State<CartPage> {
         automaticallyImplyLeading: true,
         centerTitle: false,
       ),
-      body: widget.products.isEmpty ? _emptyCart() : _body(),
+      body: widget.voucher.products!.isEmpty || _productList.isEmpty
+          ? _emptyCart()
+          : _body(),
     );
   }
 
@@ -36,10 +64,12 @@ class _CartPageState extends State<CartPage> {
   Widget _listItemsView() => Expanded(
         child: ListView.separated(
           shrinkWrap: true,
-          itemCount: widget.products.length + 1,
+          itemCount: _productList.length + 1,
           itemBuilder: (_, index) {
-            if (index == widget.products.length) return const SizedBox.shrink();
-            return _item(widget.products[index]);
+            if (index == _productList.length) {
+              return const SizedBox.shrink();
+            }
+            return _item(_productList[index]);
           },
           separatorBuilder: (_, index) => const Divider(thickness: 1),
         ),
@@ -156,12 +186,7 @@ class _CartPageState extends State<CartPage> {
               SizedBox(
                 width: context.width * 0.5,
                 child: MyButton(
-                  onTap: () => context.push(
-                    VoucherPage(
-                      products: widget.products,
-                      totalAmount: widget.totalAmount,
-                    ),
-                  ),
+                  onTap: _checkOut,
                   label: 'Checkout',
                 ),
               )

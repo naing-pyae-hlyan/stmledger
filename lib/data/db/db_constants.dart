@@ -7,5 +7,5 @@ const timestampConst = 'timestamp';
 const chargeConst = 'charge';
 const noteConst = 'note';
 const imgUrlConst = 'img_url';
-const voucherConst = 'voucher';
+const productsConst = 'products';
 const allCategoryConst = 'All';

@@ -1,11 +1,11 @@
 import '../../lib_exp.dart';
 
 class VoucherItem extends StatelessWidget {
-  final List<Product>? products;
+  final VoucherModel voucher;
   final int? totalAmount;
   final String? note;
   const VoucherItem({
-    required this.products,
+    required this.voucher,
     required this.totalAmount,
     this.note,
     Key? key,
@@ -24,18 +24,18 @@ class VoucherItem extends StatelessWidget {
           children: <Widget>[
             _textRow(
                 'ရက်စွဲ',
-                MyDateUtils.convertTimestempToDate(products?[0].timestamp)
+                MyDateUtils.convertTimestempToDate(voucher.timestamp)
                     .ddMMMhhmmAAA),
             _textRow('အမျိုးအစားများ', 'Qty / Price'),
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: products?.length,
+              itemCount: voucher.products!.length,
               itemBuilder: (_, index) => _textRow(
-                products![index].name!,
-                products![index].qty.toString() +
+                voucher.products![index].name!,
+                voucher.products![index].qty.toString() +
                     ' x ' +
-                    products![index].price.toString().currency,
+                    voucher.products![index].price.toString().currency,
               ),
             ),
             const Divider(thickness: 1),

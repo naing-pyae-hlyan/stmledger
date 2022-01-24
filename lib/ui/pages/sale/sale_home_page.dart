@@ -50,11 +50,10 @@ class _SaleHomePageState extends State<SaleHomePage> {
   }
 
   void onCheckoutClick() {
-    if (_saleCtrl.getConfirmedCartList.isNotEmpty &&
-        _saleCtrl.totalAmount > 0) {
+    if (_saleCtrl.totalAmount > 0) {
       context.push(
         VoucherPage(
-          products: _saleCtrl.getConfirmedCartList,
+          voucher: _saleCtrl.getConfirmedVoucher,
           totalAmount: _saleCtrl.totalAmount,
         ),
       );
@@ -105,7 +104,7 @@ class _SaleHomePageState extends State<SaleHomePage> {
             InkWell(
               onTap: () => context.push(
                 CartPage(
-                  products: _saleCtrl.getConfirmedCartList,
+                  voucher: _saleCtrl.voucher,
                   totalAmount: _saleCtrl.totalAmount,
                 ),
               ),
@@ -132,7 +131,12 @@ class _SaleHomePageState extends State<SaleHomePage> {
 
   Widget _listItemsView() => Consumer<SaleCtrl>(
         builder: (_, ctrl, __) {
-          final List<Product> products = ctrl.cartList;
+          final List<Product>? products = ctrl.voucher.products;
+
+          if (products == null || products.isEmpty) {
+            return const SizedBox.shrink();
+          }
+
           return Expanded(
             child: ListView.separated(
               shrinkWrap: true,

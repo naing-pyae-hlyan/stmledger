@@ -2,18 +2,19 @@ import 'package:stmledger/lib_exp.dart';
 
 class VoucherModel {
   int? id;
-  String? voucher;
-  int? charge;
   int? timestamp;
+  int? charge;
   String? note;
-  VoucherModel({this.id, this.voucher, this.charge, this.timestamp, this.note});
+  List<Product>? products;
+  VoucherModel(
+      {this.id, this.products, this.charge, this.timestamp, this.note});
 
   factory VoucherModel.fromJson(Map<String, dynamic> json) => VoucherModel(
         id: json[uniqueIdConst],
         timestamp: json[timestampConst],
         charge: json[chargeConst],
         note: json[noteConst],
-        voucher: json[voucherConst],
+        products: List.from(json[productsConst].map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
@@ -21,36 +22,36 @@ class VoucherModel {
         timestampConst: timestamp,
         chargeConst: charge,
         noteConst: note,
-        voucherConst: voucher,
+        productsConst: products,
       };
 }
 
-class Voucher {
-  String? name;
-  int? qty;
-  int? price;
-  Voucher({this.name, this.qty, this.price});
+// class Voucher {
+//   String? name;
+//   int? qty;
+//   int? price;
+//   Voucher({this.name, this.qty, this.price});
 
-  factory Voucher.fromJson(Map<String, dynamic> json) => Voucher(
-        name: json[productNameConst],
-        qty: json[qtyConst],
-        price: json[productPriceConst],
-      );
-}
+//   factory Voucher.fromJson(Map<String, dynamic> json) => Voucher(
+//         name: json[productNameConst],
+//         qty: json[qtyConst],
+//         price: json[productPriceConst],
+//       );
+// }
 
-List<Product> convertVoucherModelToProduct(VoucherModel v) {
-  List<Product> p = [];
-  final list = jsonDecode(v.voucher!);
-  for (Map<String, dynamic> i in list) {
-    p.add(Product(
-      id: v.id,
-      timestamp: v.timestamp,
-      charge: v.charge,
-      note: v.note,
-      name: i[productNameConst],
-      price: i[productPriceConst],
-      qty: i[qtyConst],
-    ));
-  }
-  return p;
-}
+// List<Product> convertVoucherModelToProduct(VoucherModel v) {
+//   List<Product> p = [];
+//   // final list = jsonDecode(v.voucher!);
+//   for (Map<String, dynamic> i in []) {
+//     p.add(Product(
+//       id: v.id,
+//       // timestamp: v.timestamp,
+//       // charge: v.charge,
+//       // note: v.note,
+//       name: i[productNameConst],
+//       price: i[productPriceConst],
+//       qty: i[qtyConst],
+//     ));
+//   }
+//   return p;
+// }

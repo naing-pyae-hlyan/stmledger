@@ -10,7 +10,7 @@ class VoucherTable {
       '$timestampConst INT,'
       '$chargeConst INT,'
       '$noteConst TEXT,'
-      '$voucherConst TEXT'
+      '$productsConst TEXT'
       ')',
     );
   }
@@ -25,7 +25,7 @@ class VoucherTable {
         lastDate == null &&
         productName != allCategoryConst) {
       maps = await DbGeneralFunc.getByQuery(
-          tableName: tableName, column: voucherConst, productName: productName);
+          tableName: tableName, column: productsConst, productName: productName);
     } else if (fstDate != null &&
         lastDate != null &&
         productName == allCategoryConst) {
@@ -83,7 +83,7 @@ class VoucherTable {
         qtyConst: p.qty,
       });
     }
-    map[voucherConst] = jsonEncode(json);
+    map[productsConst] = jsonEncode(json);
 
     return DbGeneralFunc.insert(
       tableName: tableName,

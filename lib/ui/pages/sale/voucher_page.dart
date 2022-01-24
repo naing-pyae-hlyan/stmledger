@@ -3,10 +3,10 @@ import 'package:stmledger/ui/widgets/voucher_item.dart';
 import '../../../lib_exp.dart';
 
 class VoucherPage extends StatefulWidget {
-  final List<Product> products;
+  final VoucherModel voucher;
   final int? totalAmount;
   const VoucherPage({
-    required this.products,
+    required this.voucher,
     required this.totalAmount,
     Key? key,
   }) : super(key: key);
@@ -37,7 +37,7 @@ class _VoucherPageState extends State<VoucherPage> {
 
   Future<void> _voucher() async {
     final resp = await _dbCtrl.insertVoucher(
-      products: widget.products,
+      products: widget.voucher.products!,
       charge: widget.totalAmount!,
       note: _noteCtrl.text,
     );
@@ -76,7 +76,7 @@ class _VoucherPageState extends State<VoucherPage> {
                 child: Column(
                   children: <Widget>[
                     VoucherItem(
-                      products: widget.products,
+                      voucher: widget.voucher,
                       totalAmount: widget.totalAmount,
                     ),
                     const SizedBox(height: 8),

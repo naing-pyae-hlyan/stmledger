@@ -1,32 +1,38 @@
 import '../lib_exp.dart';
 
 class SaleCtrl with ChangeNotifier {
-  List<Product> cartList = [];
+  VoucherModel voucher = VoucherModel(
+    products: [],
+  );
   void initCart(List<Product> l) {
-    cartList.clear();
     for (var p in l) {
       p.qty = 0;
     }
-    cartList = l;
+    voucher = VoucherModel(
+      timestamp: MyDateUtils.timestampNow,
+      charge: 0,
+      note: '',
+      products: l,
+    );
   }
 
   void addQty(int index) {
-    if (cartList.isEmpty || cartList.length < index) return;
-    cartList[index].qty = cartList[index].qty! + 1;
+    if (voucher.products!.isEmpty || voucher.products!.length < index) return;
+    voucher.products![index].qty = voucher.products![index].qty! + 1;
     notifyListeners();
   }
 
   void removeQty(int index) {
-    if (cartList.isEmpty || cartList.length < index) return;
-    if (cartList[index].qty! < 1) return;
+    if (voucher.products!.isEmpty || voucher.products!.length < index) return;
+    if (voucher.products![index].qty! < 1) return;
 
-    cartList[index].qty = cartList[index].qty! - 1;
+    voucher.products![index].qty = voucher.products![index].qty! - 1;
     notifyListeners();
   }
 
   int get cartCounter {
     int count = 0;
-    for (var p in cartList) {
+    for (var p in voucher.products!) {
       if (p.qty != null && p.qty! > 0) {
         count += p.qty!;
       }
@@ -34,19 +40,24 @@ class SaleCtrl with ChangeNotifier {
     return count;
   }
 
-  List<Product> get getConfirmedCartList {
+  VoucherModel get getConfirmedVoucher {
     List<Product> l = [];
-    for (var p in cartList) {
+    for (var p in voucher.products!) {
       if (p.qty != null && p.price != null && p.qty! > 0 && p.price! > 0) {
         l.add(p);
       }
     }
-    return l;
+    return VoucherModel(
+      timestamp: voucher.timestamp,
+      charge: voucher.charge,
+      note: voucher.note,
+      products: l,
+    );
   }
 
   int get totalAmount {
     int amt = 0;
-    for (var p in cartList) {
+    for (var p in voucher.products!) {
       if (p.price != null && p.qty != null && p.price! > 0 && p.qty! > 0) {
         amt += (p.price! * p.qty!);
       }
