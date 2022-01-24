@@ -72,7 +72,7 @@ class DbCtrl with ChangeNotifier {
     return resp;
   }
 
-  Future<dynamic> find() async {
+  Future<dynamic> findVoucher() async {
     List<VoucherModel>? resp = [];
     try {
       resp = await VoucherTable.find(
@@ -105,8 +105,8 @@ class DbCtrl with ChangeNotifier {
   }
 
   void resetQuery() {
-    // _productId = allCategoryConst.key!;
-    // _fstTimestamp = null;
-    // _lastTimestamp = null;
+    pName = allCategoryConst;
+    _fstTimestamp = null;
+    _lastTimestamp = null;
   }
 }

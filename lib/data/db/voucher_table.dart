@@ -55,10 +55,18 @@ class VoucherTable {
     debugLog(tag, maps.toString());
     final List<VoucherModel> voucherList = List.generate(
         maps.length, (index) => VoucherModel.fromJson(maps[index]));
-    List<Product> productList = [];
-    List<VoucherModel> filteredVoucherList = [];
-    int charge = 0;
+    return _filteredByProductName(
+        voucherList: voucherList, productName: productName);
+  }
+
+  static List<VoucherModel> _filteredByProductName({
+    required List<VoucherModel> voucherList,
+    required String productName,
+  }) {
     if (productName != allCategoryConst) {
+      List<Product> productList = [];
+      List<VoucherModel> filteredVoucherList = [];
+      int charge = 0;
       for (var v in voucherList) {
         productList.clear();
         charge = 0;
