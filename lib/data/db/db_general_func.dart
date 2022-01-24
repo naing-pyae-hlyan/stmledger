@@ -46,8 +46,9 @@ class DbGeneralFunc {
     final Database? db = await DbHelper().db;
     if (db == null) return [];
     debugLog(tableName, 'Get All from DB --!');
-    return await db
-        .rawQuery('SELECT * FROM $tableName  ORDER BY id DESC LIMIT 1000');
+    return await db.rawQuery(
+      'SELECT * FROM $tableName  ORDER BY id DESC LIMIT 1000',
+    );
   }
 
   static Future<List<Map<String, dynamic>>> getByQuery(
@@ -59,7 +60,7 @@ class DbGeneralFunc {
 
     debugLog(tableName, 'Get by query from DB $productName--!');
     return await db.rawQuery(
-      "SELECT * FROM $tableName $column LIKE '%$productName%' ORDER BY id DESC LIMIT 1000",
+      "SELECT * FROM $tableName WHERE $column LIKE '%$productName%' ORDER BY id DESC LIMIT 1000",
     );
   }
 

@@ -28,7 +28,9 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
     for (var p in widget.products) {
       ids.add(p.name!);
     }
-    _productNameList = [...{...ids}];
+    _productNameList = [
+      ...{...ids}
+    ];
     _selectedValue = _productNameList[0];
     fstDate = null;
     lstDate = null;
@@ -78,18 +80,13 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
           }),
           MyDatePicker(onSelectedDateTime: (DateTime? date) async {
             lstDate = date?.millisecondsSinceEpoch;
-            await _dbCtrl.find(
-              fstTimestamp: fstDate,
-              lstTimestamp: lstDate,
-              productName: _selectedValue,
-            );
 
-            // _dbCtrl.setQuery(
-            //   fstDate: fstDate,
-            //   lstDate: lstDate,
-            //   productId: _dbCtrl.productId,
-            //   needCallDBandNotify: true,
-            // );
+            _dbCtrl.setQuery(
+              fstDate: fstDate,
+              lstDate: lstDate,
+              productName: _dbCtrl.pName,
+              needCallDBandNotify: true,
+            );
           }),
           SizedBox(
             width: context.width * 0.4,
@@ -98,10 +95,11 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
               list: _productNameList,
               onChanged: (String v) async {
                 setState(() => _selectedValue = v);
-                await _dbCtrl.find(
-                  fstTimestamp: fstDate,
-                  lstTimestamp: lstDate,
+                _dbCtrl.setQuery(
+                  fstDate: fstDate,
+                  lstDate: lstDate,
                   productName: v,
+                  needCallDBandNotify: true,
                 );
               },
             ),
