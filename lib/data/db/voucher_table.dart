@@ -25,7 +25,9 @@ class VoucherTable {
         lastDate == null &&
         productName != allCategoryConst) {
       maps = await DbGeneralFunc.getByQuery(
-          tableName: tableName, column: productsConst, productName: productName);
+          tableName: tableName,
+          column: productsConst,
+          productName: productName);
     } else if (fstDate != null &&
         lastDate != null &&
         productName == allCategoryConst) {
@@ -51,9 +53,32 @@ class VoucherTable {
       maps = await DbGeneralFunc.getAll(tableName: tableName);
     }
     debugLog(tag, maps.toString());
-
-    return List.generate(
+    final List<VoucherModel> voucherList = List.generate(
         maps.length, (index) => VoucherModel.fromJson(maps[index]));
+    List<Product> productList = [];
+    List<VoucherModel> filteredVoucherList = [];
+    int charge = 0;
+    if (productName != allCategoryConst) {
+      for (var v in voucherList) {
+        productList.clear();
+        charge = 0;
+        for (var p in v.products!) {
+          if (p.name == productName) {
+            charge += p.price!;
+            productList.add(p);
+          }
+        }
+        filteredVoucherList.add(VoucherModel(
+          timestamp: v.timestamp,
+          charge: charge,
+          note: v.note,
+          products: productList,
+        ));
+      }
+      return filteredVoucherList;
+    } else {
+      return voucherList;
+    }
   }
 
   static Future<List<VoucherModel>> getAllVoucher() async {
