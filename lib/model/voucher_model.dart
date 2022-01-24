@@ -14,7 +14,9 @@ class VoucherModel {
         timestamp: json[timestampConst],
         charge: json[chargeConst],
         note: json[noteConst],
-        products: List.from(json[productsConst].map((x) => x)),
+        products: (jsonDecode(json[productsConst]) as List)
+            .map((e) => Product.fromJson(e))
+            .toList(),
       );
 
   Map<String, dynamic> toJson() => {
