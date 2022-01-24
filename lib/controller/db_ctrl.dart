@@ -72,38 +72,52 @@ class DbCtrl with ChangeNotifier {
     return resp;
   }
 
-  Future<dynamic> find() async {
+  Future<dynamic> find({
+    int? fstTimestamp,
+    int? lstTimestamp,
+    String productName = allCategoryConst,
+  }) async {
     List<VoucherModel>? resp = [];
     try {
       resp = await VoucherTable.find(
-          fstDate: fstTimestamp, lastDate: lastTimestamp, productId: productId);
+        fstDate: fstTimestamp,
+        lastDate: lstTimestamp,
+        productName: productName,
+      );
     } catch (e) {
       return ErrorResponse(code: null, message: e.toString());
     }
     return resp;
   }
 
-  int? fstTimestamp;
-  int? lastTimestamp;
-  int productId = allCategoryConst.key!;
+  // int? _fstTimestamp;
+  // int? _lastTimestamp;
+  // int _productId = allCategoryConst.key!;
 
-  void setQuery(
-      {int? productId,
-      int? fstDate,
-      int? lstDate,
-      bool needCallDBandNotify = true}) async {
-    productId = productId ?? allCategoryConst.key!;
-    fstTimestamp = fstDate;
-    lastTimestamp = lstDate;
-    if (needCallDBandNotify) {
-      await find();
-      notifyListeners();
-    }
+  void setQuery({
+    String? productName,
+    int? fstDate,
+    int? lstDate,
+    // bool needCallDBandNotify = true,
+  }) async {
+    await find(
+      fstTimestamp: fstDate,
+      lstTimestamp: lstDate,
+      productName: productName ?? allCategoryConst,
+    );
+
+    // productId = productId ?? allCategoryConst.key!;
+    // _fstTimestamp = fstDate;
+    // _lastTimestamp = lstDate;
+    // if (needCallDBandNotify) {
+    //   notifyListeners();
+    //   await find();
+    // }
   }
 
   void resetQuery() {
-    productId = allCategoryConst.key!;
-    fstTimestamp = null;
-    lastTimestamp = null;
+    // _productId = allCategoryConst.key!;
+    // _fstTimestamp = null;
+    // _lastTimestamp = null;
   }
 }

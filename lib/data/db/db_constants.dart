@@ -1,5 +1,3 @@
-import 'package:stmledger/ui/ui_exp.dart';
-
 const uniqueIdConst = 'id';
 const qtyConst = 'qty';
 const productIdConst = 'product_id';
@@ -10,4 +8,4 @@ const chargeConst = 'charge';
 const noteConst = 'note';
 const imgUrlConst = 'img_url';
 const voucherConst = 'voucher';
-final MyDropDownModel allCategoryConst = MyDropDownModel(value: 'All', key: 0);
+const allCategoryConst = 'All';

@@ -14,8 +14,8 @@ class SummaryHomePage extends StatefulWidget {
 }
 
 class _SummaryHomePageState extends State<SummaryHomePage> {
-  List<MyDropDownModel> _productNameList = [];
-  MyDropDownModel _selectedValue = allCategoryConst;
+  List<String> _productNameList = [];
+  String _selectedValue = allCategoryConst;
   late DbCtrl _dbCtrl;
   int? fstDate;
   int? lstDate;
@@ -24,11 +24,11 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
   void initState() {
     super.initState();
     _dbCtrl = context.read<DbCtrl>();
-    final Map<String, MyDropDownModel> ids = {};
+    final ids = [allCategoryConst];
     for (var p in widget.products) {
-      ids[p.name!] = MyDropDownModel(value: p.name, key: p.id);
+      ids.add(p.name!);
     }
-    _productNameList = ids.values.toList();
+    _productNameList = [...{...ids}];
     _selectedValue = _productNameList[0];
     fstDate = null;
     lstDate = null;
@@ -70,35 +70,40 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
         children: <Widget>[
           MyDatePicker(onSelectedDateTime: (DateTime? date) {
             fstDate = date?.millisecondsSinceEpoch;
-            _dbCtrl.setQuery(
-              fstDate: fstDate,
-              productId: _dbCtrl.productId,
-              needCallDBandNotify: false,
-            );
+            // _dbCtrl.setQuery(
+            //   fstDate: fstDate,
+            //   productId: _dbCtrl.productId,
+            //   needCallDBandNotify: false,
+            // );
           }),
-          MyDatePicker(onSelectedDateTime: (DateTime? date) {
+          MyDatePicker(onSelectedDateTime: (DateTime? date) async {
             lstDate = date?.millisecondsSinceEpoch;
-            _dbCtrl.setQuery(
-              fstDate: fstDate,
-              lstDate: lstDate,
-              productId: _dbCtrl.productId,
-              needCallDBandNotify: true,
+            await _dbCtrl.find(
+              fstTimestamp: fstDate,
+              lstTimestamp: lstDate,
+              productName: _selectedValue,
             );
+
+            // _dbCtrl.setQuery(
+            //   fstDate: fstDate,
+            //   lstDate: lstDate,
+            //   productId: _dbCtrl.productId,
+            //   needCallDBandNotify: true,
+            // );
           }),
           SizedBox(
             width: context.width * 0.4,
             child: MyDropDown(
               selectedName: _selectedValue,
               list: _productNameList,
-              onChanged: (MyDropDownModel v) => setState(() {
-                _selectedValue = v;
-                _dbCtrl.setQuery(
-                  productId: v.key,
-                  fstDate: fstDate,
-                  lstDate: lstDate,
-                  needCallDBandNotify: true,
+              onChanged: (String v) async {
+                setState(() => _selectedValue = v);
+                await _dbCtrl.find(
+                  fstTimestamp: fstDate,
+                  lstTimestamp: lstDate,
+                  productName: v,
                 );
-              }),
+              },
             ),
           ),
         ],

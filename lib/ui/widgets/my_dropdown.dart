@@ -1,15 +1,9 @@
 import '../../lib_exp.dart';
 
-class MyDropDownModel {
-  final String? value;
-  final dynamic key;
-  MyDropDownModel({this.value, this.key});
-}
-
 class MyDropDown extends StatefulWidget {
-  final MyDropDownModel selectedName;
-  final List<MyDropDownModel> list;
-  final ValueChanged<MyDropDownModel> onChanged;
+  final String selectedName;
+  final List<String> list;
+  final ValueChanged<String> onChanged;
   const MyDropDown({
     Key? key,
     required this.selectedName,
@@ -30,16 +24,16 @@ class _MyDropDownState extends State<MyDropDown> {
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: DropdownButton<MyDropDownModel>(
+      child: DropdownButton<String>(
         value: widget.selectedName,
         isExpanded: true,
         underline: const SizedBox.shrink(),
         dropdownColor: Colors.white,
         items: widget.list
             .map(
-              (MyDropDownModel model) => DropdownMenuItem(
-                value: model,
-                child: Text(model.value!),
+              (String value) => DropdownMenuItem(
+                value: value,
+                child: Text(value),
               ),
             )
             .toList(),
