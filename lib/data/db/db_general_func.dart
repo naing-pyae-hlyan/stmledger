@@ -40,13 +40,48 @@ class DbGeneralFunc {
     }
   }
 
-  static Future<List<Map>> getAll({required String tableName}) async {
+  static Future<List<Map<String, dynamic>>> getAll(
+      {required String tableName}) async {
     /// Get a reference to the database;
     final Database? db = await DbHelper().db;
     if (db == null) return [];
     debugLog(tableName, 'Get All from DB --!');
-    return await db.rawQuery('SELECT * FROM $tableName');
+    return await db
+        .rawQuery('SELECT * FROM $tableName  ORDER BY id DESC LIMIT 1000');
   }
+
+  static Future<List<Map<String, dynamic>>> getByQuery(
+      {required String tableName,
+      required String column,
+      required String productName}) async {
+    final Database? db = await DbHelper().db;
+    if (db == null) return [];
+
+    debugLog(tableName, 'Get by query from DB $productName--!');
+    return await db.rawQuery(
+      "SELECT * FROM $tableName $column LIKE '%$productName%' ORDER BY id DESC LIMIT 1000",
+    );
+  }
+
+  static String getByDate(
+    String tableName, {
+    required String column,
+    required int fstTimestamp,
+    required int lastTimestamp,
+    required String idName,
+  }) =>
+      // ''' SELECT * FROM $tableName WHERE $column BETWEEN '$fstTimestamp' AND '$lastTimestamp' ''';
+      "SELECT * FROM $tableName WHERE $column BETWEEN '$fstTimestamp' AND '$lastTimestamp' ORDER BY $idName DESC LIMIT 1000";
+
+  static String getByDateWithQuery(
+    String tableName, {
+    required String column,
+    required int fstTimestamp,
+    required int lastTimestamp,
+    required String productName,
+    required String idName,
+  }) =>
+      "SELECT * FROM $tableName WHERE $column BETWEEN '%$fstTimestamp%' AND '%$lastTimestamp%' LIKE '%$productName%' ORDER BY $idName DESC LIMIT 1000";
 
   static Future<int> updateById({
     required String tableName,

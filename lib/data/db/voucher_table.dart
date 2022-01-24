@@ -20,52 +20,45 @@ class VoucherTable {
     required int? lastDate,
     required String productName,
   }) async {
-    final Database? db = await DbHelper().db;
-    if (db == null) return [];
     List<Map<String, dynamic>> maps = [];
     if (fstDate == null &&
         lastDate == null &&
         productName != allCategoryConst) {
-      maps = await db.rawQuery(MySqlQueries.getByQuery(
-        tableName,
-        column: voucherConst,
-        productName: productName,
-        idName: uniqueIdConst,
-      ));
+      maps = await DbGeneralFunc.getByQuery(
+          tableName: tableName, column: voucherConst, productName: productName);
     } else if (fstDate != null &&
         lastDate != null &&
         productName == allCategoryConst) {
-      maps = await db.rawQuery(MySqlQueries.getByDate(
-        tableName,
-        column: timestampConst,
-        fstTimestamp: fstDate,
-        lastTimestamp: lastDate,
-        idName: uniqueIdConst,
-      ));
+      // maps = await db.rawQuery(MySqlQueries.getByDate(
+      //   tableName,
+      //   column: timestampConst,
+      //   fstTimestamp: fstDate,
+      //   lastTimestamp: lastDate,
+      //   idName: uniqueIdConst,
+      // ));
     } else if (fstDate != null &&
         lastDate != null &&
         productName != allCategoryConst) {
-      maps = await db.rawQuery(MySqlQueries.getByDateWithQuery(
-        tableName,
-        column: timestampConst,
-        fstTimestamp: fstDate,
-        lastTimestamp: lastDate,
-        productName: productName,
-        idName: uniqueIdConst,
-      ));
+      // maps = await db.rawQuery(MySqlQueries.getByDateWithQuery(
+      //   tableName,
+      //   column: timestampConst,
+      //   fstTimestamp: fstDate,
+      //   lastTimestamp: lastDate,
+      //   productName: productName,
+      //   idName: uniqueIdConst,
+      // ));
     } else {
-      maps = await db.rawQuery(MySqlQueries.getAll(tableName, uniqueIdConst));
+      maps = await DbGeneralFunc.getAll(tableName: tableName);
     }
+    debugLog(tag, maps.toString());
 
     return List.generate(
         maps.length, (index) => VoucherModel.fromJson(maps[index]));
   }
 
   static Future<List<VoucherModel>> getAllVoucher() async {
-    final Database? db = await DbHelper().db;
-    if (db == null) return [];
     final List<Map<String, dynamic>> maps =
-        await db.rawQuery(MySqlQueries.getAll(tableName, uniqueIdConst));
+        await DbGeneralFunc.getAll(tableName: tableName);
 
     return List.generate(
         maps.length, (index) => VoucherModel.fromJson(maps[index]));
