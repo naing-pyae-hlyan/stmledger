@@ -1,12 +1,10 @@
 import '../../lib_exp.dart';
 
 class MyDropDown extends StatefulWidget {
-  final String selectedName;
   final List<String> list;
   final ValueChanged<String> onChanged;
   const MyDropDown({
     Key? key,
-    required this.selectedName,
     required this.list,
     required this.onChanged,
   }) : super(key: key);
@@ -16,6 +14,8 @@ class MyDropDown extends StatefulWidget {
 }
 
 class _MyDropDownState extends State<MyDropDown> {
+  String _selectedName = allCategoryConst;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,7 +25,7 @@ class _MyDropDownState extends State<MyDropDown> {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: DropdownButton<String>(
-        value: widget.selectedName,
+        value: _selectedName,
         isExpanded: true,
         underline: const SizedBox.shrink(),
         dropdownColor: Colors.white,
@@ -37,7 +37,10 @@ class _MyDropDownState extends State<MyDropDown> {
               ),
             )
             .toList(),
-        onChanged: (dynamic v) => widget.onChanged(v),
+        onChanged: (dynamic v) {
+          widget.onChanged(v);
+          setState(() => _selectedName = v);
+        },
       ),
     );
   }

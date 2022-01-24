@@ -94,14 +94,13 @@ class DbCtrl with ChangeNotifier {
     String? productName,
     int? fstDate,
     int? lstDate,
-    bool needCallDBandNotify = true,
+    bool needToNotify = true,
   }) async {
     pName = productName ?? allCategoryConst;
     _fstTimestamp = fstDate;
     _lastTimestamp = lstDate;
-    if (needCallDBandNotify) {
+    if (needToNotify) {
       notifyListeners();
-      await find();
     }
   }
 

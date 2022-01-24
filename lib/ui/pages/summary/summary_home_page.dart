@@ -15,7 +15,6 @@ class SummaryHomePage extends StatefulWidget {
 
 class _SummaryHomePageState extends State<SummaryHomePage> {
   List<String> _productNameList = [];
-  String _selectedValue = allCategoryConst;
   late DbCtrl _dbCtrl;
   int? fstDate;
   int? lstDate;
@@ -31,7 +30,6 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
     _productNameList = [
       ...{...ids}
     ];
-    _selectedValue = _productNameList[0];
     fstDate = null;
     lstDate = null;
   }
@@ -85,21 +83,19 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
               fstDate: fstDate,
               lstDate: lstDate,
               productName: _dbCtrl.pName,
-              needCallDBandNotify: true,
+              needToNotify: true,
             );
           }),
           SizedBox(
             width: context.width * 0.4,
             child: MyDropDown(
-              selectedName: _selectedValue,
               list: _productNameList,
               onChanged: (String v) async {
-                setState(() => _selectedValue = v);
                 _dbCtrl.setQuery(
                   fstDate: fstDate,
                   lstDate: lstDate,
                   productName: v,
-                  needCallDBandNotify: true,
+                  needToNotify: true,
                 );
               },
             ),
