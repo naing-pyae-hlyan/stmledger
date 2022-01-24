@@ -64,15 +64,25 @@ class DbGeneralFunc {
     );
   }
 
-  static String getByDate(
+  static Future<List<Map<String, dynamic>>> getByDate(
     String tableName, {
     required String column,
-    required int fstTimestamp,
-    required int lastTimestamp,
-    required String idName,
-  }) =>
-      // ''' SELECT * FROM $tableName WHERE $column BETWEEN '$fstTimestamp' AND '$lastTimestamp' ''';
-      "SELECT * FROM $tableName WHERE $column BETWEEN '$fstTimestamp' AND '$lastTimestamp' ORDER BY $idName DESC LIMIT 1000";
+    required int fstDate,
+    required int lstDate,
+  }) async {
+    final Database? db = await DbHelper().db;
+    if (db == null) return [];
+    debugLog(
+      tableName,
+      'Get by date from DB $column--! $fstDate to $lstDate',
+    );
+
+    return await db.rawQuery(
+      "SELECT * FROM $tableName WHERE $column >= '$fstDate' AND $column <= '$lstDate'",
+    );
+  }
+  // ''' SELECT * FROM $tableName WHERE $column BETWEEN '$fstTimestamp' AND '$lastTimestamp' ''';
+  // "SELECT * FROM $tableName WHERE $column BETWEEN '$fstTimestamp' AND '$lastTimestamp' ORDER BY $idName DESC LIMIT 1000";
 
   static String getByDateWithQuery(
     String tableName, {

@@ -31,13 +31,12 @@ class VoucherTable {
     } else if (fstDate != null &&
         lastDate != null &&
         productName == allCategoryConst) {
-      // maps = await db.rawQuery(MySqlQueries.getByDate(
-      //   tableName,
-      //   column: timestampConst,
-      //   fstTimestamp: fstDate,
-      //   lastTimestamp: lastDate,
-      //   idName: uniqueIdConst,
-      // ));
+      maps = await DbGeneralFunc.getByDate(
+        tableName,
+        column: timestampConst,
+        fstDate: fstDate,
+        lstDate: lastDate,
+      );
     } else if (fstDate != null &&
         lastDate != null &&
         productName != allCategoryConst) {
