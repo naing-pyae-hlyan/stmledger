@@ -19,7 +19,7 @@ class _MyDatePickerState extends State<MyDatePicker> {
       context: context,
       initialDate: date!,
       firstDate: DateTime(2022),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(2023),
       builder: (_, child) => SizedBox(child: child),
     );
     if (selectedDate != null) {

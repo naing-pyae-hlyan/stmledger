@@ -30,7 +30,7 @@ class _CartPageState extends State<CartPage> {
     context.push(
       VoucherPage(
         voucher: VoucherModel(
-          timestamp: widget.voucher.timestamp,
+          iso8601Date: widget.voucher.iso8601Date,
           charge: widget.voucher.charge,
           note: widget.voucher.note,
           products: _productList,

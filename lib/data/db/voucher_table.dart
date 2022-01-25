@@ -7,7 +7,7 @@ class VoucherTable {
     await db.execute(
       'CREATE TABLE $tableName('
       '$uniqueIdConst INTEGER PRIMARY KEY AUTOINCREMENT,'
-      '$timestampConst INTEGER,'
+      '$dateConst TEXT,'
       '$chargeConst INT,'
       '$noteConst TEXT,'
       '$productsConst TEXT'
@@ -16,8 +16,8 @@ class VoucherTable {
   }
 
   static Future<List<VoucherModel>> find({
-    required int? fstDate,
-    required int? lastDate,
+    required DateTime? fstDate,
+    required DateTime? lastDate,
     required String productName,
   }) async {
     List<Map<String, dynamic>> maps = [];
@@ -33,9 +33,9 @@ class VoucherTable {
         productName == allCategoryConst) {
       maps = await DbGeneralFunc.getByDate(
         tableName,
-        column: timestampConst,
-        fstDate: fstDate,
-        lstDate: lastDate,
+        column: dateConst,
+        from: fstDate,
+        to: lastDate,
       );
     } else if (fstDate != null &&
         lastDate != null &&
@@ -76,7 +76,7 @@ class VoucherTable {
           }
         }
         filteredVoucherList.add(VoucherModel(
-          timestamp: v.timestamp,
+          iso8601Date: v.iso8601Date,
           charge: charge,
           note: v.note,
           products: productList,
@@ -102,7 +102,7 @@ class VoucherTable {
     required String note,
   }) async {
     Map<String, dynamic> map = {};
-    map[timestampConst] = MyDateUtils.timestampNow;
+    map[dateConst] = MyDateUtils.iso8601Date;
     map[chargeConst] = charge;
     map[noteConst] = note;
     List<Map<String, dynamic>> json = [];

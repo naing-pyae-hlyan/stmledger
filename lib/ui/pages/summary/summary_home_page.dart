@@ -16,8 +16,8 @@ class SummaryHomePage extends StatefulWidget {
 class _SummaryHomePageState extends State<SummaryHomePage> {
   List<String> _productNameList = [];
   late DbCtrl _dbCtrl;
-  int? fstDate;
-  int? lstDate;
+  DateTime? fstDate;
+  DateTime? lstDate;
 
   @override
   void initState() {
@@ -68,16 +68,9 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
   Widget _haderRow() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          MyDatePicker(onSelectedDateTime: (DateTime? date) {
-            fstDate = date?.millisecondsSinceEpoch;
-            // _dbCtrl.setQuery(
-            //   fstDate: fstDate,
-            //   productId: _dbCtrl.productId,
-            //   needCallDBandNotify: false,
-            // );
-          }),
+          MyDatePicker(onSelectedDateTime: (DateTime? date) => fstDate = date),
           MyDatePicker(onSelectedDateTime: (DateTime? date) async {
-            lstDate = date?.millisecondsSinceEpoch;
+            lstDate = date;
 
             _dbCtrl.setQuery(
               fstDate: fstDate,

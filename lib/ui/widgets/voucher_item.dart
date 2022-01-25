@@ -24,7 +24,7 @@ class VoucherItem extends StatelessWidget {
           children: <Widget>[
             _textRow(
                 'ရက်စွဲ',
-                MyDateUtils.convertTimestempToDate(voucher.timestamp)
+                MyDateUtils.convertIso8601StringToDateTime(voucher.iso8601Date)
                     .ddMMMhhmmAAA),
             _textRow('အမျိုးအစားများ', 'Qty / Price'),
             ListView.builder(

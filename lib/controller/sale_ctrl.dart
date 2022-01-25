@@ -9,7 +9,7 @@ class SaleCtrl with ChangeNotifier {
       p.qty = 0;
     }
     voucher = VoucherModel(
-      timestamp: MyDateUtils.timestampNow,
+      iso8601Date: MyDateUtils.iso8601Date,
       charge: 0,
       note: '',
       products: l,
@@ -48,7 +48,7 @@ class SaleCtrl with ChangeNotifier {
       }
     }
     return VoucherModel(
-      timestamp: voucher.timestamp,
+      iso8601Date: voucher.iso8601Date,
       charge: voucher.charge,
       note: voucher.note,
       products: l,

@@ -86,14 +86,14 @@ class DbCtrl with ChangeNotifier {
     return resp;
   }
 
-  int? _fstTimestamp;
-  int? _lastTimestamp;
+  DateTime? _fstTimestamp;
+  DateTime? _lastTimestamp;
   String pName = allCategoryConst;
 
   void setQuery({
     String? productName,
-    int? fstDate,
-    int? lstDate,
+    DateTime? fstDate,
+    DateTime? lstDate,
     bool needToNotify = true,
   }) async {
     pName = productName ?? allCategoryConst;
