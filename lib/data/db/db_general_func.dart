@@ -77,9 +77,11 @@ class DbGeneralFunc {
       'Get by date from DB $column--! $fstDate to $lstDate',
     );
 
-    return await db.rawQuery(
-      "SELECT * FROM $tableName WHERE $column >= '$fstDate' AND $column <= '$lstDate'",
+    var a = await db.rawQuery(
+      "SELECT * FROM $tableName WHERE strftime('%s', $column) BETWEEN strftime('%s', $fstDate) AND strftime('%s', $lstDate)",
     );
+    print(a);
+    return a;
   }
   // ''' SELECT * FROM $tableName WHERE $column BETWEEN '$fstTimestamp' AND '$lastTimestamp' ''';
   // "SELECT * FROM $tableName WHERE $column BETWEEN '$fstTimestamp' AND '$lastTimestamp' ORDER BY $idName DESC LIMIT 1000";

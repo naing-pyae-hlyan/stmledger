@@ -17,7 +17,7 @@ class ProductsTable {
   static Future<List<Product>> getAll() async {
     final Database? db = await DbHelper().db;
     if (db == null) return [];
-    final List<Map<String, dynamic>> maps = await db.query(tableName);
+    final List<Map<String, dynamic>> maps = await db.query(tableName, orderBy: productNameConst);
 
     return List.generate(maps.length, (index) => Product.fromJson(maps[index]));
   }

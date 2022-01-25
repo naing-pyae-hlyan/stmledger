@@ -7,7 +7,7 @@ class VoucherTable {
     await db.execute(
       'CREATE TABLE $tableName('
       '$uniqueIdConst INTEGER PRIMARY KEY AUTOINCREMENT,'
-      '$timestampConst INT,'
+      '$timestampConst INTEGER,'
       '$chargeConst INT,'
       '$noteConst TEXT,'
       '$productsConst TEXT'
