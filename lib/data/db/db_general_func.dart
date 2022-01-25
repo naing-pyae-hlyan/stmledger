@@ -64,38 +64,35 @@ class DbGeneralFunc {
     );
   }
 
-  static Future<List<Map<String, dynamic>>> getByDate(
+ 
+  static Future<List<Map<String, dynamic>>> getByDateWithQuery(
     String tableName, {
-    required String column,
+    required String dateColumn,
+    required String? productColumn,
     required DateTime? from,
     required DateTime? to,
+    required String? search,
   }) async {
     final Database? db = await DbHelper().db;
     if (db == null) return [];
     debugLog(
       tableName,
-      'Get by date from DB $column--! $from to $to',
+      'Get by date with qyery from DB $dateColumn--! $from to $to $search',
     );
-    String rawQuery = "SELECT * FROM $tableName WHERE $column";
+    String rawQuery = "SELECT * FROM $tableName WHERE $dateColumn";
     if (from != null) {
-      rawQuery += " AND STRFTIME('%Y-%m-%d %H:%M:%S.%s', $column) >='$from'";
+      rawQuery +=
+          " AND STRFTIME('%Y-%m-%d %H:%M:%S.%s', $dateColumn) >='$from'";
     }
     if (to != null) {
-      rawQuery += " AND STRFTIME('%Y-%m-%d %H:%M:%S.%s', $column) <='$to'";
+      rawQuery += " AND STRFTIME('%Y-%m-%d %H:%M:%S.%s', $dateColumn) <='$to'";
+    }
+    if (search != null && productColumn != null) {
+      rawQuery += " AND $productColumn LIKE '%$search%'";
     }
 
-    return await db.rawQuery(rawQuery);
+    return await db.rawQuery(rawQuery + " ORDER BY id DESC LIMIT 1000");
   }
-
-  static String getByDateWithQuery(
-    String tableName, {
-    required String column,
-    required int fstTimestamp,
-    required int lastTimestamp,
-    required String productName,
-    required String idName,
-  }) =>
-      "SELECT * FROM $tableName WHERE $column BETWEEN '%$fstTimestamp%' AND '%$lastTimestamp%' LIKE '%$productName%' ORDER BY $idName DESC LIMIT 1000";
 
   static Future<int> updateById({
     required String tableName,

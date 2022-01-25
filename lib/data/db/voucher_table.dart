@@ -21,36 +21,14 @@ class VoucherTable {
     required String productName,
   }) async {
     List<Map<String, dynamic>> maps = [];
-    if (fstDate == null &&
-        lastDate == null &&
-        productName != allCategoryConst) {
-      maps = await DbGeneralFunc.getByQuery(
-          tableName: tableName,
-          column: productsConst,
-          productName: productName);
-    } else if (fstDate != null &&
-        lastDate != null &&
-        productName == allCategoryConst) {
-      maps = await DbGeneralFunc.getByDate(
-        tableName,
-        column: dateConst,
-        from: fstDate,
-        to: lastDate,
-      );
-    } else if (fstDate != null &&
-        lastDate != null &&
-        productName != allCategoryConst) {
-      // maps = await db.rawQuery(MySqlQueries.getByDateWithQuery(
-      //   tableName,
-      //   column: timestampConst,
-      //   fstTimestamp: fstDate,
-      //   lastTimestamp: lastDate,
-      //   productName: productName,
-      //   idName: uniqueIdConst,
-      // ));
-    } else {
-      maps = await DbGeneralFunc.getAll(tableName: tableName);
-    }
+    maps = await DbGeneralFunc.getByDateWithQuery(
+      tableName,
+      dateColumn: dateConst,
+      from: fstDate,
+      to: lastDate,
+      productColumn: productName == allCategoryConst ? null : productsConst,
+      search: productName == allCategoryConst ? null : productName,
+    );
     debugLog(tag, maps.toString());
     final List<VoucherModel> voucherList = List.generate(
         maps.length, (index) => VoucherModel.fromJson(maps[index]));
