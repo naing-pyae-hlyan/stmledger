@@ -86,8 +86,6 @@ class DbGeneralFunc {
 
     return await db.rawQuery(rawQuery);
   }
-  // ''' SELECT * FROM $tableName WHERE $column BETWEEN '$fstTimestamp' AND '$lastTimestamp' ''';
-  // "SELECT * FROM $tableName WHERE $column BETWEEN '$fstTimestamp' AND '$lastTimestamp' ORDER BY $idName DESC LIMIT 1000";
 
   static String getByDateWithQuery(
     String tableName, {

@@ -68,17 +68,23 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
   Widget _haderRow() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          MyDatePicker(onSelectedDateTime: (DateTime? date) => fstDate = date),
-          MyDatePicker(onSelectedDateTime: (DateTime? date) async {
-            lstDate = date;
+          MyDatePicker(
+            onSelectedDateTime: (DateTime? date) => fstDate = date,
+            needToAdd23Hours: false,
+          ),
+          MyDatePicker(
+            needToAdd23Hours: true,
+            onSelectedDateTime: (DateTime? date) async {
+              lstDate = date;
 
-            _dbCtrl.setQuery(
-              fstDate: fstDate,
-              lstDate: lstDate,
-              productName: _dbCtrl.pName,
-              needToNotify: true,
-            );
-          }),
+              _dbCtrl.setQuery(
+                fstDate: fstDate,
+                lstDate: lstDate,
+                productName: _dbCtrl.pName,
+                needToNotify: true,
+              );
+            },
+          ),
           SizedBox(
             width: context.width * 0.4,
             child: MyDropDown(
