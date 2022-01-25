@@ -15,6 +15,14 @@ class Product {
     this.imgURl = '',
   });
 
+  static Product clone(Product p) => Product(
+        id: p.id,
+        name: p.name,
+        price: p.price,
+        qty: p.qty,
+        imgURl: p.imgURl,
+      );
+
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json[uniqueIdConst],
         name: json[productNameConst],

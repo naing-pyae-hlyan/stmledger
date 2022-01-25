@@ -45,11 +45,10 @@ class VoucherTable {
       List<VoucherModel> filteredVoucherList = [];
       int charge = 0;
       for (var v in voucherList) {
-        productList.clear();
         charge = 0;
         for (var p in v.products!) {
           if (p.name == productName) {
-            charge += p.price!;
+            charge += p.price! * p.qty!;
             productList.add(p);
           }
         }
@@ -57,8 +56,9 @@ class VoucherTable {
           iso8601Date: v.iso8601Date,
           charge: charge,
           note: v.note,
-          products: productList,
+          products: [...productList],
         ));
+        productList.clear();
       }
       return filteredVoucherList;
     } else {

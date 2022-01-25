@@ -9,6 +9,14 @@ class VoucherModel {
   VoucherModel(
       {this.id, this.products, this.charge, this.iso8601Date, this.note});
 
+  static VoucherModel clone(VoucherModel v) => VoucherModel(
+        id: v.id,
+        iso8601Date: v.iso8601Date,
+        charge: v.charge,
+        note: v.note,
+        products: v.products,
+      );
+
   factory VoucherModel.fromJson(Map<String, dynamic> json) => VoucherModel(
         id: json[uniqueIdConst],
         iso8601Date: json[dateConst],
