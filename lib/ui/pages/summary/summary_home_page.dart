@@ -16,8 +16,8 @@ class SummaryHomePage extends StatefulWidget {
 class _SummaryHomePageState extends State<SummaryHomePage> {
   List<String> _productNameList = [];
   late DbCtrl _dbCtrl;
-  DateTime? fstDate;
-  DateTime? lstDate;
+  late DateTime fstDate;
+  late DateTime lstDate;
 
   @override
   void initState() {
@@ -30,8 +30,10 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
     _productNameList = [
       ...{...ids}
     ];
-    fstDate = null;
-    lstDate = null;
+    final now = DateTime.now();
+    fstDate = DateTime(now.year, now.month, now.day);
+    lstDate = now;
+    _setSelectedDateToCtrl(needToNotify: false);
   }
 
   @override
@@ -39,6 +41,15 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
     _dbCtrl.resetQuery();
 
     super.dispose();
+  }
+
+  void _setSelectedDateToCtrl({bool needToNotify = true}) {
+    _dbCtrl.setQuery(
+      fstDate: fstDate,
+      lstDate: lstDate,
+      productName: _dbCtrl.pName,
+      needToNotify: needToNotify,
+    );
   }
 
   @override
@@ -69,20 +80,17 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           MyDatePicker(
-            onSelectedDateTime: (DateTime? date) => fstDate = date,
             needToAdd23Hours: false,
+            onSelectedDateTime: (DateTime? date) async {
+              fstDate = date!;
+              _setSelectedDateToCtrl();
+            },
           ),
           MyDatePicker(
             needToAdd23Hours: true,
             onSelectedDateTime: (DateTime? date) async {
-              lstDate = date;
-
-              _dbCtrl.setQuery(
-                fstDate: fstDate,
-                lstDate: lstDate,
-                productName: _dbCtrl.pName,
-                needToNotify: true,
-              );
+              lstDate = date!;
+              _setSelectedDateToCtrl();
             },
           ),
           SizedBox(
