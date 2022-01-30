@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ရွှေသမင်မုန့်တိုက်'),
+        title: const Text('My Ledger'),
         centerTitle: true,
       ),
       body: Padding(
