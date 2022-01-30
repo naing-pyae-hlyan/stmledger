@@ -171,9 +171,9 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
               Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: Text(
-                  DateTime.now().ddMMyyyy +
+                  fstDate.ddMMyyyy +
                       ' မှ ' +
-                      DateTime.now().ddMMyyyy +
+                      lstDate.ddMMyyyy +
                       ' ထိ',
                   style: TextStyle(color: Colors.grey[200]),
                 ),
