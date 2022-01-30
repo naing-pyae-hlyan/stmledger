@@ -52,25 +52,15 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: GridView.builder(
                 shrinkWrap: true,
-                itemCount: homeTypes.length + 1,
+                itemCount: homeTypes.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                 ),
-                itemBuilder: (_, index) {
-                  if (index == homeTypes.length) {
-                    return MyItem(
-                      label: 'Delet All',
-                      onPress: () async {
-                        await VoucherTable.deleteAll();
-                      },
-                    );
-                  }
-                  return MyItem(
-                    label: homeTypes[index].name,
-                    imgUrl: homeTypes[index].url,
-                    onPress: () => _onTapItem(homeTypes[index].type!),
-                  );
-                },
+                itemBuilder: (_, index) => MyItem(
+                  label: homeTypes[index].name,
+                  imgUrl: homeTypes[index].url,
+                  onPress: () => _onTapItem(homeTypes[index].type!),
+                ),
               ),
             ),
             CommonUtils.versionLabel(),
