@@ -54,12 +54,14 @@ class VoucherTable {
             productList.add(p);
           }
         }
-        filteredVoucherList.add(VoucherModel(
-          iso8601Date: v.iso8601Date,
-          charge: charge,
-          note: v.note,
-          products: [...productList],
-        ));
+        if (productList.isNotEmpty) {
+          filteredVoucherList.add(VoucherModel(
+            iso8601Date: v.iso8601Date,
+            charge: charge,
+            note: v.note,
+            products: [...productList],
+          ));
+        }
         productList.clear();
       }
       return filteredVoucherList;
