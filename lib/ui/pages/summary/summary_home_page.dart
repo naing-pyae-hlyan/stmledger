@@ -18,7 +18,6 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
   late DbCtrl _dbCtrl;
   late DateTime fstDate;
   late DateTime lstDate;
-  int _limit = voucherLimit;
 
   @override
   void initState() {
@@ -138,7 +137,7 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
                     shrinkWrap: true,
                     itemBuilder: (_, index) {
                       if (index == vouchers.length) {
-                        return _totalItem(totalAmount);
+                        return _totalItem(totalAmount, vouchers.length);
                       }
                       return VoucherItem(
                         no: index + 1,
@@ -159,19 +158,18 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
     );
   }
 
-  Widget _totalItem(int charge) => Column(
+  Widget _totalItem(int charge, int length) => Column(
         children: <Widget>[
-          MyButton(
-            onTap: () {
-              _limit += voucherLimit;
-              _dbCtrl.setPage(_limit);
-            },
-            color: Colors.white,
-            labelColor: AppColors.primaryColor,
-            padding: const EdgeInsets.all(0),
-            width: context.width / 2,
-            label: 'Show More',
-          ),
+          length < _dbCtrl.vLimit
+              ? SizedBox.shrink()
+              : MyButton(
+                  onTap: () => _dbCtrl.increaseVoucherPage(),
+                  color: Colors.white,
+                  labelColor: AppColors.primaryColor,
+                  padding: const EdgeInsets.all(0),
+                  width: context.width / 2,
+                  label: 'Show More',
+                ),
           Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
