@@ -6,6 +6,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => CategoryCtrl()),
         ChangeNotifierProvider(create: (_) => DbCtrl()),
+        ChangeNotifierProvider(create: (_) => PrintCtrl()),
         ChangeNotifierProvider(
             create: (_) => RandomImageCtrl(
                 randomImage:
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'ရွှေသမင် မုန့်တိုက်',
+      title: appName,
       theme: ThemeData(
         primarySwatch: AppColors.homePrimaryColor,
         primaryColor: AppColors.homePrimaryColor,

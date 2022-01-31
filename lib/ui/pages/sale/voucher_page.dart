@@ -20,7 +20,14 @@ class _VoucherPageState extends State<VoucherPage> {
   late DbCtrl _dbCtrl;
 
   Future<void> _print() async {
-    context.pushAndRemoveUntil(const HomePage());
+    if (Platform.isAndroid) {
+      context.push(PrintPage(
+        voucher: widget.voucher,
+        totalAmount: widget.totalAmount!,
+        note: _noteCtrl.text,
+      ));
+    } else
+      context.pushAndRemoveUntil(const HomePage());
   }
 
   @override

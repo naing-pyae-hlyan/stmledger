@@ -1,6 +1,7 @@
 import 'package:stmledger/lib_exp.dart';
 
 const dia = 'ks';
+const appName = 'ရွှေသမင် မုန့်တိုက်';
 
 final List<HomeTypeModel> homeTypes = [
   HomeTypeModel(
