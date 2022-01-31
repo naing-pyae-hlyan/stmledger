@@ -56,9 +56,12 @@ class _VoucherPageState extends State<VoucherPage> {
             title: 'Success',
             description:
                 'ဘောင်ချာကို သိမ်းပြီးပါပြီ။\nစာရင်းထဲတွင် ပြန်လည်ကြည့်ရှူပါ။',
-            addCloseButton: true,
+            addCloseButton: false,
             actionButtonLabel: 'Print',
             onTapActionButton: _print,
+            actionButtonLabel2: 'Done',
+            onTapActionButton2: () =>
+                context.pushAndRemoveUntil(const HomePage()),
           );
   }
 

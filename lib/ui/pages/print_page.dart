@@ -61,8 +61,58 @@ class _PrintPageState extends State<PrintPage> {
       );
       return;
     } else {
+      final date =
+          MyDateUtils.convertIso8601StringToDateTime(widget.voucher.iso8601Date)
+              .ddMMMhhmmAAA;
       List<LineText> data = [];
-      data.add(LineText());
+      data.add(LineText(
+        content: '$appName\n',
+        type: LineText.TYPE_TEXT,
+        align: LineText.ALIGN_CENTER,
+        weight: 2,
+        width: 2,
+        height: 2,
+        linefeed: 1,
+        underline: 1,
+      ));
+      data.add(LineText(
+        content: date,
+        type: LineText.TYPE_TEXT,
+        align: LineText.ALIGN_RIGHT,
+        linefeed: 1,
+        underline: 1,
+      ));
+      for (var i = 0, l = widget.voucher.products!.length; i < l; i++) {
+        data.add(LineText(
+          content: widget.voucher.products![i].name,
+          type: LineText.TYPE_TEXT,
+          align: LineText.ALIGN_LEFT,
+        ));
+        data.add(LineText(
+          content:
+              "${widget.voucher.products![i].qty} x ${widget.voucher.products![i].price.toString().currency}",
+          type: LineText.TYPE_TEXT,
+          align: LineText.ALIGN_LEFT,
+          underline: l - 1 == i ? 1 : 0,
+        ));
+      }
+      data.add(LineText(
+        type: LineText.TYPE_TEXT,
+        align: LineText.ALIGN_LEFT,
+        content:
+            'Total Amount:   ${widget.totalAmount.toString().currency} $dia',
+        weight: 0,
+        linefeed: 1,
+        underline: 1,
+      ));
+
+      data.add(LineText(
+        type: LineText.TYPE_TEXT,
+        align: LineText.ALIGN_LEFT,
+        content: 'ဝယ်ယူအားပေးမှုကို ကျေးဇူးတင်ပါသည်။',
+        linefeed: 1,
+        underline: 1,
+      ));
 
       try {
         Future.delayed(Duration.zero,
