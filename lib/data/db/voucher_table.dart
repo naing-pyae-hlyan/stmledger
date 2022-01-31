@@ -19,6 +19,7 @@ class VoucherTable {
     required DateTime? fstDate,
     required DateTime? lastDate,
     required String productName,
+    int limit = 100,
   }) async {
     List<Map<String, dynamic>> maps = [];
     maps = await DbGeneralFunc.getByDateWithQuery(
@@ -26,6 +27,7 @@ class VoucherTable {
       dateColumn: dateConst,
       from: fstDate,
       to: lastDate,
+      limit: limit,
       productColumn: productName == allCategoryConst ? null : productsConst,
       search: productName == allCategoryConst ? null : productName,
     );

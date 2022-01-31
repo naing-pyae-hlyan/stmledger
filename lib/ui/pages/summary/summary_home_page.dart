@@ -18,6 +18,7 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
   late DbCtrl _dbCtrl;
   late DateTime fstDate;
   late DateTime lstDate;
+  int _limit = voucherLimit;
 
   @override
   void initState() {
@@ -140,6 +141,7 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
                         return _totalItem(totalAmount);
                       }
                       return VoucherItem(
+                        no: index + 1,
                         voucher: vouchers[index],
                         totalAmount: vouchers[index].charge,
                         note: vouchers[index].note,
@@ -157,31 +159,44 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
     );
   }
 
-  Widget _totalItem(int charge) => Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        color: AppColors.primaryColor,
-        elevation: 0.5,
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Text(
-                  fstDate.ddMMyyyy +
-                      ' မှ ' +
-                      lstDate.ddMMyyyy +
-                      ' ထိ',
-                  style: TextStyle(color: Colors.grey[200]),
-                ),
-              ),
-              _textRow('ရောင်းရငွေ ($dia)', charge.toString().currency + dia),
-            ],
+  Widget _totalItem(int charge) => Column(
+        children: <Widget>[
+          MyButton(
+            onTap: () {
+              _limit += voucherLimit;
+              _dbCtrl.setPage(_limit);
+            },
+            color: Colors.white,
+            labelColor: AppColors.primaryColor,
+            padding: const EdgeInsets.all(0),
+            width: context.width / 2,
+            label: 'Show More',
           ),
-        ),
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            color: AppColors.primaryColor,
+            elevation: 0.5,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      fstDate.ddMMyyyy + ' မှ ' + lstDate.ddMMyyyy + ' ထိ',
+                      style: TextStyle(color: Colors.grey[200]),
+                    ),
+                  ),
+                  _textRow(
+                      'ရောင်းရငွေ ($dia)', charge.toString().currency + dia),
+                ],
+              ),
+            ),
+          ),
+        ],
       );
 
   Widget _textRow(String t1, String? t2) => Padding(

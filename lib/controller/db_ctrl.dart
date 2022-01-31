@@ -79,6 +79,7 @@ class DbCtrl with ChangeNotifier {
         fstDate: _fstTimestamp,
         lastDate: _lastTimestamp,
         productName: pName,
+        limit: _limit,
       );
     } catch (e) {
       return ErrorResponse(code: null, message: e.toString());
@@ -89,6 +90,12 @@ class DbCtrl with ChangeNotifier {
   DateTime? _fstTimestamp;
   DateTime? _lastTimestamp;
   String pName = allCategoryConst;
+  int _limit = voucherLimit;
+
+  void setPage(int i) {
+    _limit = i;
+    notifyListeners();
+  }
 
   void setQuery({
     String? productName,
@@ -99,6 +106,7 @@ class DbCtrl with ChangeNotifier {
     pName = productName ?? allCategoryConst;
     _fstTimestamp = fstDate;
     _lastTimestamp = lstDate;
+    _limit = voucherLimit;
     if (needToNotify) {
       notifyListeners();
     }
@@ -108,5 +116,6 @@ class DbCtrl with ChangeNotifier {
     pName = allCategoryConst;
     _fstTimestamp = null;
     _lastTimestamp = null;
+    _limit = voucherLimit;
   }
 }

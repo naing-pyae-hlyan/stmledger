@@ -3,8 +3,10 @@ import '../../lib_exp.dart';
 class VoucherItem extends StatelessWidget {
   final VoucherModel voucher;
   final int? totalAmount;
+  final int? no;
   final String? note;
   const VoucherItem({
+    this.no,
     required this.voucher,
     required this.totalAmount,
     this.note,
@@ -22,6 +24,7 @@ class VoucherItem extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
+            no != null ? _textRow('စဥ်', no.toString()) : SizedBox.shrink(),
             _textRow(
                 'ရက်စွဲ',
                 MyDateUtils.convertIso8601StringToDateTime(voucher.iso8601Date)

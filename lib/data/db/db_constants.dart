@@ -9,3 +9,4 @@ const noteConst = 'note';
 const imgUrlConst = 'img_url';
 const productsConst = 'products';
 const allCategoryConst = 'All';
+const voucherLimit = 100;

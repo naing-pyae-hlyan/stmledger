@@ -64,7 +64,6 @@ class DbGeneralFunc {
     );
   }
 
- 
   static Future<List<Map<String, dynamic>>> getByDateWithQuery(
     String tableName, {
     required String dateColumn,
@@ -72,6 +71,7 @@ class DbGeneralFunc {
     required DateTime? from,
     required DateTime? to,
     required String? search,
+    int limit = 100,
   }) async {
     final Database? db = await DbHelper().db;
     if (db == null) return [];
@@ -91,7 +91,7 @@ class DbGeneralFunc {
       rawQuery += " AND $productColumn LIKE '%$search%'";
     }
 
-    return await db.rawQuery(rawQuery + " ORDER BY id DESC LIMIT 1000");
+    return await db.rawQuery(rawQuery + " ORDER BY id DESC LIMIT 0, $limit");
   }
 
   static Future<int> updateById({
