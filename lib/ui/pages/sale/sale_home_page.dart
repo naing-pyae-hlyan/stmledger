@@ -111,7 +111,7 @@ class _SaleHomePageState extends State<SaleHomePage> {
               width: 90,
               height: 8,
               child: MyDropDown(
-                list: ['1 x', '10 x', '50 x', '100 x'],
+                list: ['100 x', '50 x', '10 x', '1 x'],
                 needAllLabel: false,
                 borderStyle: BorderStyle.none,
                 onChanged: (v) {

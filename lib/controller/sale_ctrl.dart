@@ -16,7 +16,7 @@ class SaleCtrl with ChangeNotifier {
     );
   }
 
-  int count = 1;
+  int count = 100;
 
   void addQty(int index) {
     if (voucher.products!.isEmpty || voucher.products!.length < index) return;
