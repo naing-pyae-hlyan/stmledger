@@ -3,7 +3,9 @@ import '../../../lib_exp.dart';
 class CartPage extends StatefulWidget {
   final VoucherModel voucher;
   final int totalAmount;
+  final List<WarehouseModel> warehouses;
   const CartPage({
+    required this.warehouses,
     required this.voucher,
     required this.totalAmount,
     Key? key,
@@ -29,6 +31,7 @@ class _CartPageState extends State<CartPage> {
   void _checkOut() async {
     context.push(
       VoucherPage(
+        warehouses: widget.warehouses,
         voucher: VoucherModel(
           iso8601Date: widget.voucher.iso8601Date,
           charge: widget.voucher.charge,

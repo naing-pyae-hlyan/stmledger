@@ -5,7 +5,9 @@ import '../../../lib_exp.dart';
 class VoucherPage extends StatefulWidget {
   final VoucherModel voucher;
   final int? totalAmount;
+  final List<WarehouseModel> warehouses;
   const VoucherPage({
+    required this.warehouses,
     required this.voucher,
     required this.totalAmount,
     Key? key,
@@ -48,7 +50,18 @@ class _VoucherPageState extends State<VoucherPage> {
       charge: widget.totalAmount!,
       note: _noteCtrl.text,
     );
-    (resp is ErrorResponse)
+    var resp2;
+
+    for (final p in widget.voucher.products!) {
+      for (final w in widget.warehouses) {
+        if (w.productName == p.name) {
+          w.outStock = p.qty;
+          await _dbCtrl.updateWarehouse(w);
+        }
+      }
+    }
+
+    (resp is ErrorResponse && resp2 is ErrorResponse)
         ? DialogUtils.errorDialog(context, resp)
         : MyAlertDialog.show(
             context,

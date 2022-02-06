@@ -58,6 +58,7 @@ class _SaleHomePageState extends State<SaleHomePage> {
     if (_saleCtrl.totalAmount > 0) {
       context.push(
         VoucherPage(
+          warehouses: widget.warehouses,
           voucher: _saleCtrl.getConfirmedVoucher,
           totalAmount: _saleCtrl.totalAmount,
         ),
@@ -121,6 +122,7 @@ class _SaleHomePageState extends State<SaleHomePage> {
             InkWell(
               onTap: () => context.push(
                 CartPage(
+                  warehouses: widget.warehouses,
                   voucher: _saleCtrl.voucher,
                   totalAmount: _saleCtrl.totalAmount,
                 ),

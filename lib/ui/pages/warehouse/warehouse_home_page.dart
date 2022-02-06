@@ -172,7 +172,7 @@ class _WarehouseHomePageState extends State<WarehouseHomePage> {
                                     onTap: () => _onSavePress(w),
                                   ),
                                   DataCell(Text(
-                                    (w.inStock ?? 0 - w.outStock!).toString(),
+                                    (w.inStock! - w.outStock!).toString(),
                                   )),
                                 ],
                               ))
