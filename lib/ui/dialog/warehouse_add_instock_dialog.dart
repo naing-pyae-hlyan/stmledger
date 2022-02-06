@@ -3,19 +3,16 @@ import '../../lib_exp.dart';
 class WarehouseAddInstockDialog {
   static void show(
     BuildContext context, {
-    required List<Product> dropDownList,
+    required WarehouseModel warehouseModel,
     required ValueChanged<WarehouseModel> onSave,
     Key? key,
   }) {
+    final TextEditingController _nameCtrl = TextEditingController();
     final TextEditingController _inCtrl = TextEditingController();
     final FocusNode _fn = FocusNode();
 
-    final List<String> _dropList = [];
-
-    for (final d in dropDownList) {
-      _dropList.add(d.name!);
-    }
-    String _selectedName = _dropList[0];
+    _nameCtrl.text = warehouseModel.productName!;
+    _fn.requestFocus();
 
     BaseDialog.show(
       context,
@@ -31,9 +28,11 @@ class WarehouseAddInstockDialog {
         } else {
           context.pop();
           onSave(WarehouseModel(
-            iso8601Date: MyDateUtils.iso8601Date,
-            productName: _selectedName,
+            id: warehouseModel.id,
+            iso8601Date: warehouseModel.iso8601Date,
+            productName: warehouseModel.productName,
             inStock: int.parse(_inCtrl.text),
+            outStock: warehouseModel.outStock,
           ));
         }
       },
@@ -52,15 +51,13 @@ class WarehouseAddInstockDialog {
             Text(
               'ရက်စွဲ - ' + DateTime.now().ddMMyyyy,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
+            myInputForm(
+              _nameCtrl,
+              hintText: '',
+              readOnly: true,
+              margin: const EdgeInsets.symmetric(
                 horizontal: 32,
                 vertical: 16,
-              ),
-              child: MyDropDown(
-                list: _dropList,
-                needAllLabel: false,
-                onChanged: (v) => _selectedName = v,
               ),
             ),
             myInputForm(

@@ -53,6 +53,16 @@ class DbCtrl with ChangeNotifier {
     return resp;
   }
 
+  Future<dynamic> updateWarehouse(WarehouseModel model) async {
+    int? resp;
+    try {
+      resp = await WarehouseTable.update(model);
+    } catch (e) {
+      return ErrorResponse(code: null, message: e.toString());
+    }
+    return resp;
+  }
+
   /// For Voucher
   Future<dynamic> getAllVoucher() async {
     List<VoucherModel> resp = [];
@@ -82,24 +92,37 @@ class DbCtrl with ChangeNotifier {
     return resp;
   }
 
-  Future<dynamic> findVoucher({
-    required bool isVoucher,
+  Future<dynamic> findVoucher() async {
+    List<dynamic>? resp = [];
+    try {
+      resp = await VoucherTable.find(
+        fstDate: _fstTimestamp,
+        lastDate: _lastTimestamp,
+        productName: pName,
+        limit: vLimit,
+      );
+    } catch (e) {
+      return ErrorResponse(code: null, message: e.toString());
+    }
+    return resp;
+  }
+
+  Future<dynamic> findWarehouse({
+    required List<Product> products,
   }) async {
     List<dynamic>? resp = [];
     try {
-      if (isVoucher) {
-        resp = await VoucherTable.find(
-          fstDate: _fstTimestamp,
-          lastDate: _lastTimestamp,
-          productName: pName,
-          limit: vLimit,
-        );
-      } else {
-        resp = await WarehouseTable.find(
-          fstDate: _fstTimestamp,
-          lastDate: _lastTimestamp,
-          productName: pName,
-        );
+      resp = await WarehouseTable.find(
+        fstDate: _fstTimestamp,
+        lastDate: _lastTimestamp,
+        productName: pName,
+      );
+      if (_fstTimestamp!.isToday() &&
+          _lastTimestamp!.isToday() &&
+          resp.isEmpty) {
+        for (final p in products) {
+          await insertWarehouse(p.name!, 0);
+        }
       }
     } catch (e) {
       return ErrorResponse(code: null, message: e.toString());

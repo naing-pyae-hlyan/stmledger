@@ -17,16 +17,14 @@ class _WarehouseHomePageState extends State<WarehouseHomePage> {
   late DateTime fstDate;
   late DateTime lstDate;
 
-  void _onAddPress() async {
+  void _onSavePress(WarehouseModel m) async {
     // await WarehouseTable.deleteAll();
-    _dbCtrl.refreshUI();
+    // _dbCtrl.refreshUI();
     // return;
-    WarehouseAddInstockDialog.show(context, dropDownList: widget.products,
+    print(m.id);
+    WarehouseAddInstockDialog.show(context, warehouseModel: m,
         onSave: (WarehouseModel warehouse) async {
-      var resp = await _dbCtrl.insertWarehouse(
-        warehouse.productName!,
-        warehouse.inStock ?? 0,
-      );
+      var resp = await _dbCtrl.updateWarehouse(warehouse);
       (resp is ErrorResponse)
           ? DialogUtils.errorDialog(context, resp)
           : _dbCtrl.refreshUI();
@@ -83,14 +81,6 @@ class _WarehouseHomePageState extends State<WarehouseHomePage> {
             SizedBox(height: 16),
             _futureWarehouseTable(),
             SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MyButton(
-                onTap: _onAddPress,
-                label: 'Add',
-              ),
-            ),
-            SizedBox(height: 16),
           ],
         ),
       ),
@@ -133,7 +123,9 @@ class _WarehouseHomePageState extends State<WarehouseHomePage> {
 
   Widget _futureWarehouseTable() => Consumer<DbCtrl>(builder: (_, dbCtrl, __) {
         return FutureBuilder<dynamic>(
-          future: dbCtrl.findVoucher(isVoucher: false),
+          future: dbCtrl.findWarehouse(
+            products: widget.products,
+          ),
           builder: (_, snapshot) {
             if (snapshot.data is ErrorResponse) {
               return Center(
@@ -161,9 +153,18 @@ class _WarehouseHomePageState extends State<WarehouseHomePage> {
                       rows: warehouse
                           .map<DataRow>((WarehouseModel w) => DataRow(
                                 cells: [
-                                  DataCell(Text(w.productName.toString())),
-                                  DataCell(Text(w.inStock.toString())),
-                                  DataCell(Text(w.outStock.toString())),
+                                  DataCell(
+                                    Text(w.productName.toString()),
+                                    onTap: () => _onSavePress(w),
+                                  ),
+                                  DataCell(
+                                    Text(w.inStock.toString()),
+                                    onTap: () => _onSavePress(w),
+                                  ),
+                                  DataCell(
+                                    Text(w.outStock.toString()),
+                                    onTap: () => _onSavePress(w),
+                                  ),
                                   DataCell(Text(
                                     (w.inStock ?? 0 - w.outStock!).toString(),
                                   )),

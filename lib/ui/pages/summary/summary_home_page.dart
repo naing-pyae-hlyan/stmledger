@@ -114,7 +114,7 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
     return Consumer<DbCtrl>(
       builder: (_, dbCtrl, __) {
         return FutureBuilder<dynamic>(
-          future: _dbCtrl.findVoucher(isVoucher: true),
+          future: _dbCtrl.findVoucher(),
           builder: (_, snapshot) {
             if (snapshot.data is ErrorResponse) {
               return Center(

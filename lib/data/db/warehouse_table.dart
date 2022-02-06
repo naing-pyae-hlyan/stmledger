@@ -30,6 +30,16 @@ class WarehouseTable {
     );
   }
 
+  static Future<int> update(WarehouseModel m) async => DbGeneralFunc.updateById(
+        tableName: tableName,
+        id: m.id!,
+        values: {
+          productNameConst: m.productName,
+          inStockConst: m.inStock,
+          outStockConst: m.outStock,
+        },
+      );
+
   static Future<List<WarehouseModel>> find({
     required DateTime? fstDate,
     required DateTime? lastDate,
@@ -46,27 +56,26 @@ class WarehouseTable {
       search: productName == allCategoryConst ? null : productName,
     );
     debugLog(tag, maps.toString());
-    List<WarehouseModel> list = [];
-    List<WarehouseModel> temp = [];
+    // List<WarehouseModel> temp = [];
     final List<WarehouseModel> modelList = List.generate(
         maps.length, (index) => WarehouseModel.fromJson(maps[index]));
 
-    modelList.forEach((element) {
-      temp.add(element);
-    });
+    // modelList.forEach((element) {
+    //   temp.add(element);
+    // });
 
-    for (int i = 0, l = modelList.length; i < l; i++) {
-      for (int j = i + 1; j < l; j++) {
-        if (modelList[i].productName == modelList[j].productName) {
-          temp[i].inStock = modelList[i].inStock! + modelList[j].inStock!;
-          ;
-          temp[i].outStock = modelList[i].outStock! + modelList[j].outStock!;
-          ;
-          temp.remove(modelList[j]);
-        }
-      }
-    }
-    return temp;
+    // for (int i = 0, l = modelList.length; i < l; i++) {
+    //   for (int j = i + 1; j < l; j++) {
+    //     if (modelList[i].productName == modelList[j].productName) {
+    //       temp[i].inStock = modelList[i].inStock! + modelList[j].inStock!;
+    //       ;
+    //       temp[i].outStock = modelList[i].outStock! + modelList[j].outStock!;
+    //       ;
+    //       temp.remove(modelList[j]);
+    //     }
+    //   }
+    // }
+    return modelList;
   }
 
   static Future<List<WarehouseModel>> getAllVoucher() async {
