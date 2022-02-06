@@ -19,6 +19,46 @@ class _SettingsPageState extends State<SettingsPage> {
     _fToast.init(context);
   }
 
+  Future<void> _delete(int i) async {
+    MyAlertDialog.show(
+      context,
+      type: AlertType.warning,
+      title: 'Warning!',
+      description:
+          'အချက်လက်များကို ဖျက်ခြင်းဖြင့်\n Data များ ဆုံးရှုံးနိုင်ပါသည်။\nနောက်တစ်ကြိမ် အသစ်ပြန်လည်ထည့်သွင်းရမည် ဖြစ်ပါသည်။',
+      actionButtonLabel: 'Delete',
+      actionButtonLabel2: 'Cancel',
+      addCloseButton: true,
+      onTapActionButton2: () => context.pop(),
+      onTapActionButton: () async {
+        switch (i) {
+          case 0:
+            await ProductsTable.deleteAll().then((value) => showToast(
+                  _fToast,
+                  msg: 'အမျိုးအစားများအားလုံး ဖျက်ပြီးပါပြီ။',
+                  gravity: ToastGravity.CENTER,
+                ));
+            break;
+          case 1:
+            await WarehouseTable.deleteAll().then((value) => showToast(
+                  _fToast,
+                  msg: 'ဂိုထောင်ထဲရှိစာရင်းများအားလုံး ဖျက်ပြီးပါပြီ။',
+                  gravity: ToastGravity.CENTER,
+                ));
+            break;
+          case 2:
+            await VoucherTable.deleteAll().then((value) => showToast(
+                  _fToast,
+                  msg: 'အရောင်းစာရင်းများအားလုံး ဖျက်ပြီးပါပြီ။',
+                  gravity: ToastGravity.CENTER,
+                ));
+            break;
+        }
+        context.pop();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +72,7 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Column(
           children: <Widget>[
             MyButton(
-              onTap: () {},
+              onTap: () => _delete(0),
               label: '',
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               child: Row(
@@ -45,7 +85,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             SizedBox(height: 16),
             MyButton(
-              onTap: () {},
+              onTap: () => _delete(1),
               label: '',
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               child: Row(
@@ -58,7 +98,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             SizedBox(height: 16),
             MyButton(
-              onTap: () {},
+              onTap: () => _delete(2),
               label: '',
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               child: Row(
