@@ -107,14 +107,14 @@ class _SaleHomePageState extends State<SaleHomePage> {
           title: const Text('အရောင်း'),
           actions: [
             SizedBox(
-              width: 72,
+              width: 90,
               height: 8,
               child: MyDropDown(
-                list: ['1', '10', '50', '100'],
+                list: ['1 x', '10 x', '50 x', '100 x'],
                 needAllLabel: false,
                 borderStyle: BorderStyle.none,
                 onChanged: (v) {
-                  _saleCtrl.count = int.parse(v);
+                  _saleCtrl.count = int.parse(v.replaceAll(' x', ''));
                 },
               ),
             ),

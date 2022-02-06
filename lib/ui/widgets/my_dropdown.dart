@@ -45,6 +45,8 @@ class _MyDropDownState extends State<MyDropDown> {
         value: _selectedName,
         isExpanded: true,
         underline: const SizedBox.shrink(),
+        iconEnabledColor:
+            widget.borderStyle != null ? Colors.white : AppColors.primaryColor,
         dropdownColor:
             widget.borderStyle == null ? Colors.white : AppColors.primaryColor,
         items: widget.list
