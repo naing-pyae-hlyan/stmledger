@@ -16,9 +16,11 @@ class SaleCtrl with ChangeNotifier {
     );
   }
 
+  int count = 1;
+
   void addQty(int index) {
     if (voucher.products!.isEmpty || voucher.products!.length < index) return;
-    voucher.products![index].qty = voucher.products![index].qty! + 1;
+    voucher.products![index].qty = voucher.products![index].qty! + count;
     notifyListeners();
   }
 
@@ -26,7 +28,7 @@ class SaleCtrl with ChangeNotifier {
     if (voucher.products!.isEmpty || voucher.products!.length < index) return;
     if (voucher.products![index].qty! < 1) return;
 
-    voucher.products![index].qty = voucher.products![index].qty! - 1;
+    voucher.products![index].qty = voucher.products![index].qty! - count;
     notifyListeners();
   }
 

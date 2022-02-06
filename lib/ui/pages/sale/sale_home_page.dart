@@ -106,6 +106,18 @@ class _SaleHomePageState extends State<SaleHomePage> {
           centerTitle: false,
           title: const Text('အရောင်း'),
           actions: [
+            SizedBox(
+              width: 72,
+              height: 8,
+              child: MyDropDown(
+                list: ['1', '10', '50', '100'],
+                needAllLabel: false,
+                borderStyle: BorderStyle.none,
+                onChanged: (v) {
+                  _saleCtrl.count = int.parse(v);
+                },
+              ),
+            ),
             InkWell(
               onTap: () => context.push(
                 CartPage(
