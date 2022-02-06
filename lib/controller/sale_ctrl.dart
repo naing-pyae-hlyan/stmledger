@@ -26,8 +26,13 @@ class SaleCtrl with ChangeNotifier {
 
   void removeQty(int index) {
     if (voucher.products!.isEmpty || voucher.products!.length < index) return;
-    if (voucher.products![index].qty! < 1) return;
 
+    if (voucher.products![index].qty! < 1) return;
+    if (voucher.products![index].qty! < count) {
+      voucher.products![index].qty = 0;
+      notifyListeners();
+      return;
+    }
     voucher.products![index].qty = voucher.products![index].qty! - count;
     notifyListeners();
   }
