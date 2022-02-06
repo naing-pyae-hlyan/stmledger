@@ -58,7 +58,27 @@ class WarehouseTable {
     debugLog(tag, maps.toString());
     final List<WarehouseModel> modelList = List.generate(
         maps.length, (index) => WarehouseModel.fromJson(maps[index]));
-    return modelList;
+    return _filteredByProductName(
+      models: modelList,
+      name: productName,
+    );
+  }
+
+  static List<WarehouseModel> _filteredByProductName({
+    required List<WarehouseModel> models,
+    required String name,
+  }) {
+    if (name != allCategoryConst) {
+      List<WarehouseModel> filtered = [];
+      for (final p in models) {
+        if (p.productName == name) {
+          filtered.add(p);
+        }
+      }
+      return filtered;
+    } else {
+      return models;
+    }
   }
 
   static Future<List<WarehouseModel>> getAllVoucher() async {
