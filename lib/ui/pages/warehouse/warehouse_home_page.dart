@@ -70,7 +70,7 @@ class _WarehouseHomePageState extends State<WarehouseHomePage> {
       appBar: AppBar(
         automaticallyImplyLeading: true,
         centerTitle: false,
-        title: const Text('ဂိုဒေါင်'),
+        title: const Text('ဂိုထောင်'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

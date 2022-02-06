@@ -68,6 +68,9 @@ class _HomePageState extends State<HomePage> {
         final List<Product> products = await _dbCtrl.getAllProductList();
         context.push(SummaryHomePage(products: products));
         break;
+      case HomeTypeEnum.setting:
+        context.push(const SettingsPage());
+        break;
     }
   }
 
@@ -90,25 +93,17 @@ class _HomePageState extends State<HomePage> {
           children: [
             Expanded(
               child: GridView.builder(
-                  shrinkWrap: true,
-                  itemCount: homeTypes.length + 1,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                  ),
-                  itemBuilder: (_, index) {
-                    if (index == homeTypes.length) {
-                      return MyItem(
-                        label: 'ဖျက်ရန်',
-                        imgUrl: '',
-                        onPress: () => CommonUtils.clearAllData(),
-                      );
-                    }
-                    return MyItem(
-                      label: homeTypes[index].name,
-                      imgUrl: homeTypes[index].url,
-                      onPress: () => _onTapItem(homeTypes[index].type!),
-                    );
-                  }),
+                shrinkWrap: true,
+                itemCount: homeTypes.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
+                itemBuilder: (_, index) => MyItem(
+                  label: homeTypes[index].name,
+                  imgUrl: homeTypes[index].url,
+                  onPress: () => _onTapItem(homeTypes[index].type!),
+                ),
+              ),
             ),
             CommonUtils.versionLabel(),
           ],

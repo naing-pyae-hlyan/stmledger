@@ -10,7 +10,7 @@ final List<HomeTypeModel> homeTypes = [
     type: HomeTypeEnum.category,
   ),
   HomeTypeModel(
-    name: 'ဂိုဒေါင်',
+    name: 'ဂိုထောင်',
     url: 'assets/icons/warehouse.png',
     type: HomeTypeEnum.warehouse,
   ),
@@ -23,6 +23,11 @@ final List<HomeTypeModel> homeTypes = [
     name: 'စာရင်း',
     url: 'assets/icons/summary.png',
     type: HomeTypeEnum.summary,
+  ),
+  HomeTypeModel(
+    name: 'အပြင်အဆင်',
+    url: 'assets/icons/setting.png',
+    type: HomeTypeEnum.setting,
   ),
 ];
 
