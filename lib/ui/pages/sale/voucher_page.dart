@@ -55,7 +55,7 @@ class _VoucherPageState extends State<VoucherPage> {
     for (final p in widget.voucher.products!) {
       for (final w in widget.warehouses) {
         if (w.productName == p.name) {
-          w.outStock = p.qty;
+          w.outStock = w.outStock! + p.qty!;
           await _dbCtrl.updateWarehouse(w);
         }
       }
