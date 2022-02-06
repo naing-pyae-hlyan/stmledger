@@ -81,6 +81,12 @@ class _WarehouseHomePageState extends State<WarehouseHomePage> {
             SizedBox(height: 16),
             _futureWarehouseTable(),
             SizedBox(height: 16),
+            MyButton(
+                onTap: () async {
+                  await WarehouseTable.deleteAll();
+                  _dbCtrl.refreshUI();
+                },
+                label: 'Del'),
           ],
         ),
       ),

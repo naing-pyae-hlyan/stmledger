@@ -2,8 +2,10 @@ import '../../../lib_exp.dart';
 
 class BaseSaleHomePage extends StatelessWidget {
   final List<Product> products;
+  final List<WarehouseModel> warehouses;
   const BaseSaleHomePage({
     required this.products,
+    required this.warehouses,
     Key? key,
   }) : super(key: key);
 
@@ -16,6 +18,7 @@ class BaseSaleHomePage extends StatelessWidget {
       child: SaleHomePage(
         key: key,
         products: products,
+        warehouses: warehouses,
       ),
     );
   }
@@ -23,8 +26,10 @@ class BaseSaleHomePage extends StatelessWidget {
 
 class SaleHomePage extends StatefulWidget {
   final List<Product> products;
+  final List<WarehouseModel> warehouses;
   const SaleHomePage({
     required this.products,
+    required this.warehouses,
     Key? key,
   }) : super(key: key);
 
