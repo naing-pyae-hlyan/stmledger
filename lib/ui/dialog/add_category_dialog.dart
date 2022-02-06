@@ -59,14 +59,20 @@ class AddCategoryDialog {
               nameCtrl,
               hintText: 'Name',
               fn: nameFn,
-              margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              margin: const EdgeInsets.symmetric(
+                horizontal: 32,
+                vertical: 16,
+              ),
             ),
             myInputForm(
               priceCtrl,
               hintText: '\$ Price',
               keyboardType: TextInputType.number,
               fn: priceFn,
-              margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              margin: const EdgeInsets.symmetric(
+                horizontal: 32,
+                vertical: 16,
+              ),
             ),
           ],
         ),

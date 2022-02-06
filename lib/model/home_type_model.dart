@@ -1,5 +1,6 @@
 enum HomeTypeEnum {
   category,
+  warehouse,
   sale,
   summary,
 }

@@ -13,6 +13,9 @@ class _HomePageState extends State<HomePage> {
     if (type == HomeTypeEnum.summary) {
       context.push(SummaryHomePage(products: resp));
       return;
+    } else if (type == HomeTypeEnum.warehouse) {
+      context.push(WarehouseHomePage(products: resp));
+      return;
     } else if (resp.isEmpty) {
       DialogUtils.errorDialog(
         context,
@@ -29,6 +32,9 @@ class _HomePageState extends State<HomePage> {
     switch (type) {
       case HomeTypeEnum.category:
         context.push(const CategoryHomePage());
+        break;
+      case HomeTypeEnum.warehouse:
+        _getProductsListFromDb(HomeTypeEnum.warehouse);
         break;
       case HomeTypeEnum.sale:
         _getProductsListFromDb(HomeTypeEnum.sale);

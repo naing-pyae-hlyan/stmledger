@@ -8,5 +8,7 @@ const chargeConst = 'charge';
 const noteConst = 'note';
 const imgUrlConst = 'img_url';
 const productsConst = 'products';
+const inStockConst = 'in_stock';
+const outStockConst = 'out_stock';
 const allCategoryConst = 'All';
 const voucherLimit = 4;
