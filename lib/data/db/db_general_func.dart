@@ -72,6 +72,7 @@ class DbGeneralFunc {
     required DateTime? to,
     required String? search,
     int limit = 100,
+    required String orderBy,
   }) async {
     final Database? db = await DbHelper().db;
     if (db == null) return [];
@@ -91,7 +92,13 @@ class DbGeneralFunc {
       rawQuery += " AND $productColumn LIKE '%$search%'";
     }
 
-    return await db.rawQuery(rawQuery + " ORDER BY id DESC LIMIT 0, $limit");
+    if (orderBy != 'id') {
+      rawQuery += " ORDER BY $orderBy LIMIT 0,$limit";
+    } else {
+      rawQuery += " ORDER BY id DESC LIMIT 0, $limit";
+    }
+
+    return await db.rawQuery(rawQuery);
   }
 
   static Future<int> updateById({

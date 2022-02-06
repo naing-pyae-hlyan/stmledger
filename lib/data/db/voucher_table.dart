@@ -30,6 +30,7 @@ class VoucherTable {
       limit: limit,
       productColumn: productName == allCategoryConst ? null : productsConst,
       search: productName == allCategoryConst ? null : productName,
+      orderBy: uniqueIdConst
     );
     debugLog(tag, maps.toString());
     final List<VoucherModel> voucherList = List.generate(

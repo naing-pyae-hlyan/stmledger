@@ -54,6 +54,7 @@ class WarehouseTable {
       to: lastDate,
       limit: 10000,
       search: productName == allCategoryConst ? null : productName,
+      orderBy: productNameConst,
     );
     debugLog(tag, maps.toString());
     final List<WarehouseModel> modelList = List.generate(
