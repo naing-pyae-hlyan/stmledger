@@ -12,15 +12,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _getProductsListFromDb(HomeTypeEnum type) async {
     final List<Product> products = await _dbCtrl.getAllProductList();
-    final now = DateTime.now();
-    _dbCtrl.setQuery(
-      fstDate: DateTime(now.year, now.month, now.day),
-      lstDate: now,
-      needToNotify: false,
-    );
-    final List<WarehouseModel> warehouse =
-        await _dbCtrl.findWarehouse(products: products);
-    if (products.isEmpty && warehouse.isEmpty) {
+    if (products.isEmpty) {
       DialogUtils.errorDialog(
         context,
         'ကုန်ပစ္စည်းများမရှိသေးပါ။\nအမျိုးအစားများထဲတွင် ပစ္စည်းအသစ်များ\nထည့်သွင်းနိုင်ပါသည်။',
@@ -28,7 +20,17 @@ class _HomePageState extends State<HomePage> {
         title: 'Warning!',
       );
       return;
-    } else if (warehouse.isNotEmpty && type == HomeTypeEnum.sale) {
+    }
+    final now = DateTime.now();
+    _dbCtrl.setQuery(
+      fstDate: DateTime(now.year, now.month, now.day),
+      lstDate: now,
+      needToNotify: false,
+    );
+    List<WarehouseModel> warehouse =
+        await _dbCtrl.findWarehouse(products: products);
+
+    if (warehouse.isNotEmpty && type == HomeTypeEnum.sale) {
       for (final w in warehouse) {
         if (w.inStock == 0) {
           DialogUtils.errorDialog(
@@ -48,13 +50,10 @@ class _HomePageState extends State<HomePage> {
     } else if (type == HomeTypeEnum.warehouse) {
       context.push(WarehouseHomePage(products: products));
       return;
-    } else if (type == HomeTypeEnum.summary) {
-      context.push(SummaryHomePage(products: products));
-      return;
     }
   }
 
-  void _onTapItem(HomeTypeEnum type) {
+  void _onTapItem(HomeTypeEnum type) async {
     switch (type) {
       case HomeTypeEnum.category:
         context.push(const CategoryHomePage());
@@ -66,7 +65,8 @@ class _HomePageState extends State<HomePage> {
         _getProductsListFromDb(HomeTypeEnum.sale);
         break;
       case HomeTypeEnum.summary:
-        _getProductsListFromDb(HomeTypeEnum.summary);
+        final List<Product> products = await _dbCtrl.getAllProductList();
+        context.push(SummaryHomePage(products: products));
         break;
     }
   }
