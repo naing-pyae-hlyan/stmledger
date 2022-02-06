@@ -173,6 +173,10 @@ class _WarehouseHomePageState extends State<WarehouseHomePage> {
                                   ),
                                   DataCell(Text(
                                     (w.inStock! - w.outStock!).toString(),
+                                    style: TextStyle(
+                                      color:
+                                          _stockColor(w.inStock!, w.outStock!),
+                                    ),
                                   )),
                                 ],
                               ))
@@ -186,4 +190,15 @@ class _WarehouseHomePageState extends State<WarehouseHomePage> {
           },
         );
       });
+
+  Color _stockColor(int inS, int outS) {
+    if (outS < (inS / 2)) {
+      return Colors.green[800]!;
+    } else if (outS == inS) {
+      return Colors.red[800]!;
+    } else if (outS > (inS / 2)) {
+      return Colors.orange[800]!;
+    }
+    return Colors.black;
+  }
 }

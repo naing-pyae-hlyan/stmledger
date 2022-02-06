@@ -56,25 +56,8 @@ class WarehouseTable {
       search: productName == allCategoryConst ? null : productName,
     );
     debugLog(tag, maps.toString());
-    // List<WarehouseModel> temp = [];
     final List<WarehouseModel> modelList = List.generate(
         maps.length, (index) => WarehouseModel.fromJson(maps[index]));
-
-    // modelList.forEach((element) {
-    //   temp.add(element);
-    // });
-
-    // for (int i = 0, l = modelList.length; i < l; i++) {
-    //   for (int j = i + 1; j < l; j++) {
-    //     if (modelList[i].productName == modelList[j].productName) {
-    //       temp[i].inStock = modelList[i].inStock! + modelList[j].inStock!;
-    //       ;
-    //       temp[i].outStock = modelList[i].outStock! + modelList[j].outStock!;
-    //       ;
-    //       temp.remove(modelList[j]);
-    //     }
-    //   }
-    // }
     return modelList;
   }
 
