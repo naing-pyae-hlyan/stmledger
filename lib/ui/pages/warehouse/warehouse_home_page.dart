@@ -17,6 +17,22 @@ class _WarehouseHomePageState extends State<WarehouseHomePage> {
   late DateTime fstDate;
   late DateTime lstDate;
 
+  void _onAddPress() async {
+    // await WarehouseTable.deleteAll();
+    _dbCtrl.refreshUI();
+    // return;
+    WarehouseAddInstockDialog.show(context, dropDownList: widget.products,
+        onSave: (WarehouseModel warehouse) async {
+      var resp = await _dbCtrl.insertWarehouse(
+        warehouse.productName!,
+        warehouse.inStock ?? 0,
+      );
+      (resp is ErrorResponse)
+          ? DialogUtils.errorDialog(context, resp)
+          : _dbCtrl.refreshUI();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -70,12 +86,7 @@ class _WarehouseHomePageState extends State<WarehouseHomePage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: MyButton(
-                onTap: () {
-                  WarehouseAddInstockDialog.show(
-                    context,
-                    dropDownList: widget.products,
-                  );
-                },
+                onTap: _onAddPress,
                 label: 'Add',
               ),
             ),
@@ -122,38 +133,49 @@ class _WarehouseHomePageState extends State<WarehouseHomePage> {
 
   Widget _futureWarehouseTable() => Consumer<DbCtrl>(builder: (_, dbCtrl, __) {
         return FutureBuilder<dynamic>(
-          future: _dbCtrl.findVoucher(),
+          future: dbCtrl.findVoucher(isVoucher: false),
           builder: (_, snapshot) {
-            return Expanded(
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  DataTable(
-                    columnSpacing: 42,
-                    border: TableBorder.all(
-                      width: 0.4,
-                      color: AppColors.primaryColor,
+            if (snapshot.data is ErrorResponse) {
+              return Center(
+                child: Text(snapshot.data.message),
+              );
+            }
+            if (snapshot.data is List<WarehouseModel>) {
+              final List<WarehouseModel> warehouse = snapshot.data;
+              return Expanded(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    DataTable(
+                      columnSpacing: 42,
+                      border: TableBorder.all(
+                        width: 0.4,
+                        color: AppColors.primaryColor,
+                      ),
+                      columns: const <DataColumn>[
+                        DataColumn(label: Text('အမည်')),
+                        DataColumn(label: Text('ထုတ်')),
+                        DataColumn(label: Text('ရောင်း')),
+                        DataColumn(label: Text('လက်ကျန်')),
+                      ],
+                      rows: warehouse
+                          .map<DataRow>((WarehouseModel w) => DataRow(
+                                cells: [
+                                  DataCell(Text(w.productName.toString())),
+                                  DataCell(Text(w.inStock.toString())),
+                                  DataCell(Text(w.outStock.toString())),
+                                  DataCell(Text(
+                                    (w.inStock ?? 0 - w.outStock!).toString(),
+                                  )),
+                                ],
+                              ))
+                          .toList(),
                     ),
-                    columns: const <DataColumn>[
-                      DataColumn(label: Text('အမည်')),
-                      DataColumn(label: Text('ထုတ်')),
-                      DataColumn(label: Text('ရောင်း')),
-                      DataColumn(label: Text('လက်ကျန်')),
-                    ],
-                    rows: List<Product>.generate(1, (index) => Product())
-                        .map<DataRow>((Product e) => DataRow(
-                              cells: [
-                                DataCell(Text(e.name.toString())),
-                                DataCell(Text(e.price.toString())),
-                                DataCell(Text(e.qty.toString())),
-                                DataCell(Text(e.imgURl.toString())),
-                              ],
-                            ))
-                        .toList(),
-                  ),
-                ],
-              ),
-            );
+                  ],
+                ),
+              );
+            }
+            return const LinearProgressIndicator();
           },
         );
       });

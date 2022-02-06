@@ -13,9 +13,6 @@ class _HomePageState extends State<HomePage> {
     if (type == HomeTypeEnum.summary) {
       context.push(SummaryHomePage(products: resp));
       return;
-    } else if (type == HomeTypeEnum.warehouse) {
-      context.push(WarehouseHomePage(products: resp));
-      return;
     } else if (resp.isEmpty) {
       DialogUtils.errorDialog(
         context,
@@ -23,6 +20,10 @@ class _HomePageState extends State<HomePage> {
         alertType: AlertType.warning,
         title: 'Warning!',
       );
+      return;
+    } else if (type == HomeTypeEnum.warehouse) {
+      context.push(WarehouseHomePage(products: resp));
+      return;
     } else {
       context.push(BaseSaleHomePage(products: resp));
     }

@@ -17,12 +17,14 @@ class ProductsTable {
   static Future<List<Product>> getAll() async {
     final Database? db = await DbHelper().db;
     if (db == null) return [];
-    final List<Map<String, dynamic>> maps = await db.query(tableName, orderBy: productNameConst);
+    final List<Map<String, dynamic>> maps =
+        await db.query(tableName, orderBy: productNameConst);
 
     return List.generate(maps.length, (index) => Product.fromJson(maps[index]));
   }
 
-  static Future<int> insert(Product product) async => DbGeneralFunc.insert(
+  static Future<int> insert(Product product) async =>
+      await DbGeneralFunc.insert(
         tableName: tableName,
         values: {
           productNameConst: product.name,

@@ -33,10 +33,20 @@ class DbCtrl with ChangeNotifier {
     return resp;
   }
 
-  Future<dynamic> deleteById(int id) async {
+  Future<dynamic> productDeleteById(int id) async {
     int? resp;
     try {
       resp = await ProductsTable.deleteById(id);
+    } catch (e) {
+      return ErrorResponse(code: null, message: e.toString());
+    }
+    return resp;
+  }
+
+  Future<dynamic> insertWarehouse(String name, int instock) async {
+    int? resp;
+    try {
+      resp = await WarehouseTable.insert(productName: name, inStock: instock);
     } catch (e) {
       return ErrorResponse(code: null, message: e.toString());
     }
@@ -72,15 +82,25 @@ class DbCtrl with ChangeNotifier {
     return resp;
   }
 
-  Future<dynamic> findVoucher() async {
-    List<VoucherModel>? resp = [];
+  Future<dynamic> findVoucher({
+    required bool isVoucher,
+  }) async {
+    List<dynamic>? resp = [];
     try {
-      resp = await VoucherTable.find(
-        fstDate: _fstTimestamp,
-        lastDate: _lastTimestamp,
-        productName: pName,
-        limit: vLimit,
-      );
+      if (isVoucher) {
+        resp = await VoucherTable.find(
+          fstDate: _fstTimestamp,
+          lastDate: _lastTimestamp,
+          productName: pName,
+          limit: vLimit,
+        );
+      } else {
+        resp = await WarehouseTable.find(
+          fstDate: _fstTimestamp,
+          lastDate: _lastTimestamp,
+          productName: pName,
+        );
+      }
     } catch (e) {
       return ErrorResponse(code: null, message: e.toString());
     }

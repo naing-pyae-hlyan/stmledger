@@ -47,7 +47,7 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
 
   void _onRemovePress(int? id) async {
     if (id == null) return;
-    var resp = await _dbCtrl.deleteById(id);
+    var resp = await _dbCtrl.productDeleteById(id);
     (resp is ErrorResponse)
         ? DialogUtils.errorDialog(context, resp)
         : _dbCtrl.refreshUI();
