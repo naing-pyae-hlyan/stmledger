@@ -114,23 +114,23 @@ class DbGeneralFunc {
       tableName,
       values,
       where: where == null ? '$uniqueIdConst=?' : '$where=?',
-      whereArgs: [whereArgsId],
+      whereArgs: [where ?? whereArgsId],
     );
   }
 
   static Future<int> deleteById({
     required String tableName,
-    required int id,
+    required int whereArgsId,
     String? where,
   }) async {
     /// Get a reference to the database;
     final Database? db = await DbHelper().db;
     if (db == null) return 0;
-    debugLog(tableName, 'Deleted DB by ID --> $id');
+    debugLog(tableName, 'Deleted DB by ID --> $whereArgsId');
     return await db.delete(
       tableName,
       where: where == null ? '$uniqueIdConst=?' : '$where=?',
-      whereArgs: [id],
+      whereArgs: [whereArgsId],
     );
   }
 
@@ -142,7 +142,7 @@ class DbGeneralFunc {
     /// Get a reference to the database;
     final Database? db = await DbHelper().db;
     if (db == null) return 0;
-    debugLog(tableName, 'Updated DB by ID --> $whereArgsId');
+    debugLog(tableName, 'Get DB by ID --> $whereArgsId');
     var a = await db.delete(
       tableName,
       where: where == null ? '$uniqueIdConst=?' : '$where=?',

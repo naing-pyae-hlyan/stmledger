@@ -43,22 +43,21 @@ class WarehouseTable {
         },
       );
 
-  static Future<int> updateNameOnly({
+  static Future<dynamic> updateNameOnly({
     required int productId,
     required String newName,
-  }) async =>
-      DbGeneralFunc.getById(
-        tableName: tableName,
-        whereArgsId: productId,
-        where: productNameConst,
-        // values: {
-        //   productNameConst: newName,
-        // },
-      );
+  }) async {
+    final Database? db = await DbHelper().db;
+    if (db == null) return 0;
+    debugLog(tableName, 'Updated DB by ID --> $newName WHERE : $productId');
+    return await db.rawUpdate(
+      "UPDATE $tableName SET  product_name = '$newName' WHERE product_id = $productId",
+    );
+  }
 
   static Future<int> deleteById(int id) async => DbGeneralFunc.deleteById(
         tableName: tableName,
-        id: id,
+        whereArgsId: id,
         where: productIdConst,
       );
 

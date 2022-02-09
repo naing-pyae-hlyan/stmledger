@@ -44,7 +44,7 @@ class ProductsTable {
       );
 
   static Future<int> deleteById(int id) async =>
-      DbGeneralFunc.deleteById(tableName: tableName, id: id);
+      DbGeneralFunc.deleteById(tableName: tableName, whereArgsId: id);
 
   static Future<int> deleteAll() async =>
       DbGeneralFunc.deleteAll(tableName: tableName);

@@ -39,11 +39,11 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
       onPresss: (Product p) async {
         var resp = await _dbCtrl.updateProduct(p);
         var resp2 = await _dbCtrl.updateNameOnly(
-          productId: product.id!,
-          newName: product.name ?? '',
+          productId: p.id!,
+          newName: p.name ?? '',
         );
         (resp is ErrorResponse || resp2 is ErrorResponse)
-            ? DialogUtils.errorDialog(context, resp)
+            ? DialogUtils.errorDialog(context, resp2)
             : _dbCtrl.refreshUI();
       },
     );
@@ -105,7 +105,7 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
                     }
                     return MyItem(
                       imgUrl: products[index].imgURl,
-                      label: products[index].name! + ' #${products[index].id}',
+                      label: products[index].name!,
                       price: products[index].price,
                       isAdd: false,
                       onCloseBtnCallback: () =>

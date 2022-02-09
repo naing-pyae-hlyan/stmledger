@@ -160,16 +160,16 @@ class DbCtrl with ChangeNotifier {
             );
           }
         } else if (pName == allCategoryConst) {
-          List<String> tempRespList = [];
+          List<int> tempRespList = [];
           List<Map<int, String>> tempProductList = [];
 
           /// added the Product to List<Map<int,String>> and Warehouse model list to List<String>
           for (final p in products) tempProductList.add({p.id!: p.name!});
 
-          for (final r in resp) tempRespList.add(r.productName);
+          for (final r in resp) tempRespList.add(r.productId);
 
           for (final p in tempProductList)
-            if (!tempRespList.contains(p.values.first)) {
+            if (!tempRespList.contains(p.keys.first)) {
               await _insertWarehouse(
                 productId: p.keys.first,
                 name: p.values.first,
