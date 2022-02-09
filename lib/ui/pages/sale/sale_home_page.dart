@@ -81,7 +81,7 @@ class _SaleHomePageState extends State<SaleHomePage> {
       (index) => GlobalKey(),
     );
     _saleCtrl = context.read<SaleCtrl>();
-    _saleCtrl.initCart(widget.products);
+    _saleCtrl.initCart(widget.products, widget.warehouses);
     _fToast = FToast();
     _fToast.init(context);
   }
@@ -165,8 +165,16 @@ class _SaleHomePageState extends State<SaleHomePage> {
                 return AddToCardItem(
                   products: products[index],
                   onAddClick: (key) {
-                    ctrl.addQty(index);
-                    onAddClick(key, count: ctrl.cartCounter);
+                    bool b = ctrl.addQty(index);
+                    if (b)
+                      onAddClick(key, count: ctrl.cartCounter);
+                    else
+                      showToast(
+                        _fToast,
+                        msg: 'သတ်မှတ််ထားသော ပမာဏထက်ကျော်လွန်သွားပါပြီ။',
+                        alertType: AlertType.warning,
+                        gravity: ToastGravity.CENTER,
+                      );
                   },
                   onReduceClick: (key) {
                     ctrl.removeQty(index);

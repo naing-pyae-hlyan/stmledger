@@ -4,30 +4,41 @@ class SaleCtrl with ChangeNotifier {
   VoucherModel voucher = VoucherModel(
     products: [],
   );
-  void initCart(List<Product> l) {
-    for (var p in l) {
-      p.qty = 0;
+  void initCart(List<Product> products, List<WarehouseModel> store) {
+    for (int i = 0, l = products.length; i < l; i++) {
+      products[i].qty = 0;
+      products[i].limit = store[i].inStock! - store[i].outStock!;
     }
     voucher = VoucherModel(
       iso8601Date: MyDateUtils.iso8601Date,
       charge: 0,
       note: '',
-      products: l,
+      products: products,
     );
   }
 
   int count = 100;
 
-  void addQty(int index) {
-    if (voucher.products!.isEmpty || voucher.products!.length < index) return;
-    voucher.products![index].qty = voucher.products![index].qty! + count;
+  bool addQty(int index) {
+    if (voucher.products!.isEmpty || voucher.products!.length < index)
+      return false;
+    int c = voucher.products![index].qty! + count;
+    if (c > voucher.products![index].limit!) {
+      voucher.products![index].limitLabel = 'Out of stock';
+      notifyListeners();
+      return false;
+    }
+    voucher.products![index].limitLabel = null;
+    voucher.products![index].qty = c;
     notifyListeners();
+    return true;
   }
 
   void removeQty(int index) {
     if (voucher.products!.isEmpty || voucher.products!.length < index) return;
 
     if (voucher.products![index].qty! < 1) return;
+    voucher.products![index].limitLabel = null;
     if (voucher.products![index].qty! < count) {
       voucher.products![index].qty = 0;
       notifyListeners();

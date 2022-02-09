@@ -6,6 +6,8 @@ class Product {
   int? price;
   int? qty;
   String? imgURl;
+  int? limit;
+  String? limitLabel;
 
   Product({
     this.id,
@@ -13,6 +15,8 @@ class Product {
     this.price = 0,
     this.qty = 0,
     this.imgURl = '',
+    this.limit = 0,
+    this.limitLabel,
   });
 
   static Product clone(Product p) => Product(
@@ -21,6 +25,7 @@ class Product {
         price: p.price,
         qty: p.qty,
         imgURl: p.imgURl,
+        limit: p.limit,
       );
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(

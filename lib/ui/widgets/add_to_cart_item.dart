@@ -70,7 +70,22 @@ class AddToCardItem extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
+          Consumer<SaleCtrl>(
+            builder: (_, saltCtrl, __) {
+              if (products.limitLabel == null)
+                return SizedBox.shrink();
+              else
+                return Text(
+                  products.limitLabel!,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.pink[300],
+                    fontWeight: FontWeight.w700,
+                  ),
+                );
+            },
+          ),
         ],
       );
 
