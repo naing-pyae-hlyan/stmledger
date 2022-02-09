@@ -103,30 +103,53 @@ class DbGeneralFunc {
 
   static Future<int> updateById({
     required String tableName,
-    required int id,
+    required int whereArgsId,
+    String? where,
     required Map<String, dynamic> values,
   }) async {
     final Database? db = await DbHelper().db;
     if (db == null) return 0;
-    debugLog(tableName, 'Updated DB by ID --> $id $values');
+    debugLog(tableName, 'Updated DB by ID --> $whereArgsId $values');
     return await db.update(
       tableName,
       values,
-      where: '$uniqueIdConst=?',
-      whereArgs: [id],
+      where: where == null ? '$uniqueIdConst=?' : '$where=?',
+      whereArgs: [whereArgsId],
     );
   }
 
   static Future<int> deleteById({
     required String tableName,
     required int id,
+    String? where,
   }) async {
     /// Get a reference to the database;
     final Database? db = await DbHelper().db;
     if (db == null) return 0;
     debugLog(tableName, 'Deleted DB by ID --> $id');
-    return await db
-        .delete(tableName, where: '$uniqueIdConst=?', whereArgs: [id]);
+    return await db.delete(
+      tableName,
+      where: where == null ? '$uniqueIdConst=?' : '$where=?',
+      whereArgs: [id],
+    );
+  }
+
+  static Future<int> getById({
+    required String tableName,
+    required int whereArgsId,
+    String? where,
+  }) async {
+    /// Get a reference to the database;
+    final Database? db = await DbHelper().db;
+    if (db == null) return 0;
+    debugLog(tableName, 'Updated DB by ID --> $whereArgsId');
+    var a = await db.delete(
+      tableName,
+      where: where == null ? '$uniqueIdConst=?' : '$where=?',
+      whereArgs: [whereArgsId],
+    );
+    debugLog(tag, a.toString());
+    return a;
   }
 
   static Future<int> deleteAll({required String tableName}) async {

@@ -35,7 +35,7 @@ class ProductsTable {
 
   static Future<int> update(Product product) async => DbGeneralFunc.updateById(
         tableName: tableName,
-        id: product.id!,
+        whereArgsId: product.id!,
         values: {
           productNameConst: product.name,
           productPriceConst: product.price,

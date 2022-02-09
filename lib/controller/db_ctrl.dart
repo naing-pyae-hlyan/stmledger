@@ -42,11 +42,28 @@ class DbCtrl with ChangeNotifier {
     }
     return resp;
   }
-
-  Future<dynamic> insertWarehouse(String name, int instock) async {
+  Future<dynamic> warehouseDeleteById(int id) async {
     int? resp;
     try {
-      resp = await WarehouseTable.insert(productName: name, inStock: instock);
+      resp = await WarehouseTable.deleteById(id);
+    } catch (e) {
+      return ErrorResponse(code: null, message: e.toString());
+    }
+    return resp;
+  }
+
+  Future<dynamic> _insertWarehouse({
+    required String name,
+    required int instock,
+    required int productId,
+  }) async {
+    int? resp;
+    try {
+      resp = await WarehouseTable.insert(
+        productName: name,
+        inStock: instock,
+        productId: productId,
+      );
     } catch (e) {
       return ErrorResponse(code: null, message: e.toString());
     }
@@ -57,6 +74,20 @@ class DbCtrl with ChangeNotifier {
     int? resp;
     try {
       resp = await WarehouseTable.update(model);
+    } catch (e) {
+      return ErrorResponse(code: null, message: e.toString());
+    }
+    return resp;
+  }
+
+  Future<dynamic> updateNameOnly({
+    required int productId,
+    required String newName,
+  }) async {
+    int? resp;
+    try {
+      resp = await WarehouseTable.updateNameOnly(
+          productId: productId, newName: newName);
     } catch (e) {
       return ErrorResponse(code: null, message: e.toString());
     }
@@ -122,17 +153,29 @@ class DbCtrl with ChangeNotifier {
       if (_fstTimestamp!.isToday() && _lastTimestamp!.isToday()) {
         if (resp.isEmpty) {
           for (final p in products) {
-            await insertWarehouse(p.name!, 0);
+            await _insertWarehouse(
+              name: p.name!,
+              instock: 0,
+              productId: p.id!,
+            );
           }
         } else if (pName == allCategoryConst) {
-          var tempProductList = [], tempRespList = [];
+          List<String> tempRespList = [];
+          List<Map<int, String>> tempProductList = [];
 
-          /// added the Product and Warehouse model list to List<String>
-          for (final p in products) tempProductList.add(p.name);
+          /// added the Product to List<Map<int,String>> and Warehouse model list to List<String>
+          for (final p in products) tempProductList.add({p.id!: p.name!});
+
           for (final r in resp) tempRespList.add(r.productName);
 
           for (final p in tempProductList)
-            if (!tempRespList.contains(p)) await insertWarehouse(p, 0);
+            if (!tempRespList.contains(p.values.first)) {
+              await _insertWarehouse(
+                productId: p.keys.first,
+                name: p.values.first,
+                instock: 0,
+              );
+            }
         }
       }
     } catch (e) {

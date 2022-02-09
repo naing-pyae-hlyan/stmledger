@@ -38,7 +38,11 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
       id: product.id,
       onPresss: (Product p) async {
         var resp = await _dbCtrl.updateProduct(p);
-        (resp is ErrorResponse)
+        var resp2 = await _dbCtrl.updateNameOnly(
+          productId: product.id!,
+          newName: product.name ?? '',
+        );
+        (resp is ErrorResponse || resp2 is ErrorResponse)
             ? DialogUtils.errorDialog(context, resp)
             : _dbCtrl.refreshUI();
       },
@@ -48,7 +52,8 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
   void _onRemovePress(int? id) async {
     if (id == null) return;
     var resp = await _dbCtrl.productDeleteById(id);
-    (resp is ErrorResponse)
+    var resp2 = await _dbCtrl.warehouseDeleteById(id);
+    (resp is ErrorResponse || resp2 is ErrorResponse)
         ? DialogUtils.errorDialog(context, resp)
         : _dbCtrl.refreshUI();
   }
@@ -100,7 +105,7 @@ class _CategoryHomePageState extends State<CategoryHomePage> {
                     }
                     return MyItem(
                       imgUrl: products[index].imgURl,
-                      label: products[index].name,
+                      label: products[index].name! + ' #${products[index].id}',
                       price: products[index].price,
                       isAdd: false,
                       onCloseBtnCallback: () =>

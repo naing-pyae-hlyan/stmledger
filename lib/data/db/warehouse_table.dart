@@ -7,6 +7,7 @@ class WarehouseTable {
     await db.execute(
       'CREATE TABLE $tableName('
       '$uniqueIdConst INTEGER PRIMARY KEY AUTOINCREMENT,'
+      '$productIdConst INT,'
       '$dateConst TEXT,'
       '$productNameConst TEXT,'
       '$inStockConst INT,'
@@ -18,10 +19,12 @@ class WarehouseTable {
   static Future<int> insert({
     required String productName,
     required int inStock,
+    required int productId,
   }) async {
     return await DbGeneralFunc.insert(
       tableName: tableName,
       values: {
+        productIdConst: productId,
         dateConst: MyDateUtils.iso8601Date,
         productNameConst: productName,
         inStockConst: inStock,
@@ -32,12 +35,31 @@ class WarehouseTable {
 
   static Future<int> update(WarehouseModel m) async => DbGeneralFunc.updateById(
         tableName: tableName,
-        id: m.id!,
+        whereArgsId: m.id!,
         values: {
           productNameConst: m.productName,
           inStockConst: m.inStock,
           outStockConst: m.outStock,
         },
+      );
+
+  static Future<int> updateNameOnly({
+    required int productId,
+    required String newName,
+  }) async =>
+      DbGeneralFunc.getById(
+        tableName: tableName,
+        whereArgsId: productId,
+        where: productNameConst,
+        // values: {
+        //   productNameConst: newName,
+        // },
+      );
+
+  static Future<int> deleteById(int id) async => DbGeneralFunc.deleteById(
+        tableName: tableName,
+        id: id,
+        where: productIdConst,
       );
 
   static Future<List<WarehouseModel>> find({

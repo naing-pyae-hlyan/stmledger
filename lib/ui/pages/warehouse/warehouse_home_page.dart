@@ -150,7 +150,9 @@ class _WarehouseHomePageState extends State<WarehouseHomePage> {
                           .map<DataRow>((WarehouseModel w) => DataRow(
                                 cells: [
                                   DataCell(
-                                    Text(w.productName.toString()),
+                                    Text(w.productName.toString() +
+                                        ' #' +
+                                        w.productId.toString()),
                                     onTap: () => _onSavePress(w),
                                   ),
                                   DataCell(

@@ -29,6 +29,7 @@ class WarehouseAddInstockDialog {
           context.pop();
           onSave(WarehouseModel(
             id: warehouseModel.id,
+            productId: warehouseModel.productId,
             iso8601Date: warehouseModel.iso8601Date,
             productName: warehouseModel.productName,
             inStock: int.parse(_inCtrl.text),
