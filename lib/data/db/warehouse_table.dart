@@ -56,7 +56,7 @@ class WarehouseTable {
       search: productName == allCategoryConst ? null : productName,
       orderBy: productNameConst,
     );
-    debugLog(tag, maps.toString());
+    // debugLog(tag, maps.toString());
     final List<WarehouseModel> modelList = List.generate(
         maps.length, (index) => WarehouseModel.fromJson(maps[index]));
     return _filteredByProductName(

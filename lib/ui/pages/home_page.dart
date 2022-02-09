@@ -27,10 +27,11 @@ class _HomePageState extends State<HomePage> {
       lstDate: now,
       needToNotify: false,
     );
-    List<WarehouseModel> warehouse =
-        await _dbCtrl.findWarehouse(products: products);
+    var warehouse = await _dbCtrl.findWarehouse(products: products);
 
-    if (warehouse.isNotEmpty && type == HomeTypeEnum.sale) {
+    if (warehouse is List<WarehouseModel> &&
+        warehouse.isNotEmpty &&
+        type == HomeTypeEnum.sale) {
       for (final w in warehouse) {
         if (w.inStock == 0) {
           DialogUtils.errorDialog(

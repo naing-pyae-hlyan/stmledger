@@ -18,10 +18,6 @@ class _WarehouseHomePageState extends State<WarehouseHomePage> {
   late DateTime lstDate;
 
   void _onSavePress(WarehouseModel m) async {
-    // await WarehouseTable.deleteAll();
-    // _dbCtrl.refreshUI();
-    // return;
-    print(m.id);
     WarehouseAddInstockDialog.show(context, warehouseModel: m,
         onSave: (WarehouseModel warehouse) async {
       var resp = await _dbCtrl.updateWarehouse(warehouse);

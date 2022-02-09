@@ -111,17 +111,28 @@ class DbCtrl with ChangeNotifier {
     required List<Product> products,
   }) async {
     List<dynamic>? resp = [];
+
     try {
       resp = await WarehouseTable.find(
         fstDate: _fstTimestamp,
         lastDate: _lastTimestamp,
         productName: pName,
       );
-      if (_fstTimestamp!.isToday() &&
-          _lastTimestamp!.isToday() &&
-          resp.isEmpty) {
-        for (final p in products) {
-          await insertWarehouse(p.name!, 0);
+
+      if (_fstTimestamp!.isToday() && _lastTimestamp!.isToday()) {
+        if (resp.isEmpty) {
+          for (final p in products) {
+            await insertWarehouse(p.name!, 0);
+          }
+        } else {
+          var tempProductList = [], tempRespList = [];
+
+          /// added the Product and Warehouse model list to List<String>
+          for (final p in products) tempProductList.add(p.name);
+          for (final r in resp) tempRespList.add(r.productName);
+
+          for (final p in tempProductList)
+            if (!tempRespList.contains(p)) await insertWarehouse(p, 0);
         }
       }
     } catch (e) {
