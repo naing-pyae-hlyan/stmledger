@@ -18,6 +18,8 @@ class _WarehouseHomePageState extends State<WarehouseHomePage> {
   late DateTime lstDate;
 
   void _onSavePress(WarehouseModel m) async {
+    if (!fstDate.isToday() || !lstDate.isToday()) return;
+
     WarehouseAddInstockDialog.show(context, warehouseModel: m,
         onSave: (WarehouseModel warehouse) async {
       var resp = await _dbCtrl.updateWarehouse(warehouse);
@@ -159,7 +161,6 @@ class _WarehouseHomePageState extends State<WarehouseHomePage> {
                                   ),
                                   DataCell(
                                     Text(w.outStock.toString()),
-                                    onTap: () => _onSavePress(w),
                                   ),
                                   DataCell(Text(
                                     (w.inStock! - w.outStock!).toString(),
