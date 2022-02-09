@@ -124,7 +124,7 @@ class DbCtrl with ChangeNotifier {
           for (final p in products) {
             await insertWarehouse(p.name!, 0);
           }
-        } else {
+        } else if (pName == allCategoryConst) {
           var tempProductList = [], tempRespList = [];
 
           /// added the Product and Warehouse model list to List<String>
