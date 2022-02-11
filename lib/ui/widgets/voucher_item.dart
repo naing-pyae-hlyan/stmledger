@@ -5,11 +5,15 @@ class VoucherItem extends StatelessWidget {
   final int? totalAmount;
   final int? no;
   final String? note;
+  final bool popupPrint;
+  final Function()? printClick;
   const VoucherItem({
     this.no,
     required this.voucher,
     required this.totalAmount,
     this.note,
+    this.popupPrint = false,
+    this.printClick,
     Key? key,
   }) : super(key: key);
 
@@ -47,6 +51,21 @@ class VoucherItem extends StatelessWidget {
               (totalAmount ?? '').toString().currency + dia,
             ),
             note != null ? _textRow('မှတ်ချက်', note) : const SizedBox.shrink(),
+            popupPrint
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: MyButton(
+                        label: 'Print',
+                        padding: EdgeInsets.zero,
+                        width: 64,
+                        child: Icon(Icons.print),
+                        onTap: printClick ?? () {},
+                      ),
+                    ),
+                  )
+                : SizedBox.shrink(),
           ],
         ),
       ),

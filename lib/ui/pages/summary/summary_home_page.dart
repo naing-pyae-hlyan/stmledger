@@ -19,6 +19,16 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
   late DateTime fstDate;
   late DateTime lstDate;
 
+  Future<void> _print(VoucherModel voucher) async {
+    if (Platform.isAndroid) {
+      context.push(PrintPage(
+        voucher: voucher,
+        totalAmount: voucher.charge!,
+        note: voucher.note ?? '',
+      ));
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -139,12 +149,22 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
                       if (index == vouchers.length) {
                         return _totalItem(totalAmount, vouchers.length);
                       }
-                      return VoucherItem(
-                        no: index + 1,
-                        voucher: vouchers[index],
-                        totalAmount: vouchers[index].charge,
-                        note: vouchers[index].note,
-                      );
+                      return Consumer<ItemPressStateCtrl>(
+                          builder: (_, itemStateCtrl, __) {
+                        return InkWell(
+                          borderRadius: BorderRadius.circular(8),
+                          onTap: () => itemStateCtrl.setState(false),
+                          onLongPress: () => itemStateCtrl.stateChange(),
+                          child: VoucherItem(
+                            no: index + 1,
+                            voucher: vouchers[index],
+                            totalAmount: vouchers[index].charge,
+                            note: vouchers[index].note,
+                            popupPrint: itemStateCtrl.state,
+                            printClick: () => _print(vouchers[index]),
+                          ),
+                        );
+                      });
                     },
                   ),
                 );
