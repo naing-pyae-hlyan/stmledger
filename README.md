@@ -43,4 +43,4 @@ This project is using SQL Database for small business POS app.
 - Setting (Phone Size)
 ![Setting (Phone Size)](https://github.com/naing-pyae-hlyan/stmledger/tree/master2/screenshot/phone_setting_ui.png?raw=true "Setting (Phone Size)")
 
-- Thanks for visiting :P
+# Thanks for visiting :P
