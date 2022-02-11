@@ -13,7 +13,12 @@ void main() {
                     categoryCakes[Random().nextInt(categoryCakes.length)])),
         ChangeNotifierProvider(create: (_) => ItemPressStateCtrl(state: false)),
       ],
-      child: const MyApp(),
+      child: const GlobalLoaderOverlay(
+        useDefaultLoading: false,
+        overlayColor: Colors.white,
+        overlayWidget: LoadingWidget(),
+        child: const MyApp(),
+      ),
     ),
   );
 }

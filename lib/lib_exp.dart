@@ -27,3 +27,4 @@ export 'package:add_to_cart_animation/add_to_cart_animation.dart';
 export 'package:add_to_cart_animation/globalkeyext.dart';
 export 'package:sqflite/sqflite.dart';
 export 'package:sqflite/sqlite_api.dart';
+export 'package:loader_overlay/loader_overlay.dart';
