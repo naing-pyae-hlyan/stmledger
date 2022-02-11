@@ -1,16 +1,15 @@
 # stmledger
 
-A new Flutter project.
+Small Ledger Application.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is using SQL Database for small business POS app.
+# Features
+-[Add new product with random Image,]()
+-[Custom search between from date and to date with product name in warehouse UI and summary UI,]()
+-[Easy to use for selling and printing,]()
+-[Search voucher day by day.]()
 
-A few resources to get you started if this is your first Flutter project:
+![alt text](https://github.com/naing-pyae-hlyan/stmledger/tree/master2/screenshot/large_category_ui.png?raw=true)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
