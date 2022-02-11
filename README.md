@@ -5,42 +5,47 @@ Small Ledger Application.
 ## Getting Started
 
 This project is using SQL Database for small business POS app.
-# Features
+## Features
 - Add new product with random Image
 - Custom search between from date and to date with product name in warehouse UI and summary UI
 - Easy to use for selling and printing
 - Search voucher day by day
 
-# Screenshot
+# 390-844 1180-820
+## Screenshot
+## Large Screen
 - Category (Large Size)
-![Category (Large Size)](screenshot/large_category_ui.png?raw=true "Category (Large Size)")
+<img src="screenshot/large_category_ui.png" width="1180" height="820">
 - Warehouse (Large Size)
-![Warehouse (Large Size)](screenshot/large_warehouse_ui.png?raw=true "Warehouse (Large Size)")
+<img src="screenshot/large_warehouse_ui.png" width="1180" height="820">
 - Sale add to cart (Large Size)
-![Sale add to cart (Large Size)](screenshot/large_sale_ui.png?raw=true "Sale add to cart (Large Size)")
+<img src="screenshot//large_sale_ui.png" width="1180" height="820">
 - Sale voucher (Large Size)
-![Sale voucher (Large Size)]screenshot/large_sale_voucher_ui.png?raw=true "Sale voucher (Large Size)")
+<img src="screenshot/large_sale_voucher.png" width="1180" height="820">
 - Sale cart (Large Size)
-![Sale cart (Large Size)](screenshot/large_sale_cart_ui.png?raw=true "Sale cart (Large Size)")
+<img src="screenshot/large_sale_cart_ui.png" width="1180" height="820">
 - Summary (Large Size)
-![Summary (Large Size))](screenshot/large_summary_ui.png?raw=true "Summary (Large Size)")
+<img src="screenshot/large_summary_ui.png" width="1180" height="820">
 - Setting (Large Size)
-![ Setting (Large Size)](screenshot/large_setting_ui.png?raw=true " Setting (Large Size)")
+<img src="screenshot/large_setting_ui.png" width="1180" height="820">
+
+
+## Small Screen
 - Home (Phone Size)
-![Home (Phone Size)](screenshot/phone_home_ui.png?raw=true "Home (Phone Size)")
+<img src="screenshot/phone_home_ui.png" width="390" height="844">
 - Add Product (Phone Size)
-![Add Product (Phone Size)](screenshot/phone_category_ui.png?raw=true "Add Product (Phone Size)")
+<img src="screenshot/phone_category_ui.png" width="390" height="844">
 - Warehouse (Phone Size)
-![Warehouse (Phone Size)](screenshot/phone_warehouse_ui.png?raw=true "Warehouse (Phone Size)")
+<img src="screenshot/phone_warehouse_ui.png" width="390" height="844">
 - Sale (Phone Size)
-![Sale (Phone Size)](screenshot/phone_sale_ui.png?raw=true "Sale (Phone Size)")
+<img src="screenshot/phone_sale_ui.png" width="390" height="844">
 - Voucher (Phone Size)
-![Voucher (Phone Size)](screenshot/phone_voucher_ui.png?raw=true "Voucher (Phone Size)")
+<img src="screenshot/phone_voucher_ui.png" width="390" height="844">
 - Summary (Phone Size)
-![Summary (Phone Size)](screenshot/phone_summary_ui.png?raw=true "Summary (Phone Size)")
+<img src="screenshot/phone_summary_ui.png" width="390" height="844">
 - Summary Print (Phone Size)
-![Category Print (Phone Size)](screenshot/phone_summary_print_ui.png?raw=true "Summary Print (Phone Size)")
+<img src="screenshot/phone_summary_print_ui.png" width="390" height="844">
 - Setting (Phone Size)
-![Setting (Phone Size)](screenshot/phone_setting_ui.png?raw=true "Setting (Phone Size)")
+<img src="screenshot/phone_setting_ui.png" width="390" height="844">
 
 # Thanks for visiting :P
