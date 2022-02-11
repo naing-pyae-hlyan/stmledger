@@ -40,6 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ));
             break;
           case 1:
+            await WarehouseTable.deleteById(1, where: uniqueIdConst);
             await WarehouseTable.deleteAll().then((value) => showToast(
                   _fToast,
                   msg: 'ဂိုထောင်ထဲရှိစာရင်းများအားလုံး ဖျက်ပြီးပါပြီ။',

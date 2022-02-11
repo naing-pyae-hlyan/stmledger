@@ -55,10 +55,12 @@ class WarehouseTable {
     );
   }
 
-  static Future<int> deleteById(int id) async => DbGeneralFunc.deleteById(
+  static Future<int> deleteById(int id,
+          {String where = productIdConst}) async =>
+      DbGeneralFunc.deleteById(
         tableName: tableName,
         whereArgsId: id,
-        where: productIdConst,
+        where: where,
       );
 
   static Future<List<WarehouseModel>> find({
@@ -80,20 +82,43 @@ class WarehouseTable {
     // debugLog(tag, maps.toString());
     final List<WarehouseModel> modelList = List.generate(
         maps.length, (index) => WarehouseModel.fromJson(maps[index]));
-    return _filteredByProductName(
+    return await _filteredByProductName(
       models: modelList,
-      name: productName,
+      pName: productName,
+      from: fstDate ?? DateTime.now(),
+      to: lastDate ?? DateTime.now(),
     );
   }
 
-  static List<WarehouseModel> _filteredByProductName({
+  static Future<List<WarehouseModel>> _filteredByProductName({
     required List<WarehouseModel> models,
-    required String name,
-  }) {
-    if (name != allCategoryConst) {
+    required String pName,
+    required DateTime from,
+    required DateTime to,
+  }) async {
+    if (await !from.isToday() || await !to.isToday()) {
+      List<WarehouseModel> filtered = [];
+      for (int i = 0, l = models.length; i < l; i++) {
+        for (int j = i + 1; j < l; j++) {
+          if (models[i].productId == models[j].productId &&
+              models[i].productName == models[j].productName) {
+            filtered.add(WarehouseModel(
+              id: models[i].id,
+              productId: models[i].productId,
+              iso8601Date: models[i].iso8601Date,
+              productName: models[i].productName,
+              inStock: models[i].inStock! + models[j].inStock!,
+              outStock: models[i].outStock! + models[j].outStock!,
+            ));
+          }
+        }
+      }
+
+      return filtered.isNotEmpty ? filtered : models;
+    } else if (pName != allCategoryConst) {
       List<WarehouseModel> filtered = [];
       for (final p in models) {
-        if (p.productName == name) {
+        if (p.productName == pName) {
           filtered.add(p);
         }
       }

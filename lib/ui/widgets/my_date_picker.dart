@@ -28,7 +28,7 @@ class _MyDatePickerState extends State<MyDatePicker> {
       setState(() => date = selectedDate);
       widget.onSelectedDateTime(
         widget.needToAdd23Hours
-            ? selectedDate.add(const Duration(hours: 24))
+            ? selectedDate.add(const Duration(hours: 23, minutes: 59))
             : selectedDate,
       );
     }
