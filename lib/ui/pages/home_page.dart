@@ -11,8 +11,10 @@ class _HomePageState extends State<HomePage> {
   late DbCtrl _dbCtrl;
 
   Future<void> _getProductsListFromDb(HomeTypeEnum type) async {
+    LoadingDialog.show(context);
     final List<Product> products = await _dbCtrl.getAllProductList();
     if (products.isEmpty) {
+      LoadingDialog.hide(context);
       DialogUtils.errorDialog(
         context,
         'ကုန်ပစ္စည်းများမရှိသေးပါ။\nအမျိုးအစားများထဲတွင် ပစ္စည်းအသစ်များ\nထည့်သွင်းနိုင်ပါသည်။',
@@ -32,6 +34,7 @@ class _HomePageState extends State<HomePage> {
     if (warehouse is List<WarehouseModel> &&
         warehouse.isNotEmpty &&
         type == HomeTypeEnum.sale) {
+      LoadingDialog.hide(context);
       for (final w in warehouse) {
         if (w.inStock == 0) {
           DialogUtils.errorDialog(
@@ -49,8 +52,11 @@ class _HomePageState extends State<HomePage> {
         warehouses: warehouse,
       ));
     } else if (type == HomeTypeEnum.warehouse) {
+      LoadingDialog.hide(context);
       context.push(WarehouseHomePage(products: products));
       return;
+    } else {
+      LoadingDialog.hide(context);
     }
   }
 
