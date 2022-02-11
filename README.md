@@ -11,7 +11,6 @@ This project is using SQL Database for small business POS app.
 - Easy to use for selling and printing
 - Search voucher day by day
 
-# 390-844 1180-820
 ## Screenshot
 ## Large Screen
 - Category (Large Size)
@@ -21,7 +20,7 @@ This project is using SQL Database for small business POS app.
 - Sale add to cart (Large Size)
 <img src="screenshot/large_sale_ui.png" width="675" height="450">
 - Sale voucher (Large Size)
-<img src="screenshot/large_sale_voucher.png" width="675" height="450">
+<img src="screenshot/large_sale_voucher_ui.png" width="675" height="450">
 - Sale cart (Large Size)
 <img src="screenshot/large_sale_cart_ui.png" width="675" height="450">
 - Summary (Large Size)
