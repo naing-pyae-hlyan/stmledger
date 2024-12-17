@@ -4,11 +4,13 @@ class AddCategoryDialog {
   static void show(
     BuildContext context, {
     Key? key,
-    required ValueChanged<Products> onPresss,
+    required ValueChanged<Product> onPresss,
     String btnLabel = 'Save',
     required String title,
     String productName = '',
     String productPrice = '',
+    String? imgUrl,
+    int? id,
   }) {
     final TextEditingController nameCtrl = TextEditingController();
     final TextEditingController priceCtrl = TextEditingController();
@@ -27,11 +29,15 @@ class AddCategoryDialog {
           priceFn.requestFocus();
           return;
         } else {
-          onPresss(Products(
-            names: [nameCtrl.text],
-            price: int.parse(priceCtrl.text),
-          ));
           context.pop();
+          onPresss(
+            Product(
+              name: nameCtrl.text,
+              price: int.parse(priceCtrl.text),
+              imgURl: context.read<RandomImageCtrl>().randomImage,
+              id: id,
+            ),
+          );
         }
       },
       addCloseButton: true,
@@ -48,18 +54,25 @@ class AddCategoryDialog {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            MyCircleImageWithGeneratedImage(imgUrl: imgUrl),
             myInputForm(
               nameCtrl,
               hintText: 'Name',
               fn: nameFn,
-              margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              margin: const EdgeInsets.symmetric(
+                horizontal: 32,
+                vertical: 16,
+              ),
             ),
             myInputForm(
               priceCtrl,
               hintText: '\$ Price',
               keyboardType: TextInputType.number,
               fn: priceFn,
-              margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              margin: const EdgeInsets.symmetric(
+                horizontal: 32,
+                vertical: 16,
+              ),
             ),
           ],
         ),

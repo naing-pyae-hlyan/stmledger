@@ -1,9 +1,11 @@
 import '../../lib_exp.dart';
 
 class MyDatePicker extends StatefulWidget {
+  final bool needToAdd23Hours;
   final ValueChanged<DateTime?> onSelectedDateTime;
   const MyDatePicker({
     required this.onSelectedDateTime,
+    required this.needToAdd23Hours,
     Key? key,
   }) : super(key: key);
 
@@ -19,12 +21,16 @@ class _MyDatePickerState extends State<MyDatePicker> {
       context: context,
       initialDate: date!,
       firstDate: DateTime(2022),
-      lastDate: date!,
+      lastDate: DateTime.now(),
       builder: (_, child) => SizedBox(child: child),
     );
     if (selectedDate != null) {
       setState(() => date = selectedDate);
-      widget.onSelectedDateTime(selectedDate);
+      widget.onSelectedDateTime(
+        widget.needToAdd23Hours
+            ? selectedDate.add(const Duration(hours: 23, minutes: 59))
+            : selectedDate,
+      );
     }
   }
 

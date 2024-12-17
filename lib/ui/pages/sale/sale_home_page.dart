@@ -1,181 +1,244 @@
 import '../../../lib_exp.dart';
 
+class BaseSaleHomePage extends StatelessWidget {
+  final List<Product> products;
+  final List<WarehouseModel> warehouses;
+  const BaseSaleHomePage({
+    required this.products,
+    required this.warehouses,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => SaleCtrl()),
+      ],
+      child: SaleHomePage(
+        key: key,
+        products: products,
+        warehouses: warehouses,
+      ),
+    );
+  }
+}
+
 class SaleHomePage extends StatefulWidget {
-  const SaleHomePage({Key? key}) : super(key: key);
+  final List<Product> products;
+  final List<WarehouseModel> warehouses;
+  const SaleHomePage({
+    required this.products,
+    required this.warehouses,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _SaleHomePageState createState() => _SaleHomePageState();
 }
 
 class _SaleHomePageState extends State<SaleHomePage> {
-  final List<String> _productNameList = [];
-  final List<String> _selectedName = [];
-  late CategoryCtrl _categoryCtrl;
-  final TextEditingController _quantityCtrl = TextEditingController();
-  final TextEditingController _priceCtrl = TextEditingController();
-  final TextEditingController _noteCtrl = TextEditingController();
+  GlobalKey<CartIconKey> gkCart = GlobalKey<CartIconKey>();
+  List<GlobalKey> imageGlobalKeyList = [];
+  late FToast _fToast;
+  late SaleCtrl _saleCtrl;
 
-  final FocusNode _quantityFn = FocusNode();
-  final FocusNode _priceFn = FocusNode();
-  final FocusNode _noteFn = FocusNode();
-  FToast? fToast;
+  late Function(GlobalKey) runAddToCardAnimation;
 
-  Future<void> _voucher() async {
-    if (_selectedName.isEmpty) {
-      showToast(fToast, msg: 'အမျိုးအစားရွေးပါ။', alertType: AlertType.warning);
-      return;
-    } else if (_quantityCtrl.text.isEmpty) {
-      _quantityFn.requestFocus();
-      showToast(fToast, msg: 'အရေအတွက်ထည့်ပါ။', alertType: AlertType.warning);
-      return;
-    } else {
-      int q = int.parse(_quantityCtrl.text);
-      int p = int.parse(_priceCtrl.text);
-      context.push(VoucherPage(
-        products: Products(
-          no: 1,
-          date: DateTime.now(),
-          names: _selectedName,
-          quentity: q,
-          price: p,
-          charge: (q * p),
-          note: _noteCtrl.text,
-        ),
-      ));
-    }
+  void onAddClick(GlobalKey gkImageContainer, {required int count}) async {
+    await runAddToCardAnimation(gkImageContainer);
+    await gkCart.currentState!.runCartAnimation((count).toString());
   }
 
-  @override
-  void dispose() {
-    _quantityCtrl.dispose();
-    _priceCtrl.dispose();
-    _noteCtrl.dispose();
-    _quantityFn.dispose();
-    _priceFn.dispose();
-    _noteFn.dispose();
-    super.dispose();
+  void onReduceClick(GlobalKey gkImageContainer, {required int count}) async {
+    await gkCart.currentState!.runCartAnimation((count).toString());
+  }
+
+  void onCheckoutClick() {
+    if (_saleCtrl.totalAmount > 0) {
+      context.push(
+        VoucherPage(
+          warehouses: widget.warehouses,
+          voucher: _saleCtrl.getConfirmedVoucher,
+          totalAmount: _saleCtrl.totalAmount,
+        ),
+      );
+    } else {
+      showToast(
+        _fToast,
+        msg: 'အနည်းဆုံး ပစ္စည်းတစ်ခုကို ခြင်းထဲသို့ထည့်ပါ။',
+        gravity: ToastGravity.BOTTOM,
+        alertType: AlertType.warning,
+      );
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    _categoryCtrl = context.read<CategoryCtrl>();
-    fToast = FToast();
-    fToast?.init(context);
-    for (var p in _categoryCtrl.products) {
-      _productNameList.add(p.names?[0] ?? '');
-    }
-    _quantityCtrl.text = '1';
-  }
-
-  void _dropDownValueChanged(dynamic value) {
-    if (value is List) {
-      _selectedName.clear();
-      int totalPrice = 0;
-      for (var s in value) {
-        for (var product in _categoryCtrl.products) {
-          if (s == product.names?[0]) {
-            _selectedName.add(s);
-            totalPrice += product.price ?? 0;
-          }
-        }
-      }
-      (totalPrice > 0)
-          ? _priceCtrl.text = totalPrice.toString()
-          : _priceCtrl.clear();
-    }
+    imageGlobalKeyList = List<GlobalKey>.generate(
+      widget.products.length,
+      (index) => GlobalKey(),
+    );
+    _saleCtrl = context.read<SaleCtrl>();
+    _saleCtrl.initCart(widget.products, widget.warehouses);
+    _fToast = FToast();
+    _fToast.init(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        centerTitle: false,
-        title: const Text('အရောင်း'),
+    return AddToCartAnimation(
+      gkCart: gkCart,
+      rotation: false,
+      dragToCardCurve: Curves.easeIn,
+      dragToCardDuration: const Duration(milliseconds: 500),
+      previewCurve: Curves.linearToEaseOut,
+      previewDuration: const Duration(milliseconds: 100),
+      previewHeight: 30,
+      previewWidth: 30,
+      opacity: 0.85,
+      initiaJump: false,
+      receiveCreateAddToCardAnimationMethod: (addToCardAnimationMethod) =>
+          runAddToCardAnimation = addToCardAnimationMethod,
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+          centerTitle: false,
+          title: const Text('အရောင်း'),
+          actions: [
+            SizedBox(
+              width: 90,
+              height: 8,
+              child: MyDropDown(
+                list: ['100 x', '50 x', '10 x', '1 x'],
+                needAllLabel: false,
+                borderStyle: BorderStyle.none,
+                onChanged: (v) {
+                  _saleCtrl.count = int.parse(v.replaceAll(' x', ''));
+                },
+              ),
+            ),
+            InkWell(
+              onTap: () => context.push(
+                CartPage(
+                  warehouses: widget.warehouses,
+                  voucher: _saleCtrl.voucher,
+                  totalAmount: _saleCtrl.totalAmount,
+                ),
+              ),
+              borderRadius: BorderRadius.circular(16),
+              child: AddToCartIcon(
+                key: gkCart,
+                icon: const Icon(Icons.shopping_cart),
+                colorBadge: Colors.red,
+              ),
+            ),
+          ],
+        ),
+        body: _body(),
       ),
-      body: _body(),
     );
   }
 
-  Widget _body() => Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    _mText('အမျိုးအစား'),
-                    MyMultiDropDown(
-                      title: 'Select',
-                      items: _productNameList,
-                      onSelected: _dropDownValueChanged,
-                    ),
-                    const SizedBox(height: 16),
-                    _mText('အရေအတွက်'),
-                    myInputForm(
-                      _quantityCtrl,
-                      fn: _quantityFn,
-                      hintText: 'Quantity',
-                      keyboardType: TextInputType.number,
-                    ),
-                    const SizedBox(height: 16),
-                    _mText('ဈေးနှုန်း ($dia)'),
-                    myInputForm(
-                      _priceCtrl,
-                      fn: _priceFn,
-                      hintText: '\$ Price',
-                      readOnly: true,
-                      keyboardType: TextInputType.number,
-                    ),
-                    const SizedBox(height: 16),
-                    _mText('မှတ်ချက်'),
-                    myInputForm(
-                      _noteCtrl,
-                      fn: _noteFn,
-                      hintText: 'Note',
-                      maxLine: 4,
-                      keyboardType: TextInputType.text,
-                    ),
-                    const SizedBox(height: 48),
-                  ],
-                ),
+  Widget _body() => Column(
+        children: <Widget>[
+          _listItemsView(),
+          _footerRow(),
+        ],
+      );
+
+  Widget _listItemsView() => Consumer<SaleCtrl>(
+        builder: (_, ctrl, __) {
+          final List<Product>? products = ctrl.voucher.products;
+
+          if (products == null || products.isEmpty) {
+            return const SizedBox.shrink();
+          }
+
+          return Expanded(
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: products.length + 1,
+              itemBuilder: (_, index) {
+                if (index == products.length) return const SizedBox.shrink();
+                return AddToCardItem(
+                  products: products[index],
+                  onAddClick: (key) {
+                    bool b = ctrl.addQty(index);
+                    if (b)
+                      onAddClick(key, count: ctrl.cartCounter);
+                    else
+                      showToast(
+                        _fToast,
+                        msg: 'သတ်မှတ််ထားသော ပမာဏထက်ကျော်လွန်သွားပါပြီ။',
+                        alertType: AlertType.warning,
+                        gravity: ToastGravity.CENTER,
+                      );
+                  },
+                  onReduceClick: (key) {
+                    ctrl.removeQty(index);
+                    onReduceClick(key, count: ctrl.cartCounter);
+                  },
+                  globalKey: imageGlobalKeyList[index],
+                );
+              },
+              separatorBuilder: (_, index) => const Divider(thickness: 1),
+            ),
+          );
+        },
+      );
+
+  Widget _footerRow() => Card(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
+        ),
+        elevation: 0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 32),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              SizedBox(
+                width: context.width * 0.4,
+                child: _totalWidget(),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                MyButton(
-                  onTap: _voucher,
-                  label: 'ထည့်',
-                  width: context.width * 0.4,
-                  padding: const EdgeInsets.all(8),
-                  color: AppColors.primaryColor.withOpacity(0.7),
+              SizedBox(
+                width: context.width * 0.5,
+                child: MyButton(
+                  onTap: onCheckoutClick,
+                  label: 'Checkout',
                 ),
-                MyButton(
-                  onTap: _voucher,
-                  label: 'ဘောင်ချာ',
-                  width: context.width * 0.4,
-                  padding: const EdgeInsets.all(8),
-                )
-              ],
-            ),
-            const SizedBox(height: 8),
-          ],
+              )
+            ],
+          ),
         ),
       );
 
-  Widget _mText(String t) => Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Text(
-          t,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            color: AppColors.primaryColor,
+  Widget _totalWidget() => Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Total : ',
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              color: Colors.pink[200],
+            ),
           ),
-        ),
+          Consumer<SaleCtrl>(builder: (_, ctrl, __) {
+            return Text(
+              ctrl.totalAmount.toString().currency + ' $dia',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.pink[300],
+              ),
+            );
+          }),
+        ],
       );
 }

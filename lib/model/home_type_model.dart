@@ -1,7 +1,9 @@
 enum HomeTypeEnum {
   category,
+  warehouse,
   sale,
   summary,
+  setting,
 }
 
 class HomeTypeModel {

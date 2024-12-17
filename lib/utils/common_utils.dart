@@ -2,7 +2,9 @@ import '../lib_exp.dart';
 
 class CommonUtils {
   static Future<void> clearAllData({bool keepLoginCredentials = false}) async {
-    /// TODO clear all
+    await ProductsTable.deleteAll();
+    await VoucherTable.deleteAll();
+    await WarehouseTable.deleteAll();
   }
 
   static Future<String> get appVersion async {

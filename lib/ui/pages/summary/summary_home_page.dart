@@ -3,25 +3,63 @@ import 'package:stmledger/ui/widgets/voucher_item.dart';
 import '../../../lib_exp.dart';
 
 class SummaryHomePage extends StatefulWidget {
-  const SummaryHomePage({Key? key}) : super(key: key);
+  final List<Product> products;
+  const SummaryHomePage({
+    required this.products,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _SummaryHomePageState createState() => _SummaryHomePageState();
 }
 
 class _SummaryHomePageState extends State<SummaryHomePage> {
-  final List<String> _productNameList = ['All'];
-  String _selectedName = 'All';
-  late CategoryCtrl _categoryCtrl;
+  List<String> _productNameList = [];
+  late DbCtrl _dbCtrl;
+  late DateTime fstDate;
+  late DateTime lstDate;
+
+  Future<void> _print(VoucherModel voucher) async {
+    if (Platform.isAndroid) {
+      context.push(PrintPage(
+        voucher: voucher,
+        totalAmount: voucher.charge!,
+        note: voucher.note ?? '',
+      ));
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    _categoryCtrl = context.read<CategoryCtrl>();
-    for (var p in _categoryCtrl.products) {
-      _productNameList.add(p.names?[0] ?? '');
+    _dbCtrl = context.read<DbCtrl>();
+    final ids = [allCategoryConst];
+    for (var p in widget.products) {
+      ids.add(p.name!);
     }
-    _selectedName = _productNameList[0];
+    _productNameList = [
+      ...{...ids}
+    ];
+    final now = DateTime.now();
+    fstDate = DateTime(now.year, now.month, now.day);
+    lstDate = now;
+    _setSelectedDateToCtrl(needToNotify: false);
+  }
+
+  @override
+  void dispose() {
+    _dbCtrl.resetQuery();
+
+    super.dispose();
+  }
+
+  void _setSelectedDateToCtrl({bool needToNotify = true}) {
+    _dbCtrl.setQuery(
+      fstDate: fstDate,
+      lstDate: lstDate,
+      productName: _dbCtrl.pName,
+      needToNotify: needToNotify,
+    );
   }
 
   @override
@@ -36,13 +74,14 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
     );
   }
 
-  Widget _body() => Container(
+  Widget _body() => Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             _haderRow(),
             const SizedBox(height: 8),
-            _itemListView(),
+            _fetchVoucherListView(),
           ],
         ),
       );
@@ -50,63 +89,132 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
   Widget _haderRow() => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          MyDatePicker(onSelectedDateTime: (DateTime? date) {}),
-          MyDatePicker(onSelectedDateTime: (DateTime? date) {}),
+          MyDatePicker(
+            needToAdd23Hours: false,
+            onSelectedDateTime: (DateTime? date) async {
+              fstDate = date!;
+              _setSelectedDateToCtrl();
+            },
+          ),
+          MyDatePicker(
+            needToAdd23Hours: true,
+            onSelectedDateTime: (DateTime? date) async {
+              lstDate = date!;
+              _setSelectedDateToCtrl();
+            },
+          ),
           SizedBox(
             width: context.width * 0.4,
             child: MyDropDown(
-              selectedName: _selectedName,
               list: _productNameList,
-              onChanged: (v) => setState(() => _selectedName = v),
+              onChanged: (String v) async {
+                _dbCtrl.setQuery(
+                  fstDate: fstDate,
+                  lstDate: lstDate,
+                  productName: v,
+                  needToNotify: true,
+                );
+              },
             ),
           ),
         ],
       );
 
-  Widget _itemListView() {
-    const int length = 10;
-    return Flexible(
-      child: ListView.builder(
-        itemCount: length + 1,
-        shrinkWrap: true,
-        itemBuilder: (_, index) {
-          if (index == length) {
-            return _totalItem();
-          }
-          return VoucherItem(
-            products: Products(),
-          );
-        },
-      ),
+  Widget _fetchVoucherListView() {
+    return Consumer<DbCtrl>(
+      builder: (_, dbCtrl, __) {
+        return FutureBuilder<dynamic>(
+          future: _dbCtrl.findVoucher(),
+          builder: (_, snapshot) {
+            if (snapshot.data is ErrorResponse) {
+              return Center(
+                child: Text(snapshot.data.message),
+              );
+            }
+            if (snapshot.data is List<VoucherModel>) {
+              final List<VoucherModel> vouchers = snapshot.data;
+
+              if (vouchers.isEmpty) {
+                return _emptyCart();
+              } else {
+                int totalAmount = 0;
+                for (VoucherModel v in vouchers) {
+                  totalAmount += v.charge ?? 0;
+                }
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: vouchers.length + 1,
+                    shrinkWrap: true,
+                    itemBuilder: (_, index) {
+                      if (index == vouchers.length) {
+                        return _totalItem(totalAmount, vouchers.length);
+                      }
+                      return Consumer<ItemPressStateCtrl>(
+                          builder: (_, itemStateCtrl, __) {
+                        return InkWell(
+                          borderRadius: BorderRadius.circular(8),
+                          onTap: () => itemStateCtrl.setState(false),
+                          onLongPress: () => itemStateCtrl.stateChange(),
+                          child: VoucherItem(
+                            no: index + 1,
+                            voucher: vouchers[index],
+                            totalAmount: vouchers[index].charge,
+                            note: vouchers[index].note,
+                            popupPrint: itemStateCtrl.state,
+                            printClick: () => _print(vouchers[index]),
+                          ),
+                        );
+                      });
+                    },
+                  ),
+                );
+              }
+            }
+
+            return const LinearProgressIndicator();
+          },
+        );
+      },
     );
   }
 
-  Widget _totalItem() => Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        color: AppColors.primaryColor,
-        elevation: 0.5,
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Text(
-                  DateTime.now().ddMMyyyy +
-                      ' မှ ' +
-                      DateTime.now().ddMMyyyy +
-                      ' ထိ',
-                  style: TextStyle(color: Colors.grey[200]),
+  Widget _totalItem(int charge, int length) => Column(
+        children: <Widget>[
+          length < _dbCtrl.vLimit
+              ? SizedBox.shrink()
+              : MyButton(
+                  onTap: () => _dbCtrl.increaseVoucherPage(),
+                  color: Colors.white,
+                  labelColor: AppColors.primaryColor,
+                  padding: const EdgeInsets.all(0),
+                  width: context.width / 2,
+                  label: 'Show More',
                 ),
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            color: AppColors.primaryColor,
+            elevation: 0.5,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      fstDate.ddMMyyyy + ' မှ ' + lstDate.ddMMyyyy + ' ထိ',
+                      style: TextStyle(color: Colors.grey[200]),
+                    ),
+                  ),
+                  _textRow(
+                      'ရောင်းရငွေ ($dia)', charge.toString().currency + dia),
+                ],
               ),
-              _textRow('အရေအတွက်', '1000'),
-              _textRow('ရောင်းရငွေ ($dia)', '10000'.currency),
-            ],
+            ),
           ),
-        ),
+        ],
       );
 
   Widget _textRow(String t1, String? t2) => Padding(
@@ -123,6 +231,29 @@ class _SummaryHomePageState extends State<SummaryHomePage> {
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Colors.grey[200],
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget _emptyCart() => Flexible(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset(
+              'assets/icons/empty.png',
+              width: context.width * 0.5,
+              height: context.width * 0.5,
+              fit: BoxFit.contain,
+            ),
+            const SizedBox(height: 32),
+            Text(
+              'No result',
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 24,
+                color: AppColors.primaryColor,
               ),
             ),
           ],

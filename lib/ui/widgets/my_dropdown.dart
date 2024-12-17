@@ -1,14 +1,16 @@
 import '../../lib_exp.dart';
 
 class MyDropDown extends StatefulWidget {
-  final String selectedName;
   final List<String> list;
-  final ValueChanged<dynamic> onChanged;
+  final ValueChanged<String> onChanged;
+  final bool needAllLabel;
+  final BorderStyle? borderStyle;
   const MyDropDown({
     Key? key,
-    required this.selectedName,
+    this.needAllLabel = true,
     required this.list,
     required this.onChanged,
+    this.borderStyle,
   }) : super(key: key);
 
   @override
@@ -16,28 +18,56 @@ class MyDropDown extends StatefulWidget {
 }
 
 class _MyDropDownState extends State<MyDropDown> {
+  late String _selectedName;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.needAllLabel) {
+      _selectedName = allCategoryConst;
+    } else {
+      _selectedName = widget.list[0];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(width: 1),
+        border: Border.all(
+          width: 1,
+          style: widget.borderStyle ?? BorderStyle.solid,
+        ),
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: DropdownButton<String>(
-        value: widget.selectedName,
+        value: _selectedName,
         isExpanded: true,
         underline: const SizedBox.shrink(),
-        dropdownColor: Colors.white,
+        iconEnabledColor:
+            widget.borderStyle != null ? Colors.white : AppColors.primaryColor,
+        dropdownColor:
+            widget.borderStyle == null ? Colors.white : AppColors.primaryColor,
         items: widget.list
             .map(
-              (String name) => DropdownMenuItem(
-                value: name,
-                child: Text(name),
+              (String value) => DropdownMenuItem(
+                value: value,
+                child: Text(
+                  value,
+                  style: TextStyle(
+                    color: widget.borderStyle == null
+                        ? AppColors.primaryColor
+                        : Colors.white,
+                  ),
+                ),
               ),
             )
             .toList(),
-        onChanged: widget.onChanged,
+        onChanged: (dynamic v) {
+          widget.onChanged(v);
+          setState(() => _selectedName = v);
+        },
       ),
     );
   }

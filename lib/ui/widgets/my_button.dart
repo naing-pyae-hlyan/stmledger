@@ -14,7 +14,6 @@ class MyButton extends StatelessWidget {
 
   const MyButton({
     Key? key,
-    required this.onTap,
     this.color,
     this.width = double.infinity,
     this.fontSize = 13.0,
@@ -24,6 +23,7 @@ class MyButton extends StatelessWidget {
     required this.label,
     this.labelWeight,
     this.labelColor,
+    required this.onTap,
   }) : super(key: key);
 
   @override

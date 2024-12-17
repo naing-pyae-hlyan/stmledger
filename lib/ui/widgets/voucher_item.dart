@@ -1,9 +1,19 @@
 import '../../lib_exp.dart';
 
 class VoucherItem extends StatelessWidget {
-  final Products? products;
+  final VoucherModel voucher;
+  final int? totalAmount;
+  final int? no;
+  final String? note;
+  final bool popupPrint;
+  final Function()? printClick;
   const VoucherItem({
-    required this.products,
+    this.no,
+    required this.voucher,
+    required this.totalAmount,
+    this.note,
+    this.popupPrint = false,
+    this.printClick,
     Key? key,
   }) : super(key: key);
 
@@ -18,26 +28,44 @@ class VoucherItem extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
-            _textRow('နံပါတ်', (products?.no ?? '').toString()),
+            no != null ? _textRow('စဥ်', no.toString()) : SizedBox.shrink(),
             _textRow(
-              'ရက်စွဲ',
-              products?.date != null ? products?.date!.ddMMMhhmmAAA : '',
-            ),
-            _textRow('အမျိုးအစား', products?.names?.join(',\n') ?? ''),
-            _textRow('အရေအတွက်', (products?.quentity ?? '').toString()),
-            _textRow(
-              'စျေးနှုန်း ($dia)',
-              (products?.price ?? '').toString().currency,
+                'ရက်စွဲ',
+                MyDateUtils.convertIso8601StringToDateTime(voucher.iso8601Date)
+                    .ddMMMhhmmAAA),
+            _textRow('အမျိုးအစားများ', 'Qty / Price'),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: voucher.products!.length,
+              itemBuilder: (_, index) => _textRow(
+                voucher.products![index].name!,
+                voucher.products![index].qty.toString() +
+                    ' x ' +
+                    voucher.products![index].price.toString().currency,
+              ),
             ),
             const Divider(thickness: 1),
             _textRow(
               'ကျသင့်ငွေ ($dia)',
-              (products?.charge ?? '').toString().currency,
+              (totalAmount ?? '').toString().currency + dia,
             ),
-            const Divider(thickness: 1),
-            (products?.note != null && products!.note!.isNotEmpty)
-                ? _textRow('မှတ်ချက်', products?.note)
-                : const SizedBox.shrink(),
+            note != null ? _textRow('မှတ်ချက်', note) : const SizedBox.shrink(),
+            popupPrint
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: MyButton(
+                        label: 'Print',
+                        padding: EdgeInsets.zero,
+                        width: 64,
+                        child: Icon(Icons.print),
+                        onTap: printClick ?? () {},
+                      ),
+                    ),
+                  )
+                : SizedBox.shrink(),
           ],
         ),
       ),
